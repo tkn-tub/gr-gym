@@ -5,5 +5,5 @@ ML/RL agent’s learning purposes. The framework to be developed should be gener
 used in various networking problems. As a proof-of-concept you should implement a showcase using
 the IEEE 802.11p implementation in GNURadio 3 where an RL agent learns to control the transmit
 power and/or MCS selection.<br>
-![Architecture](GnuRadio_Gym/doc/archi.png)
+![Architecture](doc/archi.png)
 
