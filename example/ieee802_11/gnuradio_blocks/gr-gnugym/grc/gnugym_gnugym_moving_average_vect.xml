@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<block>
+  <name>MovingAverageforVector</name>
+  <key>gnugym_gnugym_moving_average_vect_ff</key>
+  <category>[gnugym]</category>
+  <import>import gnugym</import>
+  <make>gnugym.gnugym_moving_average_vect_ff($vlen, $buffer)</make>
+  <callback>self.set_$(id)($value):
+    print("hallo")
+    return
+  </callback>
+
+	<param>
+		<name>Vector length</name>
+		<key>vlen</key>
+		<value>64</value>
+		<type>int</type>
+	</param>
+	
+	<param>
+		<name>Window/ Buffer length</name>
+		<key>buffer</key>
+		<value>3</value>
+		<type>int</type>
+	</param>
+
+  <sink>
+		<name>in</name>
+		<type>float</type>
+		<vlen>64</vlen>
+		<nports>1</nports>
+	</sink>
+
+	<source>
+		<name>out</name>
+		<type>float</type>
+		<vlen>64</vlen>
+		<nports>1</nports>
+	</source>
+</block>

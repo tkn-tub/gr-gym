@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+
+<block>
+	<name>GnuGym Parse Sequence Number</name>
+	<key>gnugym_parse_seqnr</key>
+	<category>[gnugym]</category>
+	<import>import gnugym</import>
+	<make>gnugym.gnugym_parse_seqnr($log, $debug)</make>
+
+	<param>
+		<name>Log</name>
+		<key>log</key>
+		<value>False</value>
+		<type>bool</type>
+
+		<option>
+			<name>Enable</name>
+			<key>True</key>
+		</option>
+		<option>
+			<name>Disable</name>
+			<key>False</key>
+		</option>
+	</param>
+
+	<param>
+		<name>Debug</name>
+		<key>debug</key>
+		<value>False</value>
+		<type>bool</type>
+
+		<option>
+			<name>Enable</name>
+			<key>True</key>
+		</option>
+		<option>
+			<name>Disable</name>
+			<key>False</key>
+		</option>
+	</param>
+
+	<sink>
+		<name>in</name>
+		<type>message</type>
+	</sink>
+
+	<source>
+		<name>seqnr</name>
+		<type>int</type>
+		<vlen>1</vlen>
+		<nports>1</nports>
+	</source>
+	
+	<source>
+		<name>missing_seqnr</name>
+		<type>int</type>
+		<vlen>1</vlen>
+		<nports>1</nports>
+	</source>
+
+</block>
+
