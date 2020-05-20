@@ -1,0 +1,28 @@
+sync_length:
+  default:
+  help:
+frequency:
+  default:
+  help:
+bandwidth:
+  default:
+  help:
+windows_size:
+  default:
+  help:
+model: "fading_model"
+N:
+  default: 8
+  help: the number of sinusoids to use in simulating the channel
+fDTs:
+  default: 50
+  help: normalized maximum Doppler frequency
+LOS:
+  default: LOS
+  help: include Line-of-Site path? selects between Rayleigh (NLOS) and Rician (LOS) models
+K:
+  default:
+  help: Rician factor
+seed:
+  default: 23
+  help: noise generators

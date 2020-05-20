@@ -1,0 +1,15 @@
+rpcPort:
+  default: 9999
+  help:
+
+rpcAdress:
+  default: "https//test"
+  help:
+
+stepTime:
+  default: 1
+  help:
+
+simTime:
+  default: 600
+  help:
