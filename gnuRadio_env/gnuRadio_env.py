@@ -4,53 +4,90 @@ from gym import spaces
 from utils import *
 import pandas as pb
 import abc
-
-
-class RpcBridge():
-    def __init__(self, args):
-        pass
+import xmlrpc.client
+import logging
+import time
 
 
 class gr_env(gym.Env):
-    def __init__(self, args):
+    def __init__(self, args, gnuradio):
         super(gr_env, self).__init__()
+        self._logger = logging.getLogger(self.__class__.__name__)
         self.args = args
+        self.gnuradio = gnuradio
 
         self.action_space = None
         self.observation_space = None
 
-        self.rpcBridge = RpcBridge(self.args.rpc)
-        self.senario = IEEE80211P(self.args.ieee80211p)
-        self.action_space = self.senario.get_actions_space()
-        self.observation_space = self.senario.get_observation_space()
+        self.gr_radio_programs_path = args.rpc.gr_radio_programs_path
+        self.gr_state = self.gnuradio.RadioProgramState.INACTIVE
+        self.usrp_addr = args.rpc.usrp_addr
+
+        self.ctrl_socket_host = args.rpc.host
+        self.ctrl_socket_port = args.rpc.port
+
+        self.ctrl_socket = None
+        if self.gr_state == self.gnuradio.RadioProgramState.INACTIVE:
+            self._logger.info("start gnuradio ")
+            self._init_proxy()
+            self.ctrl_socket.start()
+            self.gr_state = self.gnuradio.RadioProgramState.RUNNING
+            self._logger.debug(f"Information of the rpc client: {self.ctrl_socket.__dict__}")
+
+        elif self.gr_state == self.gnuradio.RadioProgramState.PAUSED:
+            self._logger.info("wake up gnuradio")
+            self._init_proxy()
+            self.ctrl_socket.start()
+            self.gr_state = self.gnuradio.RadioProgramState.RUNNING
+
+        self.scenario = IEEE80211P(self.args.ieee80211p)
+        self.action_space = self.scenario.get_actions_space()
+        self.observation_space = self.scenario.get_observation_space()
+
+    def _init_proxy(self):
+        if self.ctrl_socket == None:
+            self.ctrl_socket = xmlrpc.client.ServerProxy(
+                "http://%s:%d" % (self.ctrl_socket_host, self.ctrl_socket_port))
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
     def get_state(self):
-        obs = self.senario.get_obs()
-        reward = self.senario.get_reward()
-        info = self.senario.get_info()
-        done = self.senario.get_done()
+        # get state on timestep k+1
+        obs = self.scenario.get_obs()
+        reward = self.scenario.get_reward()
+        info = self.scenario.get_info()
+        done = self.scenario.get_done()
         return (obs, reward, info, done)
 
     def step(self, action):
-        response = self.senario.step(action)
-        return self.get_state()
+        # TODO set a waiting time btw sending action and geting observation
+        if self.gr_state == self.gnuradio.RadioProgramState.RUNNING:
+            self._logger.info("send action to gnuradio")
+            self.scenario.send_actions(action)
 
     def reset(self):
-        if self.senario:
-            self.senario.close()
-            self.senario = None
-        self.senario = IEEE80211P(self.args.ieee80211p)
-        self.senario.initialize_env()
-        self.action_space = self.senario.get_actions_space()
-        self.observation_space = self.senario.get_observation_space()
+        # TODO reset proxy connection
+        #
+        if self.scenario:
+            self.scenario.close()
+            self.scenario = None
+        self.scenario = IEEE80211P(self.args.ieee80211p)
+        self.scenario.initialize_env()
+        self.action_space = self.scenario.get_actions_space()
+        self.observation_space = self.scenario.get_observation_space()
         pass
 
     def close(self):
         pass
+
+    def render(self, mode='human'):
+        return
+
+    def check_is_alive(self):
+        if self.gr_state == self.gnuradio.RadioProgramState.INACTIVE:
+            self.ctrl_socket = None
 
 
 class IEEE80211(abc.ABC):
@@ -58,10 +95,15 @@ class IEEE80211(abc.ABC):
     def initialize_env(self):
         pass
 
+    @abc.abstractmethod
+    def send_actions(self):
+        pass
+
 
 class IEEE80211P(IEEE80211):
     def __init__(self, args):
         super(IEEE80211P, self).__init__()
+        self.args = args
         self.sync_length = args.sync_length
         self.frequency = args.frequency
         self.bandwidth = args.bandwidth
@@ -80,27 +122,18 @@ class IEEE80211P(IEEE80211):
 
     def _create_space(self, spaceDesc):
         space = None
-        if (spaceDesc.type == pb.Box):
-            boxSpacePb = pb.BoxSpace()
-            spaceDesc.space.Unpack(boxSpacePb)
-            low = boxSpacePb.low
-            high = boxSpacePb.high
-            shape = tuple(boxSpacePb.shape)
-            mtype = boxSpacePb.dtype
-
-        space = spaces.Box(low=low, high=high, shape=shape, dtype=mtype)
-
+        if spaceDesc.type == spaces.Discrete:
+            space = spaces.Discrete(spaceDesc.n)
+        if spaceDesc.type == spaces.Box:
+            space = spaces.Box(low=spaceDesc.low, high=spaceDesc.high, shape=spaceDesc.shape, dtype=spaceDesc.mtype)
+        return space
 
     def initialize_env(self):
-        self._action_space = self._create_space()
-        self._observation_space = self._create_space()
+        self._action_space = self._create_space(self.args.actSpace)
+        self._observation_space = self._create_space(self.args.obsSpace)
 
-    def send_actions(self, actions):
+    def send_actions(self, action):
         pass
-
-
-    def step(self, actions):
-        self.send_actions(actions)
 
     def get_subcarriers_stat(sefl):
         pass

@@ -1,9 +1,16 @@
-rpcPort:
+gr_radio_programs_path:
+  default:
+  help:
+
+usrp_addr:
+  default:
+  help:
+port:
   default: 9999
   help:
 
-rpcAdress:
-  default: "https//test"
+host:
+  default: "localhost"
   help:
 
 stepTime:
@@ -13,3 +20,6 @@ stepTime:
 simTime:
   default: 600
   help:
+
+wait_time:
+  default: 1
