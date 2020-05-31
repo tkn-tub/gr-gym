@@ -1,5 +1,5 @@
 from gym import spaces
-
+import numpy as np
 
 class ieee80211codemodscenario:
     def __init(self, gnuradio):
@@ -18,7 +18,10 @@ class ieee80211codemodscenario:
             16,     #Mbps 64QAM 2/3
             18      #Mbps 64QAM 3/4
         ]
-        
+        gnuradio.subscribe_parameter('seqnr_missing_recv', '/tmp/gr_seq_missing_recv', np.int32, 1)
+        gnuradio.subscribe_parameter('seqnr_recv', '/tmp/gr_seq_recv', np.int32, 1)
+        gnuradio.subscribe_parameter('seqnr_send', '/tmp/gr_seq_send', np.int32, 1)
+        gnuradio.subscribe_parameter('snr_vect', '/tmp/gr_snr_vect', np.float32, 64)
         self.reset()
     
     def get_observation_space(self):
@@ -28,17 +31,23 @@ class ieee80211codemodscenario:
         return spaces.Discrete(8)
 
     def execute_actions(self, action):
-        gnuradio.set_encoding(action)
+        gnuradio.set_parameter('encoding', action)
         self.action = action
 
     def get_obs(self):
-        gnuradio.get_snr_vect()[-64:]
+        obs = gnuradio.get_parameter('snr_vect')[0]
+        return obs[-64:]
 
     def get_reward(self):
         #get Data of gnuradio
-        missingcounter =  gnuradio.get_seqnr_missing_receiver()[-1]
-        senderSeqNr = gnuradio.get_seqnr_sender()[-1]
-        reveicerSeqNr = gnuradio.get_seqnr_receiver()[-1]
+        (missingcounter, ) =  gnuradio.get_parameter('seqnr_missing_recv')
+        (senderSeqNr, ) = gnuradio.get_parameter('seqnr_recv')
+        (reveicerSeqNr, ) = gnuradio.get_parameter('snr_vect')
+        (encoding, ) = gnuradio.get_parameter('encoding')
+        
+        missingcounter = missingcounter[-1]
+        senderSeqNr = senderSeqNr[-1]
+        reveicerSeqNr = reveicerSeqNr[-1]
         
         #calculate number of send packets in last step and
         #calculate number of received packets in last step and
@@ -49,7 +58,7 @@ class ieee80211codemodscenario:
         missingPackets = (missingcounter - self.lastMissingCounter) + (totalSend - totalRecv)
         
         #calculate effective packet rate -> +1 to avoid division by zero
-        reward = (totalSend - missingPackets) /(totalSend + 1) * self.bitrates[i]
+        reward = (totalSend - missingPackets) /(totalSend + 1) * self.bitrates[encoding]
         
         self.lastSendSeqnr = senderSeqNr
         self.lastRecvSeqnr = reveicerSeqNr
@@ -67,8 +76,13 @@ class ieee80211codemodscenario:
         #set inital action
         self.execute_action(0)
         #reset local counter
-        self.lastSendSeqnr = gnuradio.get_seqnr_sender()[-1]
-        self.lastMissingCounter = gnuradio.get_seqnr_missing_receiver()[-1]
+        (missingcounter, ) =  gnuradio.get_parameter('seqnr_missing_recv')
+        (senderSeqNr, ) = gnuradio.get_parameter('seqnr_recv')
+        (reveicerSeqNr, ) = gnuradio.get_parameter('snr_vect')
+        
+        self.lastMissingCounter = missingcounter[-1]
+        self.lastSendSeqnr = senderSeqNr[-1]
+        self.lastRecvSeqnr = reveicerSeqNr[-1]
     
     def get_info(self):
         return ""
