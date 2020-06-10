@@ -1,6 +1,7 @@
 from gym import spaces
 import numpy as np
 
+#TODO what is the interface class
 class ieee80211codemodscenario:
     def __init(self, gnuradio):
         self.gnuradio = gnuradio
