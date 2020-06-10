@@ -46,7 +46,7 @@ class PipeListener(threading.Thread):
 class GR_Bridge:
     # create RPC procxy
     def __init__(self, rpcAddress, rpcPort):
-        self.pipes = {}s
+        self.pipes = {}
         self.rpc = xmlrpc.client.ServerProxy("http://" + rpcAddress + ":" + str(rpcPort) + "/")
         self.log = logging.getLogger('GR-Bridge')
     
