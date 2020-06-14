@@ -1,20 +1,22 @@
-import gym
-from gym.utils import seeding
-from gym import spaces
-from utils import *
-import pandas as pb
-import abc
-import xmlrpc.client
+import importlib
 import logging
 import time
+import xmlrpc.client
+
+import gym
+from gym.utils import seeding
+
+from gnuRadio_env.ieee80211codemodscenario import *
+from utils import *
 
 
 class gr_env(gym.Env):
-    def __init__(self, args, gnuradio):
+    def __init__(self, args, gnuradio, scenario):
         super(gr_env, self).__init__()
         self._logger = logging.getLogger(self.__class__.__name__)
         self.args = args
         self.gnuradio = gnuradio
+        self.scenario = scenario
 
         self.action_space = None
         self.observation_space = None
@@ -40,7 +42,6 @@ class gr_env(gym.Env):
             self.ctrl_socket.start()
             self.gr_state = self.gnuradio.RadioProgramState.RUNNING
 
-        self.scenario = IEEE80211P(self.args.ieee80211p)
         self.action_space = self.scenario.get_actions_space()
         self.observation_space = self.scenario.get_observation_space()
 
@@ -63,21 +64,40 @@ class gr_env(gym.Env):
 
     def step(self, action):
         # TODO set a waiting time btw sending action and geting observation
-        if self.gr_state == self.gnuradio.RadioProgramState.RUNNING:
+        if self.check_is_alive():
             self._logger.info("send action to gnuradio")
             self.scenario.send_actions(action)
+            self._logger.info("wait for step time")
+            time.sleep(args.stepTime)
+            self._logger.info("get reward")
+            reward = self.scenario.get_reward()
+            done = self.scenario.get_done()
+            info = self.scenario.get_info()
+            self._logger.info("start simuation in gnu radio")
+            self.scenario.simulate()
+            self._logger.info("wait for simulation")
+            time.sleep(args.simTime)
+            self._logger.info("collect observations")
+            obs = self.scenario.get_obs()
+
+        if self.check_is_alive():
+            pass
+
+        return (obs, reward, done, info)
 
     def reset(self):
         # TODO reset proxy connection
         #
+        self._logger.info("reset usecase scenario")
         if self.scenario:
             self.scenario.close()
             self.scenario = None
-        self.scenario = IEEE80211P(self.args.ieee80211p)
-        self.scenario.initialize_env()
-        self.action_space = self.scenario.get_actions_space()
+        # self.scenario = scenario
+        self.scenario.reset()
+        self.action_space = self.scenario.get_action_space()
         self.observation_space = self.scenario.get_observation_space()
-        pass
+
+        return
 
     def close(self):
         pass
@@ -87,77 +107,21 @@ class gr_env(gym.Env):
 
     def check_is_alive(self):
         if self.gr_state == self.gnuradio.RadioProgramState.INACTIVE:
-            self.ctrl_socket = None
+            return False
+        if self.gr_state == self.gnuradio.RadioProgramState.RUNNING:
+            return True
 
 
-class IEEE80211(abc.ABC):
-    @abc.abstractmethod
-    def initialize_env(self):
-        pass
-
-    @abc.abstractmethod
-    def send_actions(self):
-        pass
+if __name__ == "__main__":
+    root_dir = get_dir_by_indicator(indicator=".git")
+    yaml_path = str(Path(root_dir) / "params" / "ieee80211p.yaml")
+    args = yaml_argparse(yaml_path=yaml_path)
 
 
-class IEEE80211P(IEEE80211):
-    def __init__(self, args):
-        super(IEEE80211P, self).__init__()
-        self.args = args
-        self.sync_length = args.sync_length
-        self.frequency = args.frequency
-        self.bandwidth = args.bandwidth
-        self.windows_size = args.windows_size
+    modules = args.gnu_radio_program.split(".") # TODO use import module from config file
+    module = importlib.import_module(".".join(modules[0:-1]))
+    gnu_module = getattr(module, modules[-1]) # need a python 3 version
+    ieee80211p = ieee80211_scenario(gnu_module)
 
-        self.reward = 0
-        self.obsData = None
-        self.done = False
-        self.info = None
 
-    def get_actions_space(self):
-        return self._action_space
-
-    def get_observation_space(self):
-        return self._observation_space
-
-    def _create_space(self, spaceDesc):
-        space = None
-        if spaceDesc.type == spaces.Discrete:
-            space = spaces.Discrete(spaceDesc.n)
-        if spaceDesc.type == spaces.Box:
-            space = spaces.Box(low=spaceDesc.low, high=spaceDesc.high, shape=spaceDesc.shape, dtype=spaceDesc.mtype)
-        return space
-
-    def initialize_env(self):
-        self._action_space = self._create_space(self.args.actSpace)
-        self._observation_space = self._create_space(self.args.obsSpace)
-
-    def send_actions(self, action):
-        pass
-
-    def get_subcarriers_stat(sefl):
-        pass
-
-    def get_packetcount(self):
-        pass
-
-    def get_reward(self):
-        return self.reward
-
-    def get_obs(self):
-        return self.obsData
-
-    def get_done(self):
-        return self.done
-
-    def get_info(self):
-        return self.info
-
-    def _create_data(self, dataContainer):
-        pass
-
-    def _pack_data(self, actions, spaceDesc):
-        pass
-
-    def close(self):
-        pass
+    gnu_env = gr_env(args=args, gnuradio=gnu_module, scenario=ieee80211p)

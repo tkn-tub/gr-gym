@@ -1,3 +1,25 @@
+gnu_radio_program:
+  default: example.ieee802_11.wifi_loopback
+  help: A string pointing to a function that is inside one or multiple modules. The
+    function will be imported and executed without any arguments. It must return a
+    tuple of inputs and targets.
+
+port:
+  default: 9999
+  help:
+
+host:
+  default: "localhost"
+  help:
+
+stepTime:
+  default: 1
+  help:
+
+simTime:
+  default: 600
+  help:
+
 sync_length:
   default:
   help:
@@ -26,6 +48,4 @@ K:
 seed:
   default: 23
   help: noise generators
-wait_step:
-  default:
-  help:
+

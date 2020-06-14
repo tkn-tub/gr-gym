@@ -19,6 +19,29 @@ def _construct_join(loader, node: yaml.Node):
     return ''.join([str(i) for i in seq])
 
 
+def get_dir_by_indicator(path=sys.path[0], indicator=".git"):
+    """ Returns the path of the folder that contains the given indicator
+
+    :param path: Path from where to search the directory tree upwards. (Default value = sys.path[0])
+    :type path: str
+    :param indicator: Name of the file that indicates the searched directory. (Default value = ".git")
+    :type indicator: str
+    :raises FileNotFoundError : If any path or any toplevel folder is not found with the given indicator, it raises
+    FileNotFoundError.
+    """
+
+    is_root = os.path.exists(os.path.join(path, indicator))
+    while not is_root:
+        new_path = os.path.dirname(path)
+        if new_path == path:
+            raise FileNotFoundError(
+                "Could not find folder containing indicator {:} in any path or any toplevel directory.".format(
+                    indicator))
+        path = new_path
+        is_root = os.path.exists(os.path.join(path, indicator))
+
+    return path
+
 def load_yaml(yaml_path, **kwargs):
     """
     Returns a dict from a yaml file. Enables concatenation of strings with !join [str1, str2, ...]
