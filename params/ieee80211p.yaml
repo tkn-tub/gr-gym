@@ -4,6 +4,12 @@ gnu_radio_program:
     function will be imported and executed without any arguments. It must return a
     tuple of inputs and targets.
 
+scenario:
+  default: ieee80211codemodscenario.ieee80211_scenario
+  help: A string pointing to a function that is inside one or multiple modules. The
+    function will be imported and executed without any arguments. It must return a
+    tuple of inputs and targets.
+
 port:
   default: 9999
   help:
