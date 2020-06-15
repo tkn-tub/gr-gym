@@ -1,6 +1,6 @@
 import gym
 
-env = gym.make('gr_env-v0')
+env = gym.make('grgym:grenv-v0')
 obs = env.reset()
 
 while True:

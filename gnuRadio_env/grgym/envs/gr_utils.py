@@ -116,6 +116,7 @@ def yaml_argparse(yaml_path, raw_args=None):
         # kwargs unpacking
         if isinstance(value, dict):
             kwargs = dict(value)
+            print(kwargs)
             value = kwargs.pop("default")
         else:
             kwargs = {}

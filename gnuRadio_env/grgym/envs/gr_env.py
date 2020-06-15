@@ -5,22 +5,22 @@ import xmlrpc.client
 
 import gym
 from gym.utils import seeding
-import gr_brige
+from grgym.envs.gr_bridge import GR_Bridge
 
 #from gnuRadio_env.ieee80211codemodscenario import *
-from utils import *
+from grgym.envs.gr_utils import *
 
 
-class gr_env(gym.Env):
+class GrEnv(gym.Env):
     def __init__(self):
-        super(gr_env, self).__init__()
+        super(GrEnv, self).__init__()
         self._logger = logging.getLogger(self.__class__.__name__)
         
         root_dir = get_dir_by_indicator(indicator=".git")
         yaml_path = str(Path(root_dir) / "params" / "ieee80211p.yaml")
         self.args = yaml_argparse(yaml_path=yaml_path)
         
-        self.bridge = GR_Bridge(args.rpc.host, args.rpc.port)
+        self.bridge = GR_Bridge(self.args.rpc.host, self.args.rpc.port)
         
         modules = args.scenario.split(".") # TODO use import module from config file
         module = importlib.import_module(".".join(modules[0:-1]))
