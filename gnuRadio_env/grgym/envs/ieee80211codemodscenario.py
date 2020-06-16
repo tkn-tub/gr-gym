@@ -43,10 +43,10 @@ class ieee80211_scenario(gnu_case):
 
     def get_reward(self):
         # get Data of gnuradio
-        (missingcounter,) = self.gnuradio.get_parameter('seqnr_missing_recv')
-        (senderSeqNr,) = self.gnuradio.get_parameter('seqnr_recv')
-        (reveicerSeqNr,) = self.gnuradio.get_parameter('snr_vect')
-        (encoding,) = self.gnuradio.get_parameter('encoding')
+        missingcounter = self.gnuradio.get_parameter('seqnr_missing_recv')[0]
+        senderSeqNr = self.gnuradio.get_parameter('seqnr_send')[0]
+        reveicerSeqNr = self.gnuradio.get_parameter('seqnr_recv')[0]
+        encoding = self.gnuradio.get_parameter('encoding')[0]
 
         missingcounter = missingcounter[-1]
         senderSeqNr = senderSeqNr[-1]

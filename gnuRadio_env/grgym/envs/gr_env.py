@@ -2,6 +2,7 @@ import importlib
 import logging
 import time
 import xmlrpc.client
+from enum import Enum
 
 import gym
 from gym.utils import seeding
@@ -10,6 +11,11 @@ from grgym.envs.gr_bridge import GR_Bridge
 #from gnuRadio_env.ieee80211codemodscenario import *
 from grgym.envs.gr_utils import *
 
+class RadioProgramState(Enum):
+    INACTIVE = 1
+    RUNNING = 2
+    PAUSED = 3
+    STOPPED = 4
 
 class GrEnv(gym.Env):
     def __init__(self):
@@ -31,6 +37,8 @@ class GrEnv(gym.Env):
 
         self.action_space = None
         self.observation_space = None
+        
+        self.gr_state = RadioProgramState.INACTIVE
 
         #self.gr_radio_programs_path = args.rpc.gr_radio_programs_path
         #self.gr_state = self.gnuradio.RadioProgramState.INACTIVE
@@ -80,7 +88,7 @@ class GrEnv(gym.Env):
             self._logger.info("send action to gnuradio")
             self.scenario.execute_actions(action)
             self._logger.info("wait for step time")
-            time.sleep(args.stepTime)
+            time.sleep(self.args.stepTime)
             self._logger.info("get reward")
             reward = self.scenario.get_reward()
             done = self.scenario.get_done()
@@ -88,7 +96,7 @@ class GrEnv(gym.Env):
             self._logger.info("start simuation in gnu radio")
             self.scenario.simulate()
             self._logger.info("wait for simulation")
-            time.sleep(args.simTime)
+            time.sleep(self.args.simTime)
             self._logger.info("collect observations")
             obs = self.scenario.get_obs()
 
@@ -107,7 +115,11 @@ class GrEnv(gym.Env):
         #    self.scenario = None
         # self.scenario = scenario
         self.scenario.reset()
-        self.bridge.start()
+        try:
+            self.bridge.start()
+        except Exception as e:
+            self._logger.error("Multiple Start Error %s" % (e))
+        self.gr_state = RadioProgramState.RUNNING
         self.action_space = self.scenario.get_action_space()
         self.observation_space = self.scenario.get_observation_space()
 
@@ -119,11 +131,11 @@ class GrEnv(gym.Env):
     def render(self, mode='human'):
         return
 
-    #def check_is_alive(self):
-    #    if self.gr_state == self.gnuradio.RadioProgramState.INACTIVE:
-    #        return False
-    #    if self.gr_state == self.gnuradio.RadioProgramState.RUNNING:
-    #        return True
+    def check_is_alive(self):
+        if self.gr_state == RadioProgramState.INACTIVE:
+            return False
+        if self.gr_state == RadioProgramState.RUNNING:
+            return True
 
 
 #if __name__ == "__main__":

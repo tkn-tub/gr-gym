@@ -11,7 +11,7 @@ scenario:
     tuple of inputs and targets.
 
 rpcport:
-  default: 9999
+  default: 8080
   help:
 rpchost:
   default: "localhost"
@@ -22,7 +22,7 @@ stepTime:
   help:
 
 simTime:
-  default: 600
+  default: 0.5
   help:
 
 sync_length:
