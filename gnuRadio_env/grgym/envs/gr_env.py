@@ -20,10 +20,10 @@ class GrEnv(gym.Env):
         yaml_path = str(Path(root_dir) / "params" / "ieee80211p.yaml")
         self.args = yaml_argparse(yaml_path=yaml_path)
         
-        self.bridge = GR_Bridge(self.args.rpc.host, self.args.rpc.port)
+        self.bridge = GR_Bridge(self.args.rpchost, self.args.rpcport)
         
-        modules = args.scenario.split(".") # TODO use import module from config file
-        module = importlib.import_module(".".join(modules[0:-1]))
+        modules = self.args.scenario.split(".") # TODO use import module from config file
+        module = importlib.import_module("grgym.envs." + ".".join(modules[0:-1]))
         gnu_module = getattr(module, modules[-1]) # need a python 3 version
         self.scenario = gnu_module(self.bridge)
         
@@ -32,9 +32,9 @@ class GrEnv(gym.Env):
         self.action_space = None
         self.observation_space = None
 
-        self.gr_radio_programs_path = args.rpc.gr_radio_programs_path
+        #self.gr_radio_programs_path = args.rpc.gr_radio_programs_path
         #self.gr_state = self.gnuradio.RadioProgramState.INACTIVE
-        self.usrp_addr = args.rpc.usrp_addr
+        #self.usrp_addr = args.rpc.usrp_addr
 
         #self.ctrl_socket_host = args.rpc.host
         #self.ctrl_socket_port = args.rpc.port
@@ -53,7 +53,7 @@ class GrEnv(gym.Env):
         #     self.ctrl_socket.start()
         #     self.gr_state = self.gnuradio.RadioProgramState.RUNNING
 
-        self.action_space = self.scenario.get_actions_space()
+        self.action_space = self.scenario.get_action_space()
         self.observation_space = self.scenario.get_observation_space()
 
     def _init_proxy(self):
@@ -78,7 +78,7 @@ class GrEnv(gym.Env):
         # TODO set a waiting time btw sending action and geting observation
         if self.check_is_alive():
             self._logger.info("send action to gnuradio")
-            self.scenario.send_actions(action)
+            self.scenario.execute_actions(action)
             self._logger.info("wait for step time")
             time.sleep(args.stepTime)
             self._logger.info("get reward")
@@ -107,7 +107,7 @@ class GrEnv(gym.Env):
         #    self.scenario = None
         # self.scenario = scenario
         self.scenario.reset()
-        self.scenario.start()
+        self.bridge.start()
         self.action_space = self.scenario.get_action_space()
         self.observation_space = self.scenario.get_observation_space()
 

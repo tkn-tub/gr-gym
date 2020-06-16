@@ -1,11 +1,11 @@
 from gym import spaces
 import numpy as np
 # TODO what is the interface class
-from gnuRadio_env.gr_env import gr_env
+from grgym.envs.gnu_case import gnu_case
 
 
-class ieee80211_scenario(gr_env):
-    def __init(self, gnuradio):
+class ieee80211_scenario(gnu_case):
+    def __init__(self, gnuradio):
         self.gnuradio = gnuradio
         self.lastSendSeqnr = 0
         self.lastRecvSeqnr = 0
@@ -77,11 +77,11 @@ class ieee80211_scenario(gr_env):
 
     def reset(self):
         # set inital action
-        self.execute_action(0)
+        self.execute_actions(0)
         # reset local counter
-        (missingcounter,) = self.gnuradio.get_parameter('seqnr_missing_recv')
-        (senderSeqNr,) = self.gnuradio.get_parameter('seqnr_recv')
-        (reveicerSeqNr,) = self.gnuradio.get_parameter('snr_vect')
+        missingcounter = self.gnuradio.get_parameter('seqnr_missing_recv')[0]
+        senderSeqNr = self.gnuradio.get_parameter('seqnr_recv')[0]
+        reveicerSeqNr = self.gnuradio.get_parameter('snr_vect')[0]
 
         self.lastMissingCounter = missingcounter[-1]
         self.lastSendSeqnr = senderSeqNr[-1]

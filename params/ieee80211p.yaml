@@ -10,13 +10,12 @@ scenario:
     function will be imported and executed without any arguments. It must return a
     tuple of inputs and targets.
 
-rpc:
-  port:
-    default: 9999
-    help:
-  host:
-    default: "localhost"
-    help:
+rpcport:
+  default: 9999
+  help:
+rpchost:
+  default: "localhost"
+  help:
 
 stepTime:
   default: 1
