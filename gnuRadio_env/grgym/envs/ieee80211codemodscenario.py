@@ -1,6 +1,5 @@
 from gym import spaces
 import numpy as np
-# TODO what is the interface class
 from grgym.envs.gnu_case import gnu_case
 
 
