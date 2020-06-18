@@ -32,6 +32,8 @@ class GrEnv(gym.Env):
         modules = self.args.scenario.split(".") 
         module = importlib.import_module("grgym.envs." + ".".join(modules[0:-1]))
         gnu_module = getattr(module, modules[-1]) # need a python 3 version
+        
+        #TODO: put args to specific module
         self.scenario = gnu_module(self.bridge)
         
         # TODO: compile and start .grc file (UniFlex Module)

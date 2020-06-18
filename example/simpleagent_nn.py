@@ -25,6 +25,8 @@ model.compile(optimizer=tf.train.AdamOptimizer(0.001),
               metrics=['accuracy'])
 
 epsilon = 1
+maxreward = np.NINF
+
 while True:
     print("--------------------------------------------------------")
     print("new step")
@@ -40,6 +42,16 @@ while True:
     print("action:", str(action))
     obs, reward, done, info = env.step(int(action))
     print("reward:", str(reward))
+    
+    maxreward = max(reward, maxreward)
+    
+    target = (reward)/maxreward
+    
+    target_f = model.predict(obs)
+    target_f[0][action] = target
+    print("agent new learning" + str(target_f))
+    model.fit(state, target_f, epochs=1, verbose=0)
+    
     epsilon *= 0.9
     
     print("Mean:", str(avg))

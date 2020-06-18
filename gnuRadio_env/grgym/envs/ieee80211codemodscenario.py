@@ -10,6 +10,8 @@ class ieee80211_scenario(gnu_case):
         self.lastRecvSeqnr = 0
         self.lastMissingCounter = 0
         self.action = 0
+        self.nopacketCounter = 0
+        self.lastDoneRecvSeqnr = 0
         self.bitrates = [
             1.5,  # Mbps BPSK 1/2
             1.25,  # Mbps BPSK 3/4
@@ -69,6 +71,14 @@ class ieee80211_scenario(gnu_case):
         return reward
 
     def get_done(self):
+        recSeqnr = self.gnuradio.get_parameter('seqnr_recv')[0]
+        if recSeqnr == self.lastDoneRecvSeqnr:
+            self.nopacketCounter += 1
+        else:
+            self.nopacketCounter = 0
+        self.lastDoneRecvSeqnr = recSeqnr
+        if self.nopacketCounter >= 10:
+            return True
         return False
 
     def render(self):
@@ -85,6 +95,9 @@ class ieee80211_scenario(gnu_case):
         self.lastMissingCounter = missingcounter[-1]
         self.lastSendSeqnr = senderSeqNr[-1]
         self.lastRecvSeqnr = reveicerSeqNr[-1]
+        
+        self.nopacketCounter = 0
+        self.lastDoneRecvSeqnr = 0
 
     def get_info(self):
         return ""
