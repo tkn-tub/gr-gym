@@ -1,6 +1,7 @@
 from gym import spaces
 import numpy as np
 from grgym.envs.gnu_case import gnu_case
+from timeit import default_timer as timer
 
 
 class ieee80211_scenario(gnu_case):
@@ -44,31 +45,55 @@ class ieee80211_scenario(gnu_case):
 
     def get_reward(self):
         # get Data of gnuradio
-        missingcounter = self.gnuradio.get_parameter('seqnr_missing_recv')[0]
-        senderSeqNr = self.gnuradio.get_parameter('seqnr_send')[0]
-        reveicerSeqNr = self.gnuradio.get_parameter('seqnr_recv')[0]
+        missingcounterprev = self.gnuradio.get_parameter_prev('seqnr_missing_recv')[0]
+        senderSeqNrprev = self.gnuradio.get_parameter_prev('seqnr_send')[0]
+        reveicerSeqNrprev = self.gnuradio.get_parameter_prev('seqnr_recv')[0]
+        
+        missingcountertmp = self.gnuradio.get_parameter('seqnr_missing_recv')
+        senderSeqNrtmp = self.gnuradio.get_parameter('seqnr_send')
+        reveicerSeqNrtmp = self.gnuradio.get_parameter('seqnr_recv')
         encoding = self.gnuradio.get_parameter('encoding')[0]
-
+        
+        missingcounter = missingcountertmp[0]
+        senderSeqNr = senderSeqNrtmp[0]
+        reveicerSeqNr = reveicerSeqNrtmp[0]
+        
         missingcounter = missingcounter[-1]
         senderSeqNr = senderSeqNr[-1]
         reveicerSeqNr = reveicerSeqNr[-1]
-
+        
+        missingcounterprev = missingcounterprev[-1]
+        senderSeqNrprev = senderSeqNrprev[-1]
+        reveicerSeqNrprev = reveicerSeqNrprev[-1]
+        
+        if(senderSeqNr < self.lastSendSeqnr):
+            senderSeqNr = senderSeqNrprev
+        if(reveicerSeqNr < self.lastRecvSeqnr):
+            reveicerSeqNr = reveicerSeqNrprev
+        if(missingcounter < self.lastMissingCounter):
+            missingcounter = missingcounterprev
+        
         # calculate number of send packets in last step and
         # calculate number of received packets in last step and
         # calculate number of lost packets in last step
         totalSend = senderSeqNr - self.lastSendSeqnr
         totalRecv = reveicerSeqNr - self.lastRecvSeqnr
         # detected missing frames at receiver, and difference between sender and receiver
-        missingPackets = (missingcounter - self.lastMissingCounter) + (totalSend - totalRecv)
-
+        missingPackets = max((missingcounter - self.lastMissingCounter), 0)
+        
         # calculate effective packet rate -> +1 to avoid division by zero
-        reward = (totalSend - missingPackets) / (totalSend + 1) * self.bitrates[encoding]
+        reward = (totalRecv - missingPackets) / (totalSend + 1) * self.bitrates[encoding]
+        
+        print("Receive:" + str(reveicerSeqNr) + ", last receive" + str(self.lastRecvSeqnr) + "age" + str(reveicerSeqNrtmp[1] - timer()))
+        print("Send:" + str(senderSeqNr) + ", last send" + str(self.lastSendSeqnr) + "age" + str(senderSeqNrtmp[1] - timer()))
+        print("Missing counter:" + str(missingcounter) + ", last missing" + str(self.lastMissingCounter) + "age" + str(missingcountertmp[1] - timer()))
+        print("totalRecv: " + str(totalRecv) + ", missing: " + str(missingPackets) + ", totalSend: " + str(totalSend))
 
         self.lastSendSeqnr = senderSeqNr
         self.lastRecvSeqnr = reveicerSeqNr
         self.lastMissingCounter = missingcounter
 
-        return reward
+        return float(reward)
 
     def get_done(self):
         recSeqnr = self.gnuradio.get_parameter('seqnr_recv')[0]
@@ -89,8 +114,8 @@ class ieee80211_scenario(gnu_case):
         self.execute_actions(0)
         # reset local counter
         missingcounter = self.gnuradio.get_parameter('seqnr_missing_recv')[0]
-        senderSeqNr = self.gnuradio.get_parameter('seqnr_recv')[0]
-        reveicerSeqNr = self.gnuradio.get_parameter('snr_vect')[0]
+        senderSeqNr = self.gnuradio.get_parameter('seqnr_send')[0]
+        reveicerSeqNr = self.gnuradio.get_parameter('seqnr_recv')[0]
 
         self.lastMissingCounter = missingcounter[-1]
         self.lastSendSeqnr = senderSeqNr[-1]

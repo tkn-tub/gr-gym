@@ -28,15 +28,23 @@ while True:
 
     randval = []
     for i in range(a_size):
-        randval.append(np.random.normal(avg[i]/maxreward, 1/(pow(num[i],1) + 1), 1))
+        randval.append(np.random.normal(avg[i]/maxreward, 1/(pow(num[i],2) + 1), 1))
     action = np.argmax(randval)
     
     print("action:", str(action))
     obs, reward, done, info = env.step(int(action))
+    
+    if reward < 0:
+        for i in range(2):
+            obs, reward, done, info = env.step(int(action))
+    
     print("reward:", str(reward))
     maxreward = max(reward, maxreward)
     avg[action] = (avg[action] * num[action] + reward) / (num[action] + 2)
     num[action] += 1
+    
+    with open('result.csv','a') as fd:
+        fd.write(str(action) + "," + str(reward) + "\n")
     
     print("Mean:", str(avg))
     print("Dist:", str(num))

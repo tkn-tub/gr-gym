@@ -13,6 +13,7 @@ class PipeListener(threading.Thread):
         self.elements = elements
         self.data = np.zeros(shape=(self.elements,1))
         self.data = (self.data.astype(self.dtype), timer())
+        self.prev = self.data
         self.mutex = threading.Lock()
     
     # listen on pipe with address
@@ -25,14 +26,30 @@ class PipeListener(threading.Thread):
                 os.mkfifo(self.address, 0o666)
             pipein = open(self.address, 'rb')
             while True:
-                buf = (pipein.read(structlen))
-                if len(buf) == structlen :
-                    tmp = np.frombuffer(buf, dtype=self.dtype)
+                buf = (pipein.read())
+                if len(buf) == 0:
+                    break
+                
+                arr = np.frombuffer(buf, dtype=self.dtype)
+                
+                for i in range(0,int(len(arr) / self.elements)):
+                    tmp = arr[(i * self.elements) : (self.elements * (i+1))]
                     self.mutex.acquire()
+                    self.prev = self.data
                     self.data = (tmp, timer())
                     self.mutex.release()
-                else:
-                    break
+                
+                #print("ges" + str(len(buf)))
+                #for i in range (0, int(len(buf) / structlen)):
+                #    tmpbuf = buf[(i*structlen): (i*structlen -1)]
+                #    print("part" + str(len(tmpbuf)))
+                #    if len(tmpbuf) == structlen :
+                #        print("data" + str(i))
+                #        tmp = np.frombuffer(tmpbuf, dtype=self.dtype)
+                #        print("[" + self.address + "]Get:" + str(tmp))
+                #        self.mutex.acquire()
+                #        self.data = (tmp, timer())
+                #        self.mutex.release()
             pipein.close()
     
     #return data from buffer
@@ -41,7 +58,12 @@ class PipeListener(threading.Thread):
         tmp = self.data
         self.mutex.release()
         return tmp
-
+    
+    def get_prev(self):
+        self.mutex.acquire()
+        tmp = self.prev
+        self.mutex.release()
+        return tmp
 
 class GR_Bridge:
     # create RPC procxy
@@ -64,6 +86,18 @@ class GR_Bridge:
     def get_parameter(self, name):
         if name in self.pipes:
             return self.pipes[name].get_data()
+        else:
+            try:
+                res = (getattr(self.rpc, "get_%s" % name)(), timer())
+            except Exception as e:
+                self.log.error("Unknown variable '%s -> %s'" % (name, e))
+            return res
+    
+    # return result of pipe if name exists there
+    # otherwise forward request to rpc
+    def get_parameter_prev(self, name):
+        if name in self.pipes:
+            return self.pipes[name].get_prev()
         else:
             try:
                 res = (getattr(self.rpc, "get_%s" % name)(), timer())
