@@ -34,13 +34,13 @@ while True:
     print("action:", str(action))
     obs, reward, done, info = env.step(int(action))
     
-    if reward < 0:
-        for i in range(2):
-            obs, reward, done, info = env.step(int(action))
+    #if reward < 0:
+    #    for i in range(2):
+    #        obs, reward, done, info = env.step(int(action))
     
     print("reward:", str(reward))
     maxreward = max(reward, maxreward)
-    avg[action] = (avg[action] * num[action] + reward) / (num[action] + 2)
+    avg[action] = (avg[action] * num[action] + reward) / (num[action] +1)
     num[action] += 1
     
     with open('result.csv','a') as fd:

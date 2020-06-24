@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Wifi Loopback
-# Generated: Sat Jun 20 13:05:20 2020
+# Generated: Tue Jun 23 18:47:43 2020
 ##################################################
 
 from distutils.version import StrictVersion
@@ -252,16 +252,19 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         )
         self.blocks_pdu_to_tagged_stream_0_0 = blocks.pdu_to_tagged_stream(blocks.complex_t, 'packet_len')
         self.blocks_pdu_to_tagged_stream_0 = blocks.pdu_to_tagged_stream(blocks.float_t, 'packet_len')
+        self.blocks_null_sink_0_1_0 = blocks.null_sink(gr.sizeof_int*1)
+        self.blocks_null_sink_0_1 = blocks.null_sink(gr.sizeof_int*1)
+        self.blocks_null_sink_0_0 = blocks.null_sink(gr.sizeof_float*64)
         self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_int*1)
         self.blocks_multiply_const_vxx_0 = blocks.multiply_const_vcc(((10**(snr/10.0))**.5, ))
         self.blocks_message_strobe_0 = blocks.message_strobe(pmt.intern("".join("x" for i in range(pdu_length))), interval)
-        self.blocks_file_sink_3 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_send', False)
+        self.blocks_file_sink_3 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_send', True)
         self.blocks_file_sink_3.set_unbuffered(True)
         self.blocks_file_sink_2 = blocks.file_sink(gr.sizeof_float*64, '/tmp/gr_snr_vect', True)
         self.blocks_file_sink_2.set_unbuffered(True)
-        self.blocks_file_sink_1_1 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_missing_recv', False)
+        self.blocks_file_sink_1_1 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_missing_recv', True)
         self.blocks_file_sink_1_1.set_unbuffered(True)
-        self.blocks_file_sink_1 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_recv', False)
+        self.blocks_file_sink_1 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_recv', True)
         self.blocks_file_sink_1.set_unbuffered(True)
 
         ##################################################
@@ -280,11 +283,14 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self.connect((self.channels_channel_model_0, 0), (self.pfb_arb_resampler_xxx_0, 0))
         self.connect((self.foo_packet_pad2_0, 0), (self.blocks_multiply_const_vxx_0, 0))
         self.connect((self.gnugym_gnugym_moving_average_vect_ff_0, 0), (self.blocks_file_sink_2, 0))
+        self.connect((self.gnugym_gnugym_moving_average_vect_ff_0, 0), (self.blocks_null_sink_0_0, 0))
         self.connect((self.gnugym_gnugym_rssi_cb_0, 0), (self.gnugym_gnugym_moving_average_vect_ff_0, 0))
         self.connect((self.gnugym_parse_seqnr_0, 0), (self.blocks_file_sink_3, 0))
         self.connect((self.gnugym_parse_seqnr_0, 1), (self.blocks_null_sink_0, 0))
+        self.connect((self.gnugym_parse_seqnr_0, 0), (self.blocks_null_sink_0_1, 0))
         self.connect((self.gnugym_parse_seqnr_0_0, 0), (self.blocks_file_sink_1, 0))
         self.connect((self.gnugym_parse_seqnr_0_0, 1), (self.blocks_file_sink_1_1, 0))
+        self.connect((self.gnugym_parse_seqnr_0_0, 1), (self.blocks_null_sink_0_1_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.wifi_phy_hier_0, 0))
         self.connect((self.wifi_phy_hier_0, 0), (self.foo_packet_pad2_0, 0))
         self.connect((self.wifi_phy_hier_0, 1), (self.gnugym_gnugym_rssi_cb_0, 0))

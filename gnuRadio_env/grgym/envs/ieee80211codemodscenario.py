@@ -42,12 +42,13 @@ class ieee80211_scenario(gnu_case):
     def get_obs(self):
         obs = self.gnuradio.get_parameter('snr_vect')[0]
         return obs[-64:]
+        return []
 
     def get_reward(self):
         # get Data of gnuradio
-        missingcounterprev = self.gnuradio.get_parameter_prev('seqnr_missing_recv')[0]
-        senderSeqNrprev = self.gnuradio.get_parameter_prev('seqnr_send')[0]
-        reveicerSeqNrprev = self.gnuradio.get_parameter_prev('seqnr_recv')[0]
+        #missingcounterprev = self.gnuradio.get_parameter_prev('seqnr_missing_recv')[0]
+        #senderSeqNrprev = self.gnuradio.get_parameter_prev('seqnr_send')[0]
+        #reveicerSeqNrprev = self.gnuradio.get_parameter_prev('seqnr_recv')[0]
         
         missingcountertmp = self.gnuradio.get_parameter('seqnr_missing_recv')
         senderSeqNrtmp = self.gnuradio.get_parameter('seqnr_send')
@@ -62,16 +63,16 @@ class ieee80211_scenario(gnu_case):
         senderSeqNr = senderSeqNr[-1]
         reveicerSeqNr = reveicerSeqNr[-1]
         
-        missingcounterprev = missingcounterprev[-1]
-        senderSeqNrprev = senderSeqNrprev[-1]
-        reveicerSeqNrprev = reveicerSeqNrprev[-1]
+        #missingcounterprev = missingcounterprev[-1]
+        #senderSeqNrprev = senderSeqNrprev[-1]
+        #reveicerSeqNrprev = reveicerSeqNrprev[-1]
         
-        if(senderSeqNr < self.lastSendSeqnr):
-            senderSeqNr = senderSeqNrprev
-        if(reveicerSeqNr < self.lastRecvSeqnr):
-            reveicerSeqNr = reveicerSeqNrprev
-        if(missingcounter < self.lastMissingCounter):
-            missingcounter = missingcounterprev
+        #if(senderSeqNr < self.lastSendSeqnr):
+        #    senderSeqNr = senderSeqNrprev
+        #if(reveicerSeqNr < self.lastRecvSeqnr):
+        #    reveicerSeqNr = reveicerSeqNrprev
+        #if(missingcounter < self.lastMissingCounter):
+        #    missingcounter = missingcounterprev
         
         # calculate number of send packets in last step and
         # calculate number of received packets in last step and
