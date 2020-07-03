@@ -1,0 +1,31 @@
+-- The CXX compiler identification is GNU 6.5.0
+-- The C compiler identification is GNU 6.5.0
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Build type not specified: defaulting to release.
+-- Boost version: 1.65.1
+-- Found the following Boost libraries:
+--   filesystem
+--   system
+-- Found LOG4CPP: /usr/lib/x86_64-linux-gnu/liblog4cpp.so
+-- Found PkgConfig: /usr/bin/pkg-config (found version "0.29.1") 
+-- Checking for module 'gmp'
+--   No package 'gmp' found
+-- Found GMP: /usr/lib/x86_64-linux-gnu/libgmpxx.so  
+-- Checking for module 'mpir >= 3.0'
+--   No package 'mpir' found
+-- Could NOT find MPIR (missing: MPIRXX_LIBRARY MPIR_LIBRARY MPIR_INCLUDE_DIR) 
+-- Found MPLIB: /usr/lib/x86_64-linux-gnu/libgmpxx.so  
+-- Found VOLK: Volk::volk  
+-- Configuring incomplete, errors occurred!
+See also "/home/ali/Desktop/s20_projects/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/gr-gnugym/build/CMakeFiles/CMakeOutput.log".

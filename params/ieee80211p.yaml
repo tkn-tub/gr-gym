@@ -1,0 +1,60 @@
+gnu_radio_program:
+  default: example.ieee802_11.wifi_loopback
+  help: A string pointing to a function that is inside one or multiple modules. The
+    function will be imported and executed without any arguments. It must return a
+    tuple of inputs and targets.
+
+scenario:
+  default: ieee80211codemodscenario.ieee80211_scenario
+  help: A string pointing to a function that is inside one or multiple modules. The
+    function will be imported and executed without any arguments. It must return a
+    tuple of inputs and targets.
+
+rpcport:
+  default: 8080
+  help:
+rpchost:
+  default: "localhost"
+  help:
+
+stepTime:
+  default: 1
+  help:
+
+simulate:
+  default: True
+  help:
+
+simTime:
+  default: 0.5
+  help:
+
+sync_length:
+  default:
+  help:
+frequency:
+  default:
+  help:
+bandwidth:
+  default:
+  help:
+windows_size:
+  default:
+  help:
+model: "fading_model"
+N:
+  default: 8
+  help: the number of sinusoids to use in simulating the channel
+fDTs:
+  default: 50
+  help: normalized maximum Doppler frequency
+LOS:
+  default: LOS
+  help: include Line-of-Site path? selects between Rayleigh (NLOS) and Rician (LOS) models
+K:
+  default:
+  help: Rician factor
+seed:
+  default: 23
+  help: noise generators
+
