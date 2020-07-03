@@ -89,5 +89,9 @@ class ieee80211codemodscenario:
         return ""
     
     def simulate(self):
-        #TODO
+        f_d = np.random.uniform(0,1363)
+        dist = np.random.uniform(0,40)
+
+        self.gnuradio.set_parameter("f_d",f_d)
+        self.gnuradio.set_parameter("dist",dist)
         return
