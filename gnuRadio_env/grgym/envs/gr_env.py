@@ -65,8 +65,9 @@ class GrEnv(gym.Env):
             reward = self.scenario.get_reward()
             done = self.scenario.get_done()
             info = self.scenario.get_info()
-            self._logger.info("start simuation in gnu radio")
-            self.scenario.simulate()
+            if self.args.simulate == True:
+                self._logger.info("start simuation in gnu radio")
+                self.scenario.simulate()
             self._logger.info("wait for simulation")
             time.sleep(self.args.simTime)
             self._logger.info("collect observations")
@@ -80,15 +81,26 @@ class GrEnv(gym.Env):
     def reset(self):
         self._logger.info("reset usecase scenario")
         self.scenario.reset()
-        try:
-            self.bridge.start()
-        except Exception as e:
-            self._logger.error("Multiple Start Error %s" % (e))
+        error = True
+        while error is True:
+            error = False
+            try:
+                self.bridge.start()
+            except Exception as e:
+                if type(e) is ConnectionRefusedError:
+                    # no rpc server
+                    error = True
+                    print("Please start the GNU Radio scenario")
+                    time.sleep(10)
+                self._logger.error("Multiple Start Error %s" % (e))
         self.gr_state = RadioProgramState.RUNNING
+        self.scenario.reset()
         self.action_space = self.scenario.get_action_space()
         self.observation_space = self.scenario.get_observation_space()
+        time.sleep(self.args.simTime)
+        obs = self.scenario.get_obs()
 
-        return
+        return obs
 
     def close(self):
         pass

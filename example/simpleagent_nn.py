@@ -25,13 +25,21 @@ model.compile(optimizer=tf.train.AdamOptimizer(0.001),
               metrics=['accuracy'])
 
 epsilon = 1
-maxreward = np.NINF
+epsilon_start = 0.99999999999
+maxreward = 0.00000000000001
+run = 0
+episode = 0
+
+with open('result_nn.csv','a') as fd:
+    fd.write("Run" +"," + "Episode" + ","+ "Action" + "," + "Reward" + "\n")
 
 while True:
     print("--------------------------------------------------------")
     print("new step")
     print("observation:", str(obs))
+    print("run " + str(run) + ", epsiode " + str(episode) + " eps = " + str(epsilon))
     action = 0
+    obs = np.reshape(obs, [1, s_size])
 
     if np.random.rand(1) < epsilon:
         action = np.random.randint(a_size)
@@ -40,8 +48,8 @@ while True:
 
     
     print("action:", str(action))
-    obs, reward, done, info = env.step(int(action))
-    print("reward:", str(reward))
+    obs_new, reward, done, info = env.step(int(action))
+    print("reward:", str(reward), " max reward: ", str(maxreward))
     
     maxreward = max(reward, maxreward)
     
@@ -50,13 +58,25 @@ while True:
     target_f = model.predict(obs)
     target_f[0][action] = target
     print("agent new learning" + str(target_f))
-    model.fit(state, target_f, epochs=1, verbose=0)
+    model.fit(obs, target_f, epochs=1, verbose=0)
     
-    epsilon *= 0.9
+    with open('result_nn.csv','a') as fd:
+        fd.write(str(run) + "," +str(episode)+ ","+ str(action) + "," + str(reward) + "\n")
     
-    print("Mean:", str(avg))
-    print("Dist:", str(num))
+    obs = obs_new
+    epsilon *= 0.97
+    run += 1
     
-    if done:
+    if (run % 15) == 0:
+        epsilon = epsilon_start
+        epsilon_start *= 0.9999999
+        epsilon_start = pow(epsilon_start, 2)
+        episode += 1
+        model.save_weights('nn_weights.bin')
+    
+    #print("Mean:", str(avg))
+    #print("Dist:", str(num))
+    
+    if done or episode > 30 or (epsilon_start < 0.01 and epsilon < 0.01):
         break
 env.close()

@@ -21,6 +21,10 @@ stepTime:
   default: 1
   help:
 
+simulate:
+  default: True
+  help:
+
 simTime:
   default: 0.5
   help:

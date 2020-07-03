@@ -23,15 +23,18 @@ class PipeListener(threading.Thread):
         structlen = self.dtype.itemsize * self.elements
         while True:
             if not os.path.exists(self.address):
+                #os.remove(self.address)
                 os.mkfifo(self.address, 0o666)
             pipein = open(self.address, 'rb')
             f = open("." + self.address, "a")
+            print("open pipe")
 
             while True:
                 buf = (pipein.read(structlen))
                 if len(buf) == 0:
+                    print(buf)
                     break
-                
+                #print("read data")
                 tmp = np.frombuffer(buf, dtype=self.dtype)
                 
                 #for i in range(0,int(len(arr) / self.elements)):
@@ -41,18 +44,7 @@ class PipeListener(threading.Thread):
                 #self.prev = self.data
                 self.data = (tmp, timer())
                 self.mutex.release()
-                
-                #print("ges" + str(len(buf)))
-                #for i in range (0, int(len(buf) / structlen)):
-                #    tmpbuf = buf[(i*structlen): (i*structlen -1)]
-                #    print("part" + str(len(tmpbuf)))
-                #    if len(tmpbuf) == structlen :
-                #        print("data" + str(i))
-                #        tmp = np.frombuffer(tmpbuf, dtype=self.dtype)
-                #        print("[" + self.address + "]Get:" + str(tmp))
-                #        self.mutex.acquire()
-                #        self.data = (tmp, timer())
-                #        self.mutex.release()
+
             pipein.close()
             f.close()
     
