@@ -18,13 +18,15 @@ s_size = ob_space.shape[0]
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(s_size, input_shape=(s_size,), activation='sigmoid'))
-model.add(keras.layers.Dense(5, activation='relu'))
+model.add(keras.layers.Dense(32, activation='relu'))
+model.add(keras.layers.Dense(16, activation='relu'))
 model.add(keras.layers.Dense(a_size, activation='softmax'))
 model.compile(optimizer=tf.train.AdamOptimizer(0.001),
               loss='categorical_crossentropy',
               metrics=['accuracy'])
 model.load_weights("nn_weights.bin")
 run = 0
+maxreward = 0.0000001
 
 #with open('result_nn.csv','a') as fd:
 #    fd.write("Run" +"," + "Episode" + ","+ "Action" + "," + "Reward" + "\n")
@@ -34,8 +36,8 @@ while True:
     print("new step")
     print("observation:", str(obs))
     print("run " + str(run))
+    obs = np.reshape(obs, [1, s_size])
     action = np.argmax(model.predict(obs)[0])
-
     
     print("action:", str(action))
     obs_new, reward, done, info = env.step(int(action))

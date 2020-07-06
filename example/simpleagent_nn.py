@@ -18,7 +18,8 @@ s_size = ob_space.shape[0]
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(s_size, input_shape=(s_size,), activation='sigmoid'))
-model.add(keras.layers.Dense(5, activation='relu'))
+model.add(keras.layers.Dense(32, activation='relu'))
+model.add(keras.layers.Dense(16, activation='relu'))
 model.add(keras.layers.Dense(a_size, activation='softmax'))
 model.compile(optimizer=tf.train.AdamOptimizer(0.001),
               loss='categorical_crossentropy',
@@ -67,7 +68,7 @@ while True:
     epsilon *= 0.97
     run += 1
     
-    if (run % 15) == 0:
+    if (run % 25) == 0:
         epsilon = epsilon_start
         epsilon_start *= 0.9999999
         epsilon_start = pow(epsilon_start, 2)

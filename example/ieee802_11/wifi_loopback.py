@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Wifi Loopback
-# Generated: Tue Jun 23 18:47:43 2020
+# Generated: Mon Jul  6 18:28:16 2020
 ##################################################
 
 from distutils.version import StrictVersion
@@ -48,7 +48,7 @@ from gnuradio import qtgui
 
 class wifi_loopback(gr.top_block, Qt.QWidget):
 
-    def __init__(self):
+    def __init__(self, samp_rate=20e6):
         gr.top_block.__init__(self, "Wifi Loopback")
         Qt.QWidget.__init__(self)
         self.setWindowTitle("Wifi Loopback")
@@ -77,20 +77,27 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
             self.restoreGeometry(self.settings.value("geometry", type=QtCore.QByteArray))
 
         ##################################################
+        # Parameters
+        ##################################################
+        self.samp_rate = samp_rate
+
+        ##################################################
         # Variables
         ##################################################
-        self.snr = snr = 15
+        self.snr = snr = 25
         self.pdu_length = pdu_length = 500
         self.out_buf_size = out_buf_size = 96000
         self.interval = interval = 300
+        self.f_d = f_d = 27.3
         self.epsilon = epsilon = 0
         self.encoding = encoding = 0
+        self.dist = dist = 20
         self.chan_est = chan_est = 0
 
         ##################################################
         # Blocks
         ##################################################
-        self._snr_range = Range(-15, 30, 0.1, 15, 200)
+        self._snr_range = Range(-60, 30, 0.1, 25, 200)
         self._snr_win = RangeWidget(self._snr_range, self.set_snr, "snr", "counter_slider", float)
         self.top_layout.addWidget(self._snr_win)
         self._pdu_length_range = Range(0, 1500, 1, 500, 200)
@@ -123,6 +130,9 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self._encoding_button_group.buttonClicked[int].connect(
         	lambda i: self.set_encoding(self._encoding_options[i]))
         self.top_layout.addWidget(self._encoding_group_box)
+        self._dist_range = Range(0, 40, 1, 20, 200)
+        self._dist_win = RangeWidget(self._dist_range, self.set_dist, 'dist in dB', "counter_slider", float)
+        self.top_layout.addWidget(self._dist_win)
         self._chan_est_options = [ieee802_11.LS, ieee802_11.LMS, ieee802_11.STA, ieee802_11.COMB]
         self._chan_est_labels = ["LS", "LMS", "STA", "Linear Comb"]
         self._chan_est_group_box = Qt.QGroupBox("chan_est")
@@ -187,6 +197,49 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self.qtgui_number_sink_0.enable_autoscale(False)
         self._qtgui_number_sink_0_win = sip.wrapinstance(self.qtgui_number_sink_0.pyqwidget(), Qt.QWidget)
         self.top_layout.addWidget(self._qtgui_number_sink_0_win)
+        self.qtgui_freq_sink_x_0 = qtgui.freq_sink_c(
+        	64, #size
+        	firdes.WIN_BLACKMAN_hARRIS, #wintype
+        	5.89e9, #fc
+        	10e6, #bw
+        	"", #name
+        	1 #number of inputs
+        )
+        self.qtgui_freq_sink_x_0.set_update_time(0.10)
+        self.qtgui_freq_sink_x_0.set_y_axis(-110, 30)
+        self.qtgui_freq_sink_x_0.set_y_label('Relative Gain', 'dB')
+        self.qtgui_freq_sink_x_0.set_trigger_mode(qtgui.TRIG_MODE_FREE, 0.0, 0, "")
+        self.qtgui_freq_sink_x_0.enable_autoscale(False)
+        self.qtgui_freq_sink_x_0.enable_grid(False)
+        self.qtgui_freq_sink_x_0.set_fft_average(1.0)
+        self.qtgui_freq_sink_x_0.enable_axis_labels(True)
+        self.qtgui_freq_sink_x_0.enable_control_panel(False)
+
+        if not True:
+          self.qtgui_freq_sink_x_0.disable_legend()
+
+        if "complex" == "float" or "complex" == "msg_float":
+          self.qtgui_freq_sink_x_0.set_plot_pos_half(not True)
+
+        labels = ['', '', '', '', '',
+                  '', '', '', '', '']
+        widths = [1, 1, 1, 1, 1,
+                  1, 1, 1, 1, 1]
+        colors = ["blue", "red", "green", "black", "cyan",
+                  "magenta", "yellow", "dark red", "dark green", "dark blue"]
+        alphas = [1.0, 1.0, 1.0, 1.0, 1.0,
+                  1.0, 1.0, 1.0, 1.0, 1.0]
+        for i in xrange(1):
+            if len(labels[i]) == 0:
+                self.qtgui_freq_sink_x_0.set_line_label(i, "Data {0}".format(i))
+            else:
+                self.qtgui_freq_sink_x_0.set_line_label(i, labels[i])
+            self.qtgui_freq_sink_x_0.set_line_width(i, widths[i])
+            self.qtgui_freq_sink_x_0.set_line_color(i, colors[i])
+            self.qtgui_freq_sink_x_0.set_line_alpha(i, alphas[i])
+
+        self._qtgui_freq_sink_x_0_win = sip.wrapinstance(self.qtgui_freq_sink_x_0.pyqwidget(), Qt.QWidget)
+        self.top_layout.addWidget(self._qtgui_freq_sink_x_0_win)
         self.qtgui_const_sink_x_0 = qtgui.const_sink_c(
         	48*10, #size
         	"", #name
@@ -242,29 +295,29 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self.gnugym_gnugym_moving_average_vect_ff_0 = gnugym.gnugym_moving_average_vect_ff(64, 3)
         self.foo_packet_pad2_0 = foo.packet_pad2(False, False, 0.001, 500, 0)
         (self.foo_packet_pad2_0).set_min_output_buffer(96000)
+        self._f_d_range = Range(0, 1363, 0.1, 27.3, 200)
+        self._f_d_win = RangeWidget(self._f_d_range, self.set_f_d, "f_d", "counter_slider", float)
+        self.top_layout.addWidget(self._f_d_win)
         self.channels_channel_model_0 = channels.channel_model(
         	noise_voltage=1,
         	frequency_offset=epsilon * 5.89e9 / 10e6,
         	epsilon=1.0,
-        	taps=(1.0, ),
+        	taps=(1.0 , ),
         	noise_seed=0,
         	block_tags=False
         )
         self.blocks_pdu_to_tagged_stream_0_0 = blocks.pdu_to_tagged_stream(blocks.complex_t, 'packet_len')
         self.blocks_pdu_to_tagged_stream_0 = blocks.pdu_to_tagged_stream(blocks.float_t, 'packet_len')
-        self.blocks_null_sink_0_1_0 = blocks.null_sink(gr.sizeof_int*1)
-        self.blocks_null_sink_0_1 = blocks.null_sink(gr.sizeof_int*1)
-        self.blocks_null_sink_0_0 = blocks.null_sink(gr.sizeof_float*64)
         self.blocks_null_sink_0 = blocks.null_sink(gr.sizeof_int*1)
-        self.blocks_multiply_const_vxx_0 = blocks.multiply_const_vcc(((10**(snr/10.0))**.5, ))
+        self.blocks_multiply_const_vxx_0_0 = blocks.multiply_const_vcc(((10**((snr-dist)/10.0))**.5, ))
         self.blocks_message_strobe_0 = blocks.message_strobe(pmt.intern("".join("x" for i in range(pdu_length))), interval)
-        self.blocks_file_sink_3 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_send', True)
+        self.blocks_file_sink_3 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_send', False)
         self.blocks_file_sink_3.set_unbuffered(True)
         self.blocks_file_sink_2 = blocks.file_sink(gr.sizeof_float*64, '/tmp/gr_snr_vect', True)
         self.blocks_file_sink_2.set_unbuffered(True)
-        self.blocks_file_sink_1_1 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_missing_recv', True)
+        self.blocks_file_sink_1_1 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_missing_recv', False)
         self.blocks_file_sink_1_1.set_unbuffered(True)
-        self.blocks_file_sink_1 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_recv', True)
+        self.blocks_file_sink_1 = blocks.file_sink(gr.sizeof_int*1, '/tmp/gr_seq_recv', False)
         self.blocks_file_sink_1.set_unbuffered(True)
 
         ##################################################
@@ -277,20 +330,18 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self.msg_connect((self.wifi_phy_hier_0, 'carrier'), (self.blocks_pdu_to_tagged_stream_0_0, 'pdus'))
         self.msg_connect((self.wifi_phy_hier_0, 'mac_out'), (self.gnugym_parse_seqnr_0_0, 'in'))
         self.msg_connect((self.wifi_phy_hier_0, 'mac_out'), (self.ieee802_11_parse_mac_0, 'in'))
-        self.connect((self.blocks_multiply_const_vxx_0, 0), (self.channels_channel_model_0, 0))
+        self.connect((self.blocks_multiply_const_vxx_0_0, 0), (self.channels_channel_model_0, 0))
         self.connect((self.blocks_pdu_to_tagged_stream_0, 0), (self.qtgui_number_sink_0, 0))
         self.connect((self.blocks_pdu_to_tagged_stream_0_0, 0), (self.qtgui_const_sink_x_0, 0))
         self.connect((self.channels_channel_model_0, 0), (self.pfb_arb_resampler_xxx_0, 0))
-        self.connect((self.foo_packet_pad2_0, 0), (self.blocks_multiply_const_vxx_0, 0))
+        self.connect((self.channels_channel_model_0, 0), (self.qtgui_freq_sink_x_0, 0))
+        self.connect((self.foo_packet_pad2_0, 0), (self.blocks_multiply_const_vxx_0_0, 0))
         self.connect((self.gnugym_gnugym_moving_average_vect_ff_0, 0), (self.blocks_file_sink_2, 0))
-        self.connect((self.gnugym_gnugym_moving_average_vect_ff_0, 0), (self.blocks_null_sink_0_0, 0))
         self.connect((self.gnugym_gnugym_rssi_cb_0, 0), (self.gnugym_gnugym_moving_average_vect_ff_0, 0))
         self.connect((self.gnugym_parse_seqnr_0, 0), (self.blocks_file_sink_3, 0))
         self.connect((self.gnugym_parse_seqnr_0, 1), (self.blocks_null_sink_0, 0))
-        self.connect((self.gnugym_parse_seqnr_0, 0), (self.blocks_null_sink_0_1, 0))
         self.connect((self.gnugym_parse_seqnr_0_0, 0), (self.blocks_file_sink_1, 0))
         self.connect((self.gnugym_parse_seqnr_0_0, 1), (self.blocks_file_sink_1_1, 0))
-        self.connect((self.gnugym_parse_seqnr_0_0, 1), (self.blocks_null_sink_0_1_0, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.wifi_phy_hier_0, 0))
         self.connect((self.wifi_phy_hier_0, 0), (self.foo_packet_pad2_0, 0))
         self.connect((self.wifi_phy_hier_0, 1), (self.gnugym_gnugym_rssi_cb_0, 0))
@@ -300,12 +351,18 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self.settings.setValue("geometry", self.saveGeometry())
         event.accept()
 
+    def get_samp_rate(self):
+        return self.samp_rate
+
+    def set_samp_rate(self, samp_rate):
+        self.samp_rate = samp_rate
+
     def get_snr(self):
         return self.snr
 
     def set_snr(self, snr):
         self.snr = snr
-        self.blocks_multiply_const_vxx_0.set_k(((10**(self.snr/10.0))**.5, ))
+        self.blocks_multiply_const_vxx_0_0.set_k(((10**((self.snr-self.dist)/10.0))**.5, ))
 
     def get_pdu_length(self):
         return self.pdu_length
@@ -327,6 +384,12 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self.interval = interval
         self.blocks_message_strobe_0.set_period(self.interval)
 
+    def get_f_d(self):
+        return self.f_d
+
+    def set_f_d(self, f_d):
+        self.f_d = f_d
+
     def get_epsilon(self):
         return self.epsilon
 
@@ -343,6 +406,13 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self._encoding_callback(self.encoding)
         self.wifi_phy_hier_0.set_encoding(self.encoding)
 
+    def get_dist(self):
+        return self.dist
+
+    def set_dist(self, dist):
+        self.dist = dist
+        self.blocks_multiply_const_vxx_0_0.set_k(((10**((self.snr-self.dist)/10.0))**.5, ))
+
     def get_chan_est(self):
         return self.chan_est
 
@@ -352,14 +422,25 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self.wifi_phy_hier_0.set_chan_est(self.chan_est)
 
 
+def argument_parser():
+    parser = OptionParser(usage="%prog: [options]", option_class=eng_option)
+    parser.add_option(
+        "", "--samp-rate", dest="samp_rate", type="eng_float", default=eng_notation.num_to_str(20e6),
+        help="Set samp_rate [default=%default]")
+    return parser
+
+
 def main(top_block_cls=wifi_loopback, options=None):
+    if options is None:
+        options, _ = argument_parser().parse_args()
 
     if StrictVersion("4.5.0") <= StrictVersion(Qt.qVersion()) < StrictVersion("5.0.0"):
         style = gr.prefs().get_string('qtgui', 'style', 'raster')
         Qt.QApplication.setGraphicsSystem(style)
     qapp = Qt.QApplication(sys.argv)
 
-    tb = top_block_cls()
+    tb = top_block_cls(samp_rate=options.samp_rate)
+    tb.start()
     tb.show()
 
     def quitting():
