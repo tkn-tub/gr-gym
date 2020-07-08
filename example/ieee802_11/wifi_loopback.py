@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Wifi Loopback
-# Generated: Mon Jul  6 18:28:16 2020
+# Generated: Tue Jul  7 21:45:13 2020
 ##################################################
 
 from distutils.version import StrictVersion
@@ -440,7 +440,6 @@ def main(top_block_cls=wifi_loopback, options=None):
     qapp = Qt.QApplication(sys.argv)
 
     tb = top_block_cls(samp_rate=options.samp_rate)
-    tb.start()
     tb.show()
 
     def quitting():

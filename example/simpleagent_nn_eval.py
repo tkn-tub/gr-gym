@@ -15,10 +15,13 @@ print("Action space: ", ac_space, ac_space.n)
 
 a_size = ac_space.n
 s_size = ob_space.shape[0]
+s_min = ob_space.low[0]
+s_max = ob_space.high[0]
+s_range = s_max - s_min
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(s_size, input_shape=(s_size,), activation='sigmoid'))
-model.add(keras.layers.Dense(32, activation='relu'))
+#model.add(keras.layers.Dense(32, activation='relu'))
 model.add(keras.layers.Dense(16, activation='relu'))
 model.add(keras.layers.Dense(a_size, activation='softmax'))
 model.compile(optimizer=tf.train.AdamOptimizer(0.001),
@@ -34,14 +37,19 @@ maxreward = 0.0000001
 while True:
     print("--------------------------------------------------------")
     print("new step")
-    print("observation:", str(obs))
+    
     print("run " + str(run))
+    obs = (obs - s_min) / s_range
     obs = np.reshape(obs, [1, s_size])
+    
+    print("observation:", str(obs))
     action = np.argmax(model.predict(obs)[0])
     
     print("action:", str(action))
     obs_new, reward, done, info = env.step(int(action))
     print("reward:", str(reward), " max reward: ", str(maxreward))
+    
+    obs = obs_new
     
     maxreward = max(reward, maxreward)
     

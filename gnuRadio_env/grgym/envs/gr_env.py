@@ -68,8 +68,8 @@ class GrEnv(gym.Env):
             if self.args.simulate == True:
                 self._logger.info("start simuation in gnu radio")
                 self.scenario.simulate()
-            self._logger.info("wait for simulation")
-            time.sleep(self.args.simTime)
+                self._logger.info("wait for simulation")
+                time.sleep(self.args.simTime)
             self._logger.info("collect observations")
             obs = self.scenario.get_obs()
 

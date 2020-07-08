@@ -15,6 +15,7 @@ class PipeListener(threading.Thread):
         self.data = (self.data.astype(self.dtype), timer())
         #self.prev = self.data
         self.mutex = threading.Lock()
+        self.log = logging.getLogger('PipeListener[' + self.address+ ']')
     
     # listen on pipe with address
     # create pipe if id does not exists
@@ -27,12 +28,11 @@ class PipeListener(threading.Thread):
                 os.mkfifo(self.address, 0o666)
             pipein = open(self.address, 'rb')
             f = open("." + self.address, "a")
-            print("open pipe")
+            self.log.debug("open pipe")
 
             while True:
                 buf = (pipein.read(structlen))
                 if len(buf) == 0:
-                    print(buf)
                     break
                 #print("read data")
                 tmp = np.frombuffer(buf, dtype=self.dtype)
