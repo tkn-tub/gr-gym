@@ -36,7 +36,7 @@ namespace gr {
   namespace gnugym {
 
     gnugym_snr_cb::sptr
-    gnugym_snr_cb::make(Equalizer algo, double freq, double bw, bool log, bool debug)
+    gnugym_snr_cb::make(EqualizerSNR algo, double freq, double bw, bool log, bool debug)
     {
       return gnuradio::get_initial_sptr
         (new gnugym_snr_cb_impl(algo,  freq, bw, log, debug));
@@ -45,7 +45,7 @@ namespace gr {
     /*
      * The private constructor
      */
-    gnugym_snr_cb_impl::gnugym_snr_cb_impl(Equalizer algo, double freq, double bw, bool log, bool debug)
+    gnugym_snr_cb_impl::gnugym_snr_cb_impl(EqualizerSNR algo, double freq, double bw, bool log, bool debug)
       : gr::block("gnugym_snr_cb",
 			gr::io_signature::make(1, -1, 64 * sizeof(gr_complex)),
 			gr::io_signature::make(1, -1, 64 * sizeof(float))),
@@ -74,25 +74,25 @@ namespace gr {
     }
 
     void
-    gnugym_snr_cb_impl::set_algorithm(Equalizer algo) {
+    gnugym_snr_cb_impl::set_algorithm(EqualizerSNR algo) {
 	    gr::thread::scoped_lock lock(d_mutex);
 	    delete d_equalizer;
 
 	    switch(algo) {
 
-	    case COMB:
+	    case COMB_SNR:
 		    dout << "Comb" << std::endl;
 		    //d_equalizer = new equalizer::comb();
 		    break;
-	    case LS:
+	    case LS_SNR:
 		    dout << "LS" << std::endl;
 		    d_equalizer = new equalizer::ls();
 		    break;
-	    case LMS:
+	    case LMS_SNR:
 		    dout << "LMS" << std::endl;
 		    //d_equalizer = new equalizer::lms();
 		    break;
-	    case STA:
+	    case STA_SNR:
 		    dout << "STA" << std::endl;
 		    //d_equalizer = new equalizer::sta();
 		    break;

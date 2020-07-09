@@ -12,24 +12,24 @@
 	<param>
 		<name>Algorithm</name>
 		<key>algo</key>
-		<value>gnugym.LS</value>
+		<value>gnugym.LS_SNR</value>
 		<type>int</type>
 
 		<option>
 			<name>LS</name>
-			<key>gnugym.LS</key>
+			<key>gnugym.LS_SNR</key>
 		</option>
 		<option>
 			<name>LMS</name>
-			<key>gnugym.LMS</key>
+			<key>gnugym.LMS_SNR</key>
 		</option>
 		<option>
 			<name>Comb</name>
-			<key>gnugym.COMB</key>
+			<key>gnugym.COMB_SNR</key>
 		</option>
 		<option>
 			<name>STA</name>
-			<key>gnugym.STA</key>
+			<key>gnugym.STA_SNR</key>
 		</option>
 	</param>
 

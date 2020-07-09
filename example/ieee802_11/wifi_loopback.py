@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Wifi Loopback
-# Generated: Thu Jul  9 20:23:49 2020
+# Generated: Thu Jul  9 23:15:52 2020
 ##################################################
 
 from distutils.version import StrictVersion
@@ -291,7 +291,7 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self.ieee802_11_mac_0 = ieee802_11.mac(([0x23, 0x23, 0x23, 0x23, 0x23, 0x23]), ([0x42, 0x42, 0x42, 0x42, 0x42, 0x42]), ([0xff, 0xff, 0xff, 0xff, 0xff, 0xff]))
         self.gnugym_parse_seqnr_0_0 = gnugym.gnugym_parse_seqnr(False, False)
         self.gnugym_parse_seqnr_0 = gnugym.gnugym_parse_seqnr(False, False)
-        self.gnugym_gnugym_snr_cb_0 = gnugym.gnugym_rssi_cb(gnugym.LS, 5.89e9, 10e6, False, False)
+        self.gnugym_gnugym_snr_cb_0 = gnugym.gnugym_snr_cb(gnugym.LS, 5.89e9, 10e6, False, False)
         self.foo_packet_pad2_0 = foo.packet_pad2(False, False, 0.001, 500, 0)
         (self.foo_packet_pad2_0).set_min_output_buffer(96000)
         self._f_d_range = Range(0, 1363, 0.1, 27.3, 200)

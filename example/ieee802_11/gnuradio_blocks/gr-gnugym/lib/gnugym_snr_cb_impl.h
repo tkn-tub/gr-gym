@@ -34,10 +34,10 @@ namespace gr {
       // Nothing to declare in this block.
 
      public:
-      gnugym_snr_cb_impl(Equalizer algo, double freq, double bw, bool log, bool debug);
+      gnugym_snr_cb_impl(EqualizerSNR algo, double freq, double bw, bool log, bool debug);
       ~gnugym_snr_cb_impl();
       
-      void set_algorithm(Equalizer algo);
+      void set_algorithm(EqualizerSNR algo);
 	  void set_bandwidth(double bw);
 	  void set_frequency(double freq);
 	

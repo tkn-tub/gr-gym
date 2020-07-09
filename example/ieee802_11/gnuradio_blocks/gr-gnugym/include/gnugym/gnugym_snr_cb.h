@@ -25,11 +25,11 @@
 #include <gnugym/api.h>
 #include <gnuradio/block.h>
 
-enum Equalizer {
-	LS   = 0,
-	LMS  = 1,
-	COMB = 2,
-	STA  = 3,
+enum EqualizerSNR {
+	LS_SNR   = 0,
+	LMS_SNR  = 1,
+	COMB_SNR = 2,
+	STA_SNR  = 3,
 };
 
 namespace gr {
@@ -53,7 +53,7 @@ namespace gr {
        * class. gnugym::gnugym_snr_cb::make is the public interface for
        * creating new instances.
        */
-      static sptr make(Equalizer algo, double freq, double bw, bool log, bool debug);
+      static sptr make(EqualizerSNR algo, double freq, double bw, bool log, bool debug);
     };
 
   } // namespace gnugym
