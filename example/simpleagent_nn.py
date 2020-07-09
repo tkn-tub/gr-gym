@@ -5,8 +5,8 @@ import tensorflow.contrib.slim as slim
 import numpy as np
 from tensorflow import keras
 
-runsPerEpisode = 80
-epsilonDecay = 0.9995
+runsPerEpisode = 100
+epsilonDecay = 0.99
 decayLimit = 0.005
 
 env = gym.make('grgym:grenv-v0')
@@ -78,8 +78,8 @@ while True:
     
     if (run % runsPerEpisode) == 0:
         epsilon = epsilon_start
-        epsilon_start *= 0.9999999
-        epsilon_start = pow(epsilon_start, 2)
+        epsilon_start *= 0.99999
+        epsilon_start = pow(epsilon_start, 1.5)
         episode += 1
         model.save_weights('nn_weights.bin')
     
