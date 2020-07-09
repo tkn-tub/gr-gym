@@ -24,7 +24,7 @@
 
 #include <gnuradio/io_signature.h>
 #include <gnugym/constellations.h>
-#include "gnugym_rssi_cb_impl.h"
+#include "gnugym_snr_cb_impl.h"
 #include "equalizer/base.h"
 #include "equalizer/comb.h"
 #include "equalizer/lms.h"
@@ -35,18 +35,18 @@
 namespace gr {
   namespace gnugym {
 
-    gnugym_rssi_cb::sptr
-    gnugym_rssi_cb::make(Equalizer algo, double freq, double bw, bool log, bool debug)
+    gnugym_snr_cb::sptr
+    gnugym_snr_cb::make(Equalizer algo, double freq, double bw, bool log, bool debug)
     {
       return gnuradio::get_initial_sptr
-        (new gnugym_rssi_cb_impl(algo,  freq, bw, log, debug));
+        (new gnugym_snr_cb_impl(algo,  freq, bw, log, debug));
     }
 
     /*
      * The private constructor
      */
-    gnugym_rssi_cb_impl::gnugym_rssi_cb_impl(Equalizer algo, double freq, double bw, bool log, bool debug)
-      : gr::block("gnugym_rssi_cb",
+    gnugym_snr_cb_impl::gnugym_snr_cb_impl(Equalizer algo, double freq, double bw, bool log, bool debug)
+      : gr::block("gnugym_snr_cb",
 			gr::io_signature::make(1, -1, 64 * sizeof(gr_complex)),
 			gr::io_signature::make(1, -1, 64 * sizeof(float))),
 	d_current_symbol(0), d_log(log), d_debug(debug), d_equalizer(NULL),
@@ -69,12 +69,12 @@ namespace gr {
     /*
      * Our virtual destructor.
      */
-    gnugym_rssi_cb_impl::~gnugym_rssi_cb_impl()
+    gnugym_snr_cb_impl::~gnugym_snr_cb_impl()
     {
     }
 
     void
-    gnugym_rssi_cb_impl::set_algorithm(Equalizer algo) {
+    gnugym_snr_cb_impl::set_algorithm(Equalizer algo) {
 	    gr::thread::scoped_lock lock(d_mutex);
 	    delete d_equalizer;
 
@@ -102,25 +102,25 @@ namespace gr {
     }
 
     void
-    gnugym_rssi_cb_impl::set_bandwidth(double bw) {
+    gnugym_snr_cb_impl::set_bandwidth(double bw) {
 	    gr::thread::scoped_lock lock(d_mutex);
 	    d_bw = bw;
     }
 
     void
-    gnugym_rssi_cb_impl::set_frequency(double freq) {
+    gnugym_snr_cb_impl::set_frequency(double freq) {
 	    gr::thread::scoped_lock lock(d_mutex);
 	    d_freq = freq;
     }
 
     void
-    gnugym_rssi_cb_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
+    gnugym_snr_cb_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
     {
       ninput_items_required[0] = noutput_items;
     }
 
     int
-    gnugym_rssi_cb_impl::general_work (int noutput_items,
+    gnugym_snr_cb_impl::general_work (int noutput_items,
                        gr_vector_int &ninput_items,
                        gr_vector_const_void_star &input_items,
                        gr_vector_void_star &output_items)
@@ -218,20 +218,13 @@ namespace gr {
 
 		    // do equalization
 		    if(d_current_symbol < 2)
-		        //d_equalizer->equalize(current_symbol, d_current_symbol,
-				//        symbols, bits, d_frame_mod, out + o * 64 * sizeof(float), true);
+		        d_equalizer->equalize(current_symbol, d_current_symbol,
+				        symbols, bits, d_frame_mod, out + o * 64 * sizeof(float), true);
 	        if(d_current_symbol == 1){
-	            // calculate RSSI
-	            float *rssiVect = out + o * 64 * sizeof(float);
-	            for(int i = 0; i < 64; i++) {
-			        if((i == 32) || (i < 6) || ( i > 58)) {
-				        continue;
-			        }
-			        double mySignal = std::pow(std::abs(in[i]), 2);
-			        
-			        rssiVect[i] = 10 * std::log10(mySignal / 2);
-			        //std::cout << "signal: " << mySignal << ", noise: " << myNoise << ", SNR: " << snrVect[i] << "\n";
-		        }
+	            for(int j = 0; j < 64; j ++){
+	                //std::cout << "SNR: " << (out + o * 64 * sizeof(float))[j] << "\n";
+	                
+	            }
 	            o ++;
 	            }
 

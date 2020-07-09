@@ -19,6 +19,7 @@
 
 install(FILES
     gnugym_gnugym_rssi_cb.xml
+    gnugym_gnugym_snr_cb.xml
     gnugym_gnugym_snrdebug_ff.xml
     gnugym_gnugym_moving_average_vect.xml
     gnugym_gnugym_parse_seqnr.xml

@@ -70,7 +70,7 @@
     </param>
     <param>
       <key>run</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>thread_safe_setters</key>
@@ -908,7 +908,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>file</key>
@@ -1485,7 +1485,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>2</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1544,7 +1544,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>freq</key>
@@ -1552,7 +1552,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(720, 260)</value>
+      <value>(728, 260)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1561,6 +1561,65 @@
     <param>
       <key>id</key>
       <value>gnugym_gnugym_rssi_cb_0</value>
+    </param>
+    <param>
+      <key>log</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gnugym_gnugym_snr_cb</key>
+    <param>
+      <key>algo</key>
+      <value>gnugym.LS</value>
+    </param>
+    <param>
+      <key>bw</key>
+      <value>10e6</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>debug</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>freq</key>
+      <value>5.89e9</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(744, 76)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>gnugym_gnugym_snr_cb_0</value>
     </param>
     <param>
       <key>log</key>
@@ -2929,6 +2988,12 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
+    <source_block_id>gnugym_gnugym_snr_cb_0</source_block_id>
+    <sink_block_id>gnugym_gnugym_moving_average_vect_ff_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>gnugym_parse_seqnr_0</source_block_id>
     <sink_block_id>blocks_null_sink_0</sink_block_id>
     <source_key>1</source_key>
@@ -2985,6 +3050,12 @@
   <connection>
     <source_block_id>wifi_phy_hier_0</source_block_id>
     <sink_block_id>gnugym_gnugym_rssi_cb_0</sink_block_id>
+    <source_key>1</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>wifi_phy_hier_0</source_block_id>
+    <sink_block_id>gnugym_gnugym_snr_cb_0</sink_block_id>
     <source_key>1</source_key>
     <sink_key>0</sink_key>
   </connection>
