@@ -13,6 +13,8 @@ class ieee80211_scenario(gnu_case):
         self.action = 0
         self.nopacketCounter = 0
         self.lastDoneRecvSeqnr = 0
+        self.lastObsTime = 0
+        self.low = -60.0
         self.bitrates = [
             1.5,  # Mbps BPSK 1/2
             1.25,  # Mbps BPSK 3/4
@@ -30,7 +32,7 @@ class ieee80211_scenario(gnu_case):
         self.reset()
 
     def get_observation_space(self):
-        return spaces.Box(low=-60.0, high=1.0, shape=(64, 1), dtype=np.float32)
+        return spaces.Box(low=self.low, high=1.0, shape=(64, 1), dtype=np.float32)
 
     def get_action_space(self):
         return spaces.Discrete(8)
@@ -72,11 +74,14 @@ class ieee80211_scenario(gnu_case):
         return (totalSend, totalRecv, missingPackets)
     
     def get_obs(self):
-        obs = self.gnuradio.get_parameter('snr_vect')[0]
+        (obs, time) = self.gnuradio.get_parameter('snr_vect')
+        if(time - self.lastObsTime == 0):
+            print("Old DATA!!!!")
+            return np.full((1, 64), self.low)[0]
         #reset after simulation
+        self.lastObsTime = time
         (totalSend, totalRecv, missingPackets) = self._get_reward_state()
         return obs[-64:]
-        return []
 
     def get_reward(self):
         encoding = self.gnuradio.get_parameter('encoding')[0]
