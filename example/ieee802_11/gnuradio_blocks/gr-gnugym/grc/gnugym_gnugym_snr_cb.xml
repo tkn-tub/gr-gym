@@ -4,7 +4,7 @@
   <key>gnugym_gnugym_snr_cb</key>
   <category>[gnugym]</category>
   <import>import gnugym</import>
-  <make>gnugym.gnugym_rssi_cb($algo, $freq, $bw, $log, $debug)</make>
+  <make>gnugym.gnugym_snr_cb($algo, $freq, $bw, $log, $debug)</make>
   <callback>set_algorithm($algo)</callback>
   <callback>set_frequency($freq)</callback>
   <callback>set_bandwidth($bw)</callback>
