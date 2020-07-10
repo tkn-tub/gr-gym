@@ -11,6 +11,7 @@ class PipeListener(threading.Thread):
         self.dtype = np.dtype(mydtype)
         self.address = address
         self.elements = elements
+        self.stop = False
         self.data = np.zeros(shape=(self.elements,1))
         self.data = (self.data.astype(self.dtype), timer())
         #self.prev = self.data
@@ -22,7 +23,7 @@ class PipeListener(threading.Thread):
     # store data in buffer
     def run(self):
         structlen = self.dtype.itemsize * self.elements
-        while True:
+        while not self.stop:
             if not os.path.exists(self.address):
                 #os.remove(self.address)
                 os.mkfifo(self.address, 0o666)
@@ -30,7 +31,7 @@ class PipeListener(threading.Thread):
             f = open("." + self.address, "a")
             self.log.debug("open pipe")
 
-            while True:
+            while not self.stop:
                 buf = (pipein.read(structlen))
                 if len(buf) == 0:
                     break
@@ -55,11 +56,8 @@ class PipeListener(threading.Thread):
         self.mutex.release()
         return tmp
     
-    #def get_prev(self):
-    #    self.mutex.acquire()
-    #    tmp = self.prev
-    #    self.mutex.release()
-    #    return tmp
+    def set_stop(self):
+        self.stop = True
 
 class GR_Bridge:
     # create RPC procxy
@@ -111,4 +109,8 @@ class GR_Bridge:
     # send start via rpc
     def start(self):
         self.rpc.start()
+    
+    def close(self):
+        for key, elem in self.pipes.items():
+            elem.set_stop()
 

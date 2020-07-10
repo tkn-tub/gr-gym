@@ -5,8 +5,9 @@ from timeit import default_timer as timer
 
 
 class ieee80211_scenario(gnu_case):
-    def __init__(self, gnuradio):
+    def __init__(self, gnuradio, args):
         self.gnuradio = gnuradio
+        self.args = args
         self.lastSendSeqnr = 0
         self.lastRecvSeqnr = 0
         self.lastMissingCounter = 0
@@ -14,6 +15,7 @@ class ieee80211_scenario(gnu_case):
         self.nopacketCounter = 0
         self.lastDoneRecvSeqnr = 0
         self.lastObsTime = 0
+        self.simcount = 0
         self.low = 0.0
         self.bitrates = [
             1.5,  # Mbps BPSK 1/2
@@ -124,9 +126,13 @@ class ieee80211_scenario(gnu_case):
         return ""
 
     def simulate(self):
-        f_d = np.random.uniform(0,1363)
-        dist = np.random.uniform(0,22)
+        if self.simcount % self.args.simSteps == 0:
+            f_d = np.random.uniform(0,1363)
+            dist = np.random.uniform(self.args.simDistMin,self.args.simDistMax)
 
-        self.gnuradio.set_parameter("f_d",f_d)
-        self.gnuradio.set_parameter("dist",dist)
+            self.gnuradio.set_parameter("f_d",f_d)
+            self.gnuradio.set_parameter("dist",dist)
+            self.simcount = 0
+        else:
+            self.simcount += 1
         return
