@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 import numpy as np
+import time
 from tensorflow import keras
 
 env = gym.make('grgym:grenv-v0')

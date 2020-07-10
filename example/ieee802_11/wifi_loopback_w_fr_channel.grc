@@ -70,7 +70,7 @@
     </param>
     <param>
       <key>run</key>
-      <value>True</value>
+      <value>False</value>
     </param>
     <param>
       <key>thread_safe_setters</key>
