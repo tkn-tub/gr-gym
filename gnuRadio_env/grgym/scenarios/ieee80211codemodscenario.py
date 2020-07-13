@@ -114,7 +114,7 @@ class ieee80211_scenario(gnu_case):
         missingcounter = self.gnuradio.get_parameter('seqnr_missing_recv')[0]
         senderSeqNr = self.gnuradio.get_parameter('seqnr_send')[0]
         reveicerSeqNr = self.gnuradio.get_parameter('seqnr_recv')[0]
-
+        
         self.lastMissingCounter = missingcounter[-1]
         self.lastSendSeqnr = senderSeqNr[-1]
         self.lastRecvSeqnr = reveicerSeqNr[-1]

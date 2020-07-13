@@ -38,7 +38,7 @@ simDistMin:
   default: 0
   help: Minimum simulated distance in dB 
 
-simDistCount:
+simDistMax:
   default: 22
   help: Maximum simulated distance in dB
 
