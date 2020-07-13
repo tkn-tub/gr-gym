@@ -28,7 +28,7 @@ class PipeListener(threading.Thread):
                 #os.remove(self.address)
                 os.mkfifo(self.address, 0o666)
             pipein = open(self.address, 'rb')
-            f = open("." + self.address, "a")
+            #f = open("." + self.address, "a")
             self.log.debug("open pipe")
 
             while not self.stop:
@@ -40,14 +40,14 @@ class PipeListener(threading.Thread):
                 
                 #for i in range(0,int(len(arr) / self.elements)):
                 #tmp = arr[(i * self.elements) : (self.elements * (i+1))]
-                f.write(str(tmp) + ";\n")
+                #f.write(str(tmp) + ";\n")
                 self.mutex.acquire()
                 #self.prev = self.data
                 self.data = (tmp, timer())
                 self.mutex.release()
 
             pipein.close()
-            f.close()
+            #f.close()
     
     #return data from buffer
     def get_data(self):
