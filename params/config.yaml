@@ -22,7 +22,7 @@ stepTime:
   help:
 
 simulate:
-  default: False
+  default: True
   help: Enable or disable the simulation methode
 
 simTime:
