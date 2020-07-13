@@ -7,7 +7,7 @@ import xmlrpc.client
 import pandas as pd
 from tensorflow import keras
 
-filename = 'result_obs_dist_25_gnc.csv'
+filename = 'rssi_sl_raw_long.csv'
 
 env = gym.make('grgym:grenv-v0')
 obs = env.reset()
@@ -38,16 +38,24 @@ for i in range(64):
     mycols.append('Sc' + str(i))
 gr.set_f_d(500)
 mycols.append('Dist')
+mycols.append('Action')
+mycols.append('Reward')
 df = pd.DataFrame(columns=mycols)
 for run in range(5):
-    for dist in range(0,30,2):
+    #for dist in range(0,22,0.1):
+    for dist in np.linspace(0, 22, num=220):
+        dist = float(dist)
         gr.set_dist(dist)
         for action in range(8):
             obs_new, reward, done, info = env.step(int(action))
-            print(obs_new)
-            tmp = pd.DataFrame(data=[obs_new],
+            print(obs)
+            tmp = pd.DataFrame(data=[obs],
                 columns=cols)
             tmp['Dist'] = [dist]
+            tmp['Action'] = [action]
+            tmp['Reward'] = [reward]
+            
+            obs = obs_new
             
             print(tmp)
             print(df)

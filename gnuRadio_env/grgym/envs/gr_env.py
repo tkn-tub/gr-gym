@@ -107,11 +107,11 @@ class GrEnv(gym.Env):
         return obs
     
     def handle_termination(self, signum, frame):
-        self.bridge.close()
         self.close()
         sys.exit(1)
     
     def close(self):
+        self.bridge.close()
         if self.check_is_alive():
             self._logger.info("Stop grc execution")
             self.gr_state = RadioProgramState.INACTIVE
