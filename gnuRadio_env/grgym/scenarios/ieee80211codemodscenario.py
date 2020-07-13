@@ -100,7 +100,7 @@ class ieee80211_scenario(gnu_case):
         else:
             self.nopacketCounter = 0
         self.lastDoneRecvSeqnr = recSeqnr
-        if self.nopacketCounter >= 10:
+        if self.nopacketCounter >= self.args.maxRewardLoss:
             return True
         return False
 
@@ -129,10 +129,9 @@ class ieee80211_scenario(gnu_case):
         if self.simcount % self.args.simSteps == 0:
             f_d = np.random.uniform(0,1363)
             dist = np.random.uniform(self.args.simDistMin,self.args.simDistMax)
-
+            print("The distance is " + str(dist) + "dB")
             self.gnuradio.set_parameter("f_d",f_d)
             self.gnuradio.set_parameter("dist",dist)
             self.simcount = 0
-        else:
-            self.simcount += 1
+        self.simcount += 1
         return

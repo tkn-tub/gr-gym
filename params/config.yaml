@@ -23,13 +23,13 @@ stepTime:
 
 simulate:
   default: False
-  help:
+  help: Enable or disable the simulation methode
 
 simTime:
   default: 0.5
   help:
 
-simCount:
+simSteps:
   default: 10
   help: Number of steps with the same Observation. The simulation changes after
     simCount steps
@@ -38,10 +38,14 @@ simDistMin:
   default: 0
   help: Minimum simulated distance in dB 
 
-simDistCount:
-  default: 22
+simDistMax:
+  default: 20
   help: Maximum simulated distance in dB
 
+maxRewardLoss:
+  default: 30
+  help: Maximum numper of steps with reward == 0 in a row
+  
 sync_length:
   default:
   help:

@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Wifi Loopback
-# Generated: Fri Jul 10 16:02:30 2020
+# Generated: Sun Jul 12 10:08:00 2020
 ##################################################
 
 from distutils.version import StrictVersion
@@ -291,7 +291,7 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self.ieee802_11_mac_0 = ieee802_11.mac(([0x23, 0x23, 0x23, 0x23, 0x23, 0x23]), ([0x42, 0x42, 0x42, 0x42, 0x42, 0x42]), ([0xff, 0xff, 0xff, 0xff, 0xff, 0xff]))
         self.gnugym_parse_seqnr_0_0 = gnugym.gnugym_parse_seqnr(False, False)
         self.gnugym_parse_seqnr_0 = gnugym.gnugym_parse_seqnr(False, False)
-        self.gnugym_gnugym_snr_cb_0 = gnugym.gnugym_snr_cb(gnugym.LS, 5.89e9, 10e6, False, False)
+        self.gnugym_gnugym_rssi_cb_0 = gnugym.gnugym_rssi_cb(gnugym.LS, 5.89e9, 10e6, False, False)
         self.foo_packet_pad2_0 = foo.packet_pad2(False, False, 0.001, 500, 0)
         (self.foo_packet_pad2_0).set_min_output_buffer(96000)
         self._f_d_range = Range(0, 1363, 0.1, 27.3, 200)
@@ -335,14 +335,14 @@ class wifi_loopback(gr.top_block, Qt.QWidget):
         self.connect((self.channels_channel_model_0, 0), (self.pfb_arb_resampler_xxx_0, 0))
         self.connect((self.channels_channel_model_0, 0), (self.qtgui_freq_sink_x_0, 0))
         self.connect((self.foo_packet_pad2_0, 0), (self.blocks_multiply_const_vxx_0_0, 0))
-        self.connect((self.gnugym_gnugym_snr_cb_0, 0), (self.blocks_file_sink_2, 0))
+        self.connect((self.gnugym_gnugym_rssi_cb_0, 0), (self.blocks_file_sink_2, 0))
         self.connect((self.gnugym_parse_seqnr_0, 0), (self.blocks_file_sink_3, 0))
         self.connect((self.gnugym_parse_seqnr_0, 1), (self.blocks_null_sink_0, 0))
         self.connect((self.gnugym_parse_seqnr_0_0, 0), (self.blocks_file_sink_1, 0))
         self.connect((self.gnugym_parse_seqnr_0_0, 1), (self.blocks_file_sink_1_1, 0))
         self.connect((self.pfb_arb_resampler_xxx_0, 0), (self.wifi_phy_hier_0, 0))
         self.connect((self.wifi_phy_hier_0, 0), (self.foo_packet_pad2_0, 0))
-        self.connect((self.wifi_phy_hier_0, 1), (self.gnugym_gnugym_snr_cb_0, 0))
+        self.connect((self.wifi_phy_hier_0, 1), (self.gnugym_gnugym_rssi_cb_0, 0))
 
     def closeEvent(self, event):
         self.settings = Qt.QSettings("GNU Radio", "wifi_loopback")
