@@ -1,0 +1,95 @@
+<?xml version="1.0"?>
+<block>
+  <name>gnugym_snr_cb</name>
+  <key>gnugym_gnugym_snr_cb</key>
+  <category>[gnugym]</category>
+  <import>import gnugym</import>
+  <make>gnugym.gnugym_snr_cb($algo, $freq, $bw, $log, $debug)</make>
+  <callback>set_algorithm($algo)</callback>
+  <callback>set_frequency($freq)</callback>
+  <callback>set_bandwidth($bw)</callback>
+	
+	<param>
+		<name>Algorithm</name>
+		<key>algo</key>
+		<value>gnugym.LS_SNR</value>
+		<type>int</type>
+
+		<option>
+			<name>LS</name>
+			<key>gnugym.LS_SNR</key>
+		</option>
+		<option>
+			<name>LMS</name>
+			<key>gnugym.LMS_SNR</key>
+		</option>
+		<option>
+			<name>Comb</name>
+			<key>gnugym.COMB_SNR</key>
+		</option>
+		<option>
+			<name>STA</name>
+			<key>gnugym.STA_SNR</key>
+		</option>
+	</param>
+
+	<param>
+		<name>Frequency</name>
+		<key>freq</key>
+		<value>5.89e9</value>
+		<type>real</type>
+	</param>
+
+	<param>
+		<name>Bandwidth</name>
+		<key>bw</key>
+		<value>10e6</value>
+		<type>real</type>
+	</param>
+
+	<param>
+		<name>Log</name>
+		<key>log</key>
+		<value>False</value>
+		<type>bool</type>
+
+		<option>
+			<name>Enable</name>
+			<key>True</key>
+		</option>
+		<option>
+			<name>Disable</name>
+			<key>False</key>
+		</option>
+	</param>
+
+	<param>
+		<name>Debug</name>
+		<key>debug</key>
+		<value>False</value>
+		<type>bool</type>
+
+		<option>
+			<name>Enable</name>
+			<key>True</key>
+		</option>
+		<option>
+			<name>Disable</name>
+			<key>False</key>
+		</option>
+	</param>
+  
+  <sink>
+		<name>in</name>
+		<type>complex</type>
+		<vlen>64</vlen>
+		<nports>1</nports>
+	</sink>
+
+	<source>
+		<name>out</name>
+		<type>float</type>
+		<vlen>64</vlen>
+		<nports>1</nports>
+	</source>
+</block>

@@ -16,21 +16,36 @@ Give examples
 
 ### Installing
 
-A step by step series of examples that tell you how to get a development env running
+There are several parts, you have to install.
+Please, first get and install OpenAI gym. Perhaps, you should do the installation in a new virtual python environment. You find OpenAI gym here: https://github.com/openai/gym
+Next, you need an installation of GNU-Radio. For linux, you can use the official GNU-Radio packet repository. We are using GNU-Radio 3.7.11. Here, you find information for the installation of GNU-Radio: https://wiki.gnuradio.org/index.php/UbuntuInstall
+If you want to use the IEEE 802.11p example, you have to install the GNU-Radio blocks of Sebastian Blosel. See his github repository for the code and more information: https://github.com/bastibl/gr-ieee802-11
 
-Say what the step will be
-
+Now, you have installed all required prequisites and you are ready to install our work. Therefore, please get our work:
 ```
-Give the example
-```
-
-And repeat
-
-```
-until finished
+git clone git@gitlab.tubit.tu-berlin.de:ali_alouane/GnuRadio_Gym.git
 ```
 
-End with an example of getting some data out of the system or using it for a little demo
+For the IEEE 802.11p Scenario controlling the modulation and the coding rate, you have to install our extension blocks. Therefore, please do the following steps
+```
+cd example/ieee802_11/gnuradio_blocks/gr-gnugym
+mkdir build
+cd build
+cmake ../
+make
+sudo make install
+sudo ldconfig
+```
+You can also run the installation Skript in `example/ieee802_11/gnuradio_blocks/gr-gnugym`.
+
+To install our OpenAI gym environment, please do the following steps:
+
+```
+cd gnuRadio_env
+pip install -e .
+```
+
+No you are ready to use the gr-env!
 
 ## Running the tests
 

@@ -70,7 +70,7 @@
     </param>
     <param>
       <key>run</key>
-      <value>False</value>
+      <value>True</value>
     </param>
     <param>
       <key>thread_safe_setters</key>
@@ -688,7 +688,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(252, 776)</value>
+      <value>(252, 792)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -790,7 +790,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1072, 44)</value>
+      <value>(1072, 36)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -986,7 +986,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1232, 264)</value>
+      <value>(1224, 264)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1080,11 +1080,11 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1184, 272)</value>
+      <value>(1128, 112)</value>
     </param>
     <param>
       <key>_rotation</key>
-      <value>270</value>
+      <value>180</value>
     </param>
     <param>
       <key>id</key>
@@ -1543,7 +1543,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1000, 160)</value>
+      <value>(1008, 152)</value>
     </param>
     <param>
       <key>_rotation</key>

@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.13'?>
+<?grc format='1' created='3.7.11'?>
 <flow_graph>
   <timestamp>Sat Feb  1 18:28:19 2014</timestamp>
   <block>
@@ -70,11 +70,7 @@
     </param>
     <param>
       <key>run</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>sizing_mode</key>
-      <value>fixed</value>
+      <value>False</value>
     </param>
     <param>
       <key>thread_safe_setters</key>
@@ -83,10 +79,6 @@
     <param>
       <key>title</key>
       <value></value>
-    </param>
-    <param>
-      <key>placement</key>
-      <value>(0,0)</value>
     </param>
   </block>
   <block>
@@ -204,7 +196,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(672, 860)</value>
+      <value>(512, 868)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -429,7 +421,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(896, 860)</value>
+      <value>(584, 548)</value>
     </param>
     <param>
       <key>gui_hint</key>
@@ -637,7 +629,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>15</value>
+      <value>25</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -673,7 +665,7 @@
     </param>
     <param>
       <key>start</key>
-      <value>-15</value>
+      <value>-60</value>
     </param>
     <param>
       <key>step</key>
@@ -916,7 +908,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>1</value>
     </param>
     <param>
       <key>file</key>
@@ -1014,7 +1006,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>True</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1027,6 +1019,57 @@
     <param>
       <key>id</key>
       <value>blocks_multiply_const_vxx_0</value>
+    </param>
+    <param>
+      <key>type</key>
+      <value>complex</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>vlen</key>
+      <value>1</value>
+    </param>
+  </block>
+  <block>
+    <key>blocks_multiply_const_vxx</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>const</key>
+      <value>(10**((snr-dist)/10.0))**.5</value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(736, 900)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>blocks_multiply_const_vxx_0_0</value>
     </param>
     <param>
       <key>type</key>
@@ -1187,6 +1230,69 @@
     </param>
   </block>
   <block>
+    <key>channels_channel_model</key>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>block_tags</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>True</value>
+    </param>
+    <param>
+      <key>epsilon</key>
+      <value>1.0</value>
+    </param>
+    <param>
+      <key>freq_offset</key>
+      <value>epsilon * 5.89e9 / 10e6</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(920, 868)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>channels_channel_model_0</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>noise_voltage</key>
+      <value>1</value>
+    </param>
+    <param>
+      <key>seed</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>taps</key>
+      <value>1.0 </value>
+    </param>
+  </block>
+  <block>
     <key>channels_selective_fading_model</key>
     <param>
       <key>alias</key>
@@ -1202,7 +1308,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>0</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1379,7 +1485,7 @@
     </param>
     <param>
       <key>_enabled</key>
-      <value>1</value>
+      <value>2</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -1446,7 +1552,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(720, 260)</value>
+      <value>(728, 260)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1455,6 +1561,65 @@
     <param>
       <key>id</key>
       <value>gnugym_gnugym_rssi_cb_0</value>
+    </param>
+    <param>
+      <key>log</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>maxoutbuf</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>minoutbuf</key>
+      <value>0</value>
+    </param>
+  </block>
+  <block>
+    <key>gnugym_gnugym_snr_cb</key>
+    <param>
+      <key>algo</key>
+      <value>gnugym.LS</value>
+    </param>
+    <param>
+      <key>bw</key>
+      <value>10e6</value>
+    </param>
+    <param>
+      <key>alias</key>
+      <value></value>
+    </param>
+    <param>
+      <key>comment</key>
+      <value></value>
+    </param>
+    <param>
+      <key>affinity</key>
+      <value></value>
+    </param>
+    <param>
+      <key>debug</key>
+      <value>False</value>
+    </param>
+    <param>
+      <key>_enabled</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>freq</key>
+      <value>5.89e9</value>
+    </param>
+    <param>
+      <key>_coordinate</key>
+      <value>(760, 92)</value>
+    </param>
+    <param>
+      <key>_rotation</key>
+      <value>0</value>
+    </param>
+    <param>
+      <key>id</key>
+      <value>gnugym_gnugym_snr_cb_0</value>
     </param>
     <param>
       <key>log</key>
@@ -1681,7 +1846,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(1064, 464)</value>
+      <value>(1076, 480)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2617,7 +2782,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(800, 892)</value>
+      <value>(752, 572)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -2634,10 +2799,6 @@
     <param>
       <key>short_id</key>
       <value></value>
-    </param>
-    <param>
-      <key>hide</key>
-      <value>none</value>
     </param>
     <param>
       <key>type</key>
@@ -2755,6 +2916,12 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
+    <source_block_id>blocks_multiply_const_vxx_0_0</source_block_id>
+    <sink_block_id>channels_channel_model_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>blocks_pdu_to_tagged_stream_0</source_block_id>
     <sink_block_id>qtgui_number_sink_0</sink_block_id>
     <source_key>0</source_key>
@@ -2763,6 +2930,18 @@
   <connection>
     <source_block_id>blocks_pdu_to_tagged_stream_0_0</source_block_id>
     <sink_block_id>qtgui_const_sink_x_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>channels_channel_model_0</source_block_id>
+    <sink_block_id>pfb_arb_resampler_xxx_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>channels_channel_model_0</source_block_id>
+    <sink_block_id>qtgui_freq_sink_x_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
   </connection>
@@ -2785,6 +2964,12 @@
     <sink_key>0</sink_key>
   </connection>
   <connection>
+    <source_block_id>foo_packet_pad2_0</source_block_id>
+    <sink_block_id>blocks_multiply_const_vxx_0_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
     <source_block_id>foo_wireshark_connector_0</source_block_id>
     <sink_block_id>blocks_file_sink_0</sink_block_id>
     <source_key>0</source_key>
@@ -2798,6 +2983,12 @@
   </connection>
   <connection>
     <source_block_id>gnugym_gnugym_rssi_cb_0</source_block_id>
+    <sink_block_id>gnugym_gnugym_moving_average_vect_ff_0</sink_block_id>
+    <source_key>0</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>gnugym_gnugym_snr_cb_0</source_block_id>
     <sink_block_id>gnugym_gnugym_moving_average_vect_ff_0</sink_block_id>
     <source_key>0</source_key>
     <sink_key>0</sink_key>
@@ -2859,6 +3050,12 @@
   <connection>
     <source_block_id>wifi_phy_hier_0</source_block_id>
     <sink_block_id>gnugym_gnugym_rssi_cb_0</sink_block_id>
+    <source_key>1</source_key>
+    <sink_key>0</sink_key>
+  </connection>
+  <connection>
+    <source_block_id>wifi_phy_hier_0</source_block_id>
+    <sink_block_id>gnugym_gnugym_snr_cb_0</sink_block_id>
     <source_key>1</source_key>
     <sink_key>0</sink_key>
   </connection>

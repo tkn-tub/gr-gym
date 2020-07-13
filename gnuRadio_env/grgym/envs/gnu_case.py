@@ -3,7 +3,12 @@ import abc
 
 # TODO
 class gnu_case(abc.ABC):
-
+    @abc.abstractmethod
+    def __init__(self, gnuradio, args):
+        """ Init your scenario
+        """
+        pass
+    
     @abc.abstractmethod
     def get_observation_space(self):
         """Returns observation space

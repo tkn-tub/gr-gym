@@ -2,6 +2,8 @@ import importlib
 import logging
 import time
 import xmlrpc.client
+import signal
+import sys
 from enum import Enum
 
 import gym
@@ -22,19 +24,16 @@ class GrEnv(gym.Env):
         self._logger = logging.getLogger(self.__class__.__name__)
         
         root_dir = get_dir_by_indicator(indicator=".git")
-        # TODO: change name of config file
-        yaml_path = str(Path(root_dir) / "params" / "ieee80211p.yaml")
+        yaml_path = str(Path(root_dir) / "params" / "config.yaml")
         self.args = yaml_argparse(yaml_path=yaml_path)
         
         self.bridge = GR_Bridge(self.args.rpchost, self.args.rpcport)
         
-        # TODO: Change location of scenario file
         modules = self.args.scenario.split(".") 
-        module = importlib.import_module("grgym.envs." + ".".join(modules[0:-1]))
+        module = importlib.import_module("grgym.scenarios." + ".".join(modules[0:-1]))
         gnu_module = getattr(module, modules[-1]) # need a python 3 version
         
-        #TODO: put args to specific module
-        self.scenario = gnu_module(self.bridge)
+        self.scenario = gnu_module(self.bridge, self.args)
         
         # TODO: compile and start .grc file (UniFlex Module)
 
@@ -45,6 +44,9 @@ class GrEnv(gym.Env):
 
         self.action_space = self.scenario.get_action_space()
         self.observation_space = self.scenario.get_observation_space()
+        
+        signal.signal(signal.SIGINT, self.handle_termination)
+        signal.signal(signal.SIGTERM, self.handle_termination)
 
     def _init_proxy(self):
         if self.ctrl_socket == None:
@@ -68,8 +70,10 @@ class GrEnv(gym.Env):
             if self.args.simulate == True:
                 self._logger.info("start simuation in gnu radio")
                 self.scenario.simulate()
-            self._logger.info("wait for simulation")
-            time.sleep(self.args.simTime)
+                #Call get_obs to reset internal states
+                self.scenario.get_obs()
+                self._logger.info("wait for simulation")
+                time.sleep(self.args.simTime)
             self._logger.info("collect observations")
             obs = self.scenario.get_obs()
 
@@ -101,8 +105,16 @@ class GrEnv(gym.Env):
         obs = self.scenario.get_obs()
 
         return obs
-
+    
+    def handle_termination(self, signum, frame):
+        self.close()
+        sys.exit(1)
+    
     def close(self):
+        self.bridge.close()
+        if self.check_is_alive():
+            self._logger.info("Stop grc execution")
+            self.gr_state = RadioProgramState.INACTIVE
         pass
 
     def render(self, mode='human'):
