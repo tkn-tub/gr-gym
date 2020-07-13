@@ -95,6 +95,7 @@ list(APPEND gr_gnugym_sources
     ${generated_sources}
     constellations_impl.cc
     gnugym_rssi_cb_impl.cc
+    gnugym_snr_cb_impl.cc
     equalizer/base.cc
     equalizer/comb.cc
     equalizer/ls.cc

@@ -22,12 +22,25 @@ stepTime:
   help:
 
 simulate:
-  default: True
+  default: False
   help:
 
 simTime:
   default: 0.5
   help:
+
+simCount:
+  default: 10
+  help: Number of steps with the same Observation. The simulation changes after
+    simCount steps
+
+simDistMin:
+  default: 0
+  help: Minimum simulated distance in dB 
+
+simDistMax:
+  default: 22
+  help: Maximum simulated distance in dB
 
 sync_length:
   default:
