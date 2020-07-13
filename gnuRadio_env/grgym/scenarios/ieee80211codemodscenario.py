@@ -67,7 +67,16 @@ class ieee80211_scenario(gnu_case):
         totalSend = senderSeqNr - self.lastSendSeqnr
         totalRecv = reveicerSeqNr - self.lastRecvSeqnr
         # detected missing frames at receiver, and difference between sender and receiver
-        missingPackets = max((missingcounter - self.lastMissingCounter), 0)
+        missingPackets = (missingcounter - self.lastMissingCounter)
+        
+        if(totalSend < -4000):
+            totalSend += 4096
+        if(totalRecv < -4000):
+            totalRecv += 4096
+        if(missingPackets < -4000):
+            missingPackets += 4096
+        
+        print("totalSend=" +  str(totalSend) + ", totalRecv=" + str(totalRecv) + ", missingPackets=" + str(missingPackets))
 
         self.lastSendSeqnr = senderSeqNr
         self.lastRecvSeqnr = reveicerSeqNr
