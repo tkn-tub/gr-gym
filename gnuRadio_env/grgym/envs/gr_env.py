@@ -22,9 +22,11 @@ class GrEnv(gym.Env):
     def __init__(self):
         super(GrEnv, self).__init__()
         self._logger = logging.getLogger(self.__class__.__name__)
+        self.gr_process = None
+        self.gr_process_io = None
         
-        root_dir = get_dir_by_indicator(indicator=".git")
-        yaml_path = str(Path(root_dir) / "params" / "config.yaml")
+        self.root_dir = get_dir_by_indicator(indicator=".git")
+        yaml_path = str(Path(self.root_dir) / "params" / "config.yaml")
         self.args = yaml_argparse(yaml_path=yaml_path)
         
         self.bridge = GR_Bridge(self.args.rpchost, self.args.rpcport)
@@ -36,6 +38,8 @@ class GrEnv(gym.Env):
         self.scenario = gnu_module(self.bridge, self.args)
         
         # TODO: compile and start .grc file (UniFlex Module)
+        self._compile_radio_program(self, Path(self.root_dir) + '/' + self.args.radio_programs_path, self.args.gnu_radio_program)
+        self._start_radio_program(self, Path(self.root_dir) + '/' + self.args.radio_programs_path, self.args.gnu_radio_program)
 
         self.action_space = None
         self.observation_space = None
@@ -114,6 +118,7 @@ class GrEnv(gym.Env):
         self.bridge.close()
         if self.check_is_alive():
             self._logger.info("Stop grc execution")
+            self._stop_radio_program()
             self.gr_state = RadioProgramState.INACTIVE
         pass
 
@@ -125,3 +130,44 @@ class GrEnv(gym.Env):
             return False
         if self.gr_state == RadioProgramState.RUNNING:
             return True
+    
+    def _compile_radio_program(self, gr_radio_programs_path, grc_radio_program_name):
+        grProgramPath = os.path.join(gr_radio_programs_path, grc_radio_program_name + '.grc')
+        outdir = "--directory=%s" % gr_radio_programs_path
+        print(grProgramPath)
+        print(outdir)
+        try:
+            sh.grcc(outdir, grProgramPath)
+        except Exception as e:
+            raise
+        self.log.info("Compilation Completed")
+    
+    def _start_radio_program(self, gr_radio_programs_path, grc_radio_program_name):
+        if self.gr_process_io is None:
+            self.gr_process_io = {'stdout': open('/tmp/gnuradio.log', 'w+'), 'stderr': open('/tmp/gnuradio-err.log', 'w+')}
+        try:
+            # start GNURadio process
+            pyRadioProgPath = os.path.join(gr_radio_programs_path, grc_radio_program_name + '.py')
+            self.log.info("Start radio program: {}".format(pyRadioProgPath))
+            self.gr_radio_program_name = grc_radio_program_name
+            self.gr_process = subprocess.Popen(["env", "python2", pyRadioProgPath],
+                                               stdout=self.gr_process_io['stdout'], stderr=self.gr_process_io['stderr'])
+            self.gr_state = RadioProgramState.RUNNING
+        except OSError:
+            return False
+        return True
+        
+    def _stop_radio_program(self):
+        if self.check_is_alive():
+            self.log.info("stopping radio program")
+
+            if self.gr_process is not None and hasattr(self.gr_process, "kill"):
+                self.gr_process.kill()
+
+            if self.gr_process_io is not None and self.gr_process_io is dict:
+                for k in self.gr_process_io.keys():
+                    # if self.gr_process_io[k] is file and not self.gr_process_io[k].closed:
+                    if not self.gr_process_io[k].closed:
+                        self.gr_process_io[k].close()
+                        self.gr_process_io[k] = None
+            self.gr_state = RadioProgramState.INACTIVE
