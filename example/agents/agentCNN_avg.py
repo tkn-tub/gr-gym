@@ -53,7 +53,7 @@ while True:
     action = 0
     
     obs = np.average([obs[11], obs[25], obs[39], obs[53]])
-    obs = (obs - s_min) / s_range 
+    obs = 6* ((obs - s_min) / s_range -1/2) 
     obs = np.reshape(obs, [1, 1])
 
     print("observation:", str(obs))
@@ -75,6 +75,11 @@ while True:
     
     target_f = model.predict(obs)
     target_f[0][action] = target
+    
+    if target < 0.1:
+        for i in range(action, 8):
+            target_f[0][i] = target
+    
     print('New targets '+ str(target_f))
     model.fit(obs, target_f, epochs=1, verbose=0)
     
