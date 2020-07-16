@@ -23,19 +23,19 @@ s_range = s_max - s_min
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(1, input_shape=(1,), activation='sigmoid'))
-model.add(keras.layers.Dense(a_size, activation='relu'))
+model.add(keras.layers.Dense(a_size*2, activation='relu'))
 model.add(keras.layers.Dense(a_size, activation='relu'))
 model.add(keras.layers.Dense(a_size, activation='softmax'))
 model.compile(optimizer=tf.train.AdamOptimizer(0.001),
               loss='categorical_crossentropy',
               metrics=['accuracy'])
-model.load_weights('agentdata/nn_avg_weights.bin')
+model.load_weights('agentdata/nn_avgsqrt_weights.bin')
 
 while True:
     print("--------------------------------------------------------")
     print("new step")
     
-    obs = np.average(obs)
+    obs = np.average([obs[11], obs[25], obs[39], obs[53]])
     obs = (obs - s_min) / s_range 
     obs = np.reshape(obs, [1, 1])
 

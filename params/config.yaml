@@ -30,7 +30,7 @@ simTime:
   help:
 
 simSteps:
-  default: 10
+  default: 4
   help: Number of steps with the same Observation. The simulation changes after
     simCount steps
 

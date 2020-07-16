@@ -5,9 +5,9 @@ import tensorflow.contrib.slim as slim
 import numpy as np
 from tensorflow import keras
 
-logresult = 'agentdata/result_nn_avg.csv'
-runsPerEpisode = 120
-epsilonDecay = 0.993
+logresult = 'agentdata/result_nn_avgsqrt.csv'
+runsPerEpisode = 150
+epsilonDecay = 0.994
 epsilonStartDecay = 0.99999
 epsilonStartPow = 1.6
 decayLimit = 0.005
@@ -28,7 +28,7 @@ s_range = s_max - s_min
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(1, input_shape=(1,), activation='sigmoid'))
-model.add(keras.layers.Dense(a_size, activation='relu'))
+model.add(keras.layers.Dense(a_size*2, activation='relu'))
 model.add(keras.layers.Dense(a_size, activation='relu'))
 model.add(keras.layers.Dense(a_size, activation='softmax'))
 model.compile(optimizer=tf.train.AdamOptimizer(0.001),
@@ -37,7 +37,9 @@ model.compile(optimizer=tf.train.AdamOptimizer(0.001),
 
 epsilon = 1
 epsilon_start = 0.99999
-maxreward = 0.00000000000001
+maxreward = 0.00000000000001 #[]
+#for i in range(a_size):
+#    maxreward.append(0.00000000000001)
 run = 0
 episode = 0
 
@@ -50,7 +52,7 @@ while True:
     print("run " + str(run) + ", epsiode " + str(episode) + " eps = " + str(epsilon))
     action = 0
     
-    obs = np.average(obs)
+    obs = np.average([obs[11], obs[25], obs[39], obs[53]])
     obs = (obs - s_min) / s_range 
     obs = np.reshape(obs, [1, 1])
 
@@ -67,10 +69,13 @@ while True:
     
     maxreward = max(reward, maxreward)
     
-    target = (reward)/maxreward
+    target = np.power((reward)/maxreward,1/3) #[action] * (0.3 + action / (a_size / 0.3))
+    
+    print("scaled reward: " + str(target))
     
     target_f = model.predict(obs)
     target_f[0][action] = target
+    print('New targets '+ str(target_f))
     model.fit(obs, target_f, epochs=1, verbose=0)
     
     with open(logresult,'a') as fd:
@@ -85,7 +90,7 @@ while True:
         epsilon_start *= epsilonStartDecay
         epsilon_start = pow(epsilon_start, epsilonStartPow)
         episode += 1
-        model.save_weights('agentdata/nn_avg_weights.bin')
+        model.save_weights('agentdata/nn_avgsqrt_weights.bin')
     
     #print("Mean:", str(avg))
     #print("Dist:", str(num))

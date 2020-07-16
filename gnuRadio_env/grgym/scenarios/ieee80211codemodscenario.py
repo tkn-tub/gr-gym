@@ -76,7 +76,7 @@ class ieee80211_scenario(gnu_case):
         if(missingPackets < -4000):
             missingPackets += 4096
         
-        print("totalSend=" +  str(totalSend) + ", totalRecv=" + str(totalRecv) + ", missingPackets=" + str(missingPackets))
+        #print("totalSend=" +  str(totalSend) + ", totalRecv=" + str(totalRecv) + ", missingPackets=" + str(missingPackets))
 
         self.lastSendSeqnr = senderSeqNr
         self.lastRecvSeqnr = reveicerSeqNr

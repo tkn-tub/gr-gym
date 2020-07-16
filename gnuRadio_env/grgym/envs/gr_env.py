@@ -77,7 +77,7 @@ class GrEnv(gym.Env):
             self._logger.info("collect observations")
             obs = self.scenario.get_obs()
 
-        if self.check_is_alive():
+        if not self.check_is_alive():
             pass
 
         return (obs, reward, done, info)
