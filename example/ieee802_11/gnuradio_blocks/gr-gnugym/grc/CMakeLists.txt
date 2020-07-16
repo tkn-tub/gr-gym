@@ -18,10 +18,10 @@
 # Boston, MA 02110-1301, USA.
 
 install(FILES
-    gnugym_gnugym_rssi_cb.xml
-    gnugym_gnugym_snr_cb.xml
-    gnugym_gnugym_snrdebug_ff.xml
-    gnugym_gnugym_moving_average_vect.xml
-    gnugym_gnugym_parse_seqnr.xml
+    gnugym_gnugym_rssi_cb.block.yaml
+    gnugym_gnugym_snr_cb.block.yaml
+    gnugym_gnugym_snrdebug_ff.block.yaml
+    gnugym_gnugym_moving_average_vect.block.yaml
+    gnugym_gnugym_parse_seqnr.block.yaml
     DESTINATION share/gnuradio/grc/blocks
 )
