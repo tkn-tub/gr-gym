@@ -1,9 +1,12 @@
 import importlib
 import logging
+import subprocess
 import time
 import xmlrpc.client
 import signal
 import sys
+import sh
+import os
 from enum import Enum
 
 import gym
@@ -31,15 +34,15 @@ class GrEnv(gym.Env):
         
         self.bridge = GR_Bridge(self.args.rpchost, self.args.rpcport)
         
+        if self.args.radio_programs_compile_execute:
+            self._compile_radio_program(str(Path(self.root_dir) / self.args.radio_programs_path), self.args.gnu_radio_program_filename)
+            self._start_radio_program(str(Path(self.root_dir) / self.args.radio_programs_path), self.args.gnu_radio_program)
+        
         modules = self.args.scenario.split(".") 
         module = importlib.import_module("grgym.scenarios." + ".".join(modules[0:-1]))
         gnu_module = getattr(module, modules[-1]) # need a python 3 version
         
         self.scenario = gnu_module(self.bridge, self.args)
-        
-        # TODO: compile and start .grc file (UniFlex Module)
-        self._compile_radio_program(self, Path(self.root_dir) + '/' + self.args.radio_programs_path, self.args.gnu_radio_program)
-        self._start_radio_program(self, Path(self.root_dir) + '/' + self.args.radio_programs_path, self.args.gnu_radio_program)
 
         self.action_space = None
         self.observation_space = None
@@ -98,7 +101,10 @@ class GrEnv(gym.Env):
                 if type(e) is ConnectionRefusedError:
                     # no rpc server
                     error = True
-                    print("Please start the GNU Radio scenario")
+                    if self.args.radio_programs_compile_execute:
+                        print("Wait for start of GNU-Radio. This should happen automaticaly.")
+                    else:
+                        print("Wait for start of GNU-Radio. Please start the scenario on the other machine now.")
                     time.sleep(10)
                 self._logger.error("Multiple Start Error %s" % (e))
         self.gr_state = RadioProgramState.RUNNING
@@ -134,13 +140,11 @@ class GrEnv(gym.Env):
     def _compile_radio_program(self, gr_radio_programs_path, grc_radio_program_name):
         grProgramPath = os.path.join(gr_radio_programs_path, grc_radio_program_name + '.grc')
         outdir = "--directory=%s" % gr_radio_programs_path
-        print(grProgramPath)
-        print(outdir)
         try:
             sh.grcc(outdir, grProgramPath)
         except Exception as e:
             raise
-        self.log.info("Compilation Completed")
+        self._logger.info("Compilation Completed")
     
     def _start_radio_program(self, gr_radio_programs_path, grc_radio_program_name):
         if self.gr_process_io is None:
@@ -148,7 +152,7 @@ class GrEnv(gym.Env):
         try:
             # start GNURadio process
             pyRadioProgPath = os.path.join(gr_radio_programs_path, grc_radio_program_name + '.py')
-            self.log.info("Start radio program: {}".format(pyRadioProgPath))
+            self._logger.info("Start radio program: {}".format(pyRadioProgPath))
             self.gr_radio_program_name = grc_radio_program_name
             self.gr_process = subprocess.Popen(["env", "python2", pyRadioProgPath],
                                                stdout=self.gr_process_io['stdout'], stderr=self.gr_process_io['stderr'])
@@ -159,7 +163,7 @@ class GrEnv(gym.Env):
         
     def _stop_radio_program(self):
         if self.check_is_alive():
-            self.log.info("stopping radio program")
+            self._logger.info("stopping radio program")
 
             if self.gr_process is not None and hasattr(self.gr_process, "kill"):
                 self.gr_process.kill()
