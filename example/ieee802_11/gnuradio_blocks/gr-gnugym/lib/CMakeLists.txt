@@ -29,7 +29,7 @@ endif(SSE2_SUPPORTED)
 ########################################################################
 # Setup library
 ########################################################################
-list(APPEND gr_gnugym_sources
+list(APPEND gnugym_sources
     ${generated_sources}
     constellations_impl.cc
     gnugym_rssi_cb_impl.cc
@@ -43,17 +43,6 @@ list(APPEND gr_gnugym_sources
     gnugym_moving_average_vect_ff_impl.cc
     gnugym_parse_seqnr_impl.cc
 )
-
-# use SSE2 optimized viterbi implementation if SSE2 is enabled
-if(SSE2_SUPPORTED)
-    list(APPEND gnugym_sources
-        viterbi_decoder/viterbi_decoder_x86.cc
-    )
-else()
-    list(APPEND gnugym_sources
-        viterbi_decoder/viterbi_decoder_generic.cc
-    )
-endif(SSE2_SUPPORTED)
 
 set(gnugym_sources "${gnugym_sources}" PARENT_SCOPE)
 if(NOT gnugym_sources)
