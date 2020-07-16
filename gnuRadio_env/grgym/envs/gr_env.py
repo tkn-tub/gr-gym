@@ -8,10 +8,12 @@ import sys
 import sh
 import os
 from enum import Enum
+from packaging import version
 
 import gym
 from gym.utils import seeding
 from grgym.envs.gr_bridge import GR_Bridge
+from gnuradio import gr
 
 from grgym.envs.gr_utils import *
 
@@ -145,7 +147,11 @@ class GrEnv(gym.Env):
     
     def _compile_radio_program(self, gr_radio_programs_path, grc_radio_program_name):
         grProgramPath = os.path.join(gr_radio_programs_path, grc_radio_program_name + '.grc')
-        outdir = "--directory=%s" % gr_radio_programs_path
+        
+        if version.parse(gr.version()) > version.parse('3.8.0'):
+            outdir = "--output=%s" % gr_radio_programs_path
+        else:
+            outdir = "--directory=%s" % gr_radio_programs_path
         try:
             sh.grcc(outdir, grProgramPath)
         except Exception as e:
