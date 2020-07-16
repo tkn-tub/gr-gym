@@ -32,6 +32,10 @@ rpchost:
   default: "localhost"
   help:
 
+eventbased:
+  default: False
+  help:
+
 stepTime:
   default: 1
   help:

@@ -68,8 +68,9 @@ class GrEnv(gym.Env):
         if self.check_is_alive():
             self._logger.info("send action to gnuradio")
             self.scenario.execute_actions(action)
-            self._logger.info("wait for step time")
-            time.sleep(self.args.stepTime)
+            if not self.args.eventbased:
+                self._logger.info("wait for step time")
+                time.sleep(self.args.stepTime)
             self._logger.info("get reward")
             reward = self.scenario.get_reward()
             done = self.scenario.get_done()
@@ -78,9 +79,10 @@ class GrEnv(gym.Env):
                 self._logger.info("start simuation in gnu radio")
                 self.scenario.simulate()
                 #Call get_obs to reset internal states
-                self.scenario.get_obs()
-                self._logger.info("wait for simulation")
-                time.sleep(self.args.simTime)
+                if not self.args.eventbased:
+                    self.scenario.get_obs()
+                    self._logger.info("wait for simulation")
+                    time.sleep(self.args.simTime)
             self._logger.info("collect observations")
             obs = self.scenario.get_obs()
 
@@ -89,8 +91,8 @@ class GrEnv(gym.Env):
 
         return (obs, reward, done, info)
     
-    def set_interval(self, interval):
-        self.bridge.set_interval(interval)
+    #def set_interval(self, interval):
+    #    self.bridge.set_interval(interval)
         
     def reset(self):
         self._logger.info("reset usecase scenario")
@@ -114,7 +116,8 @@ class GrEnv(gym.Env):
         self.scenario.reset()
         self.action_space = self.scenario.get_action_space()
         self.observation_space = self.scenario.get_observation_space()
-        time.sleep(self.args.simTime)
+        if not self.args.eventbased:
+            time.sleep(self.args.simTime)
         obs = self.scenario.get_obs()
 
         return obs
