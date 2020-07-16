@@ -1,5 +1,20 @@
+radio_programs_compile_execute:
+  default: True
+  help: Enable or disable gnu radio program compilation and execution. Disable it,
+    if GNU-Radio runs on a separate machine.
+
+radio_programs_path:
+  default: example/grc
+  help: Path to the collection of radio programms (grc files)
+
+gnu_radio_program_filename:
+  default: ieee80211_wifi_loopback_w_fr_channel
+  help: A string pointing to a function that is inside one or multiple modules. The
+    function will be imported and executed without any arguments. It must return a
+    tuple of inputs and targets.
+
 gnu_radio_program:
-  default: example.ieee802_11.wifi_loopback
+  default: wifi_loopback
   help: A string pointing to a function that is inside one or multiple modules. The
     function will be imported and executed without any arguments. It must return a
     tuple of inputs and targets.
@@ -15,6 +30,10 @@ rpcport:
   help:
 rpchost:
   default: "localhost"
+  help:
+
+eventbased:
+  default: False
   help:
 
 stepTime:

@@ -11,12 +11,16 @@ class PipeListener(threading.Thread):
         self.dtype = np.dtype(mydtype)
         self.address = address
         self.elements = elements
+        self.interval = 300
         self.stop = False
         self.data = np.zeros(shape=(self.elements,1))
         self.data = (self.data.astype(self.dtype), timer())
         #self.prev = self.data
         self.mutex = threading.Lock()
         self.log = logging.getLogger('PipeListener[' + self.address+ ']')
+        self.waitevent = threading.Event()
+        self.waitcounter_mutex = threading.Lock()
+        self.waitcounter = 0
     
     # listen on pipe with address
     # create pipe if id does not exists
@@ -28,7 +32,7 @@ class PipeListener(threading.Thread):
                 #os.remove(self.address)
                 os.mkfifo(self.address, 0o666)
             pipein = open(self.address, 'rb')
-            #f = open("." + self.address, "a")
+            #f = open("." + self.address + ".csv", "a")
             self.log.debug("open pipe")
 
             while not self.stop:
@@ -40,14 +44,16 @@ class PipeListener(threading.Thread):
                 
                 #for i in range(0,int(len(arr) / self.elements)):
                 #tmp = arr[(i * self.elements) : (self.elements * (i+1))]
-                #f.write(str(tmp) + ";\n")
+                #f.write(str(self.interval) + "," + str(timer() - self.data[1]) + "\n")
                 self.mutex.acquire()
                 #self.prev = self.data
                 self.data = (tmp, timer())
                 self.mutex.release()
+                self.waitevent.set()
 
             pipein.close()
             #f.close()
+            self.waitevent.set()
     
     #return data from buffer
     def get_data(self):
@@ -58,6 +64,22 @@ class PipeListener(threading.Thread):
     
     def set_stop(self):
         self.stop = True
+    
+    #def set_interval(self, interval):
+    #    self.interval = interval
+    
+    def wait_for_value(self):
+        if not self.stop:
+            self.waitcounter_mutex.acquire()
+            self.waitcounter += 1
+            self.waitcounter_mutex.release()
+            self.waitevent.wait()
+            self.waitcounter_mutex.acquire()
+            self.waitcounter -= 1
+            if self.waitcounter <= 0:
+                self.waitcounter = 0
+                self.waitevent.clear()
+            self.waitcounter_mutex.release()
 
 class GR_Bridge:
     # create RPC procxy
@@ -113,4 +135,11 @@ class GR_Bridge:
     def close(self):
         for key, elem in self.pipes.items():
             elem.set_stop()
-
+    
+    def wait_for_value(self, name):
+        if name in self.pipes:
+            self.pipes[name].wait_for_value()
+    
+    #def set_interval(self, interval):
+    #    for key, elem in self.pipes.items():
+    #        elem.set_interval(interval)

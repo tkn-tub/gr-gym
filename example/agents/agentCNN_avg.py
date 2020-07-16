@@ -107,4 +107,5 @@ while True:
     if episode > 30 or (epsilon_start < decayLimit and epsilon < decayLimit):
         print("Fertig")
         break
+
 env.close()

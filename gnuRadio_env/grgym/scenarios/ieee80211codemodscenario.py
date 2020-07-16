@@ -43,11 +43,14 @@ class ieee80211_scenario(gnu_case):
         self.gnuradio.set_parameter('encoding', action)
         self.action = action
     
-    def _get_reward_state(self):
+    def _get_reward_state(self, eventbased):
         # get Data of gnuradio
         #missingcounterprev = self.gnuradio.get_parameter_prev('seqnr_missing_recv')[0]
         #senderSeqNrprev = self.gnuradio.get_parameter_prev('seqnr_send')[0]
         #reveicerSeqNrprev = self.gnuradio.get_parameter_prev('seqnr_recv')[0]
+        
+        if eventbased:
+            self.gnuradio.wait_for_value('seqnr_recv')
         
         missingcountertmp = self.gnuradio.get_parameter('seqnr_missing_recv')
         senderSeqNrtmp = self.gnuradio.get_parameter('seqnr_send')
@@ -85,18 +88,20 @@ class ieee80211_scenario(gnu_case):
         return (totalSend, totalRecv, missingPackets)
     
     def get_obs(self):
+        if self.args.eventbased:
+            self.gnuradio.wait_for_value('snr_vect')
         (obs, time) = self.gnuradio.get_parameter('snr_vect')
         if(time - self.lastObsTime == 0):
             print("Old DATA!!!!")
             return np.full((1, 64), self.low)[0]
         #reset after simulation
         self.lastObsTime = time
-        (totalSend, totalRecv, missingPackets) = self._get_reward_state()
+        (totalSend, totalRecv, missingPackets) = self._get_reward_state(False)
         return obs[-64:]
 
     def get_reward(self):
         encoding = self.gnuradio.get_parameter('encoding')[0]
-        (totalSend, totalRecv, missingPackets) = self._get_reward_state()
+        (totalSend, totalRecv, missingPackets) = self._get_reward_state(self.args.eventbased)
         # calculate effective packet rate -> +1 to avoid division by zero
         reward = (totalRecv - missingPackets) / (totalSend + 1) * self.bitrates[encoding]
 

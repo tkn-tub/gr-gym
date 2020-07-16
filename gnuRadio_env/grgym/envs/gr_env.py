@@ -1,9 +1,12 @@
 import importlib
 import logging
+import subprocess
 import time
 import xmlrpc.client
 import signal
 import sys
+import sh
+import os
 from enum import Enum
 
 import gym
@@ -22,20 +25,24 @@ class GrEnv(gym.Env):
     def __init__(self):
         super(GrEnv, self).__init__()
         self._logger = logging.getLogger(self.__class__.__name__)
+        self.gr_process = None
+        self.gr_process_io = None
         
-        root_dir = get_dir_by_indicator(indicator=".git")
-        yaml_path = str(Path(root_dir) / "params" / "config.yaml")
+        self.root_dir = get_dir_by_indicator(indicator=".git")
+        yaml_path = str(Path(self.root_dir) / "params" / "config.yaml")
         self.args = yaml_argparse(yaml_path=yaml_path)
         
         self.bridge = GR_Bridge(self.args.rpchost, self.args.rpcport)
+        
+        if self.args.radio_programs_compile_execute:
+            self._compile_radio_program(str(Path(self.root_dir) / self.args.radio_programs_path), self.args.gnu_radio_program_filename)
+            self._start_radio_program(str(Path(self.root_dir) / self.args.radio_programs_path), self.args.gnu_radio_program)
         
         modules = self.args.scenario.split(".") 
         module = importlib.import_module("grgym.scenarios." + ".".join(modules[0:-1]))
         gnu_module = getattr(module, modules[-1]) # need a python 3 version
         
         self.scenario = gnu_module(self.bridge, self.args)
-        
-        # TODO: compile and start .grc file (UniFlex Module)
 
         self.action_space = None
         self.observation_space = None
@@ -61,8 +68,9 @@ class GrEnv(gym.Env):
         if self.check_is_alive():
             self._logger.info("send action to gnuradio")
             self.scenario.execute_actions(action)
-            self._logger.info("wait for step time")
-            time.sleep(self.args.stepTime)
+            if not self.args.eventbased:
+                self._logger.info("wait for step time")
+                time.sleep(self.args.stepTime)
             self._logger.info("get reward")
             reward = self.scenario.get_reward()
             done = self.scenario.get_done()
@@ -71,9 +79,10 @@ class GrEnv(gym.Env):
                 self._logger.info("start simuation in gnu radio")
                 self.scenario.simulate()
                 #Call get_obs to reset internal states
-                self.scenario.get_obs()
-                self._logger.info("wait for simulation")
-                time.sleep(self.args.simTime)
+                if not self.args.eventbased:
+                    self.scenario.get_obs()
+                    self._logger.info("wait for simulation")
+                    time.sleep(self.args.simTime)
             self._logger.info("collect observations")
             obs = self.scenario.get_obs()
 
@@ -81,7 +90,10 @@ class GrEnv(gym.Env):
             pass
 
         return (obs, reward, done, info)
-
+    
+    #def set_interval(self, interval):
+    #    self.bridge.set_interval(interval)
+        
     def reset(self):
         self._logger.info("reset usecase scenario")
         self.scenario.reset()
@@ -94,14 +106,18 @@ class GrEnv(gym.Env):
                 if type(e) is ConnectionRefusedError:
                     # no rpc server
                     error = True
-                    print("Please start the GNU Radio scenario")
+                    if self.args.radio_programs_compile_execute:
+                        print("Wait for start of GNU-Radio. This should happen automaticaly.")
+                    else:
+                        print("Wait for start of GNU-Radio. Please start the scenario on the other machine now.")
                     time.sleep(10)
                 self._logger.error("Multiple Start Error %s" % (e))
         self.gr_state = RadioProgramState.RUNNING
         self.scenario.reset()
         self.action_space = self.scenario.get_action_space()
         self.observation_space = self.scenario.get_observation_space()
-        time.sleep(self.args.simTime)
+        if not self.args.eventbased:
+            time.sleep(self.args.simTime)
         obs = self.scenario.get_obs()
 
         return obs
@@ -114,6 +130,7 @@ class GrEnv(gym.Env):
         self.bridge.close()
         if self.check_is_alive():
             self._logger.info("Stop grc execution")
+            self._stop_radio_program()
             self.gr_state = RadioProgramState.INACTIVE
         pass
 
@@ -125,3 +142,42 @@ class GrEnv(gym.Env):
             return False
         if self.gr_state == RadioProgramState.RUNNING:
             return True
+    
+    def _compile_radio_program(self, gr_radio_programs_path, grc_radio_program_name):
+        grProgramPath = os.path.join(gr_radio_programs_path, grc_radio_program_name + '.grc')
+        outdir = "--directory=%s" % gr_radio_programs_path
+        try:
+            sh.grcc(outdir, grProgramPath)
+        except Exception as e:
+            raise
+        self._logger.info("Compilation Completed")
+    
+    def _start_radio_program(self, gr_radio_programs_path, grc_radio_program_name):
+        if self.gr_process_io is None:
+            self.gr_process_io = {'stdout': open('/tmp/gnuradio.log', 'w+'), 'stderr': open('/tmp/gnuradio-err.log', 'w+')}
+        try:
+            # start GNURadio process
+            pyRadioProgPath = os.path.join(gr_radio_programs_path, grc_radio_program_name + '.py')
+            self._logger.info("Start radio program: {}".format(pyRadioProgPath))
+            self.gr_radio_program_name = grc_radio_program_name
+            self.gr_process = subprocess.Popen(["env", "python2", pyRadioProgPath],
+                                               stdout=self.gr_process_io['stdout'], stderr=self.gr_process_io['stderr'])
+            self.gr_state = RadioProgramState.RUNNING
+        except OSError:
+            return False
+        return True
+        
+    def _stop_radio_program(self):
+        if self.check_is_alive():
+            self._logger.info("stopping radio program")
+
+            if self.gr_process is not None and hasattr(self.gr_process, "kill"):
+                self.gr_process.kill()
+
+            if self.gr_process_io is not None and self.gr_process_io is dict:
+                for k in self.gr_process_io.keys():
+                    # if self.gr_process_io[k] is file and not self.gr_process_io[k].closed:
+                    if not self.gr_process_io[k].closed:
+                        self.gr_process_io[k].close()
+                        self.gr_process_io[k] = None
+            self.gr_state = RadioProgramState.INACTIVE
