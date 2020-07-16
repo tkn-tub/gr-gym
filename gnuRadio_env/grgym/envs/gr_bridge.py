@@ -32,7 +32,7 @@ class PipeListener(threading.Thread):
                 #os.remove(self.address)
                 os.mkfifo(self.address, 0o666)
             pipein = open(self.address, 'rb')
-            f = open("." + self.address + ".csv", "a")
+            #f = open("." + self.address + ".csv", "a")
             self.log.debug("open pipe")
 
             while not self.stop:
@@ -44,7 +44,7 @@ class PipeListener(threading.Thread):
                 
                 #for i in range(0,int(len(arr) / self.elements)):
                 #tmp = arr[(i * self.elements) : (self.elements * (i+1))]
-                f.write(str(self.interval) + "," + str(timer() - self.data[1]) + "\n")
+                #f.write(str(self.interval) + "," + str(timer() - self.data[1]) + "\n")
                 self.mutex.acquire()
                 #self.prev = self.data
                 self.data = (tmp, timer())
@@ -52,7 +52,7 @@ class PipeListener(threading.Thread):
                 self.waitevent.set()
 
             pipein.close()
-            f.close()
+            #f.close()
             self.waitevent.set()
     
     #return data from buffer
