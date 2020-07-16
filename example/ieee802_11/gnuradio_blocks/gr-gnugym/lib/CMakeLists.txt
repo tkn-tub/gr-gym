@@ -19,74 +19,12 @@
 # Setup library
 ########################################################################
 include(GrPlatform) #define LIB_SUFFIX
+check_include_file("xmmintrin.h" SSE2_SUPPORTED)
 
-file(WRITE ${CMAKE_CURRENT_BINARY_DIR}/generate_helper.py "
-#!${PYTHON_EXECUTABLE}
-
-import sys, os, re
-sys.path.append('${GR_RUNTIME_PYTHONPATH}')
-os.environ['srcdir'] = '${CMAKE_CURRENT_SOURCE_DIR}'
-os.chdir('${CMAKE_CURRENT_BINARY_DIR}')
-
-if __name__ == '__main__':
-    sys.path.append('${CMAKE_CURRENT_SOURCE_DIR}/../python')
-    import build_utils
-    root, inp = sys.argv[1:3]
-    for sig in sys.argv[3:]:
-        name = re.sub ('X+', sig, root)
-        d = build_utils.standard_dict(name, sig, 'gnugym')
-        build_utils.expand_template(d, inp, '_impl')
-")
-
-
-macro(expand_cc_h_impl root)
-  #make a list of all the generated files
-  unset(expanded_files_cc_impl)
-  unset(expanded_files_h_impl)
-  foreach(sig ${ARGN})
-    string(REGEX REPLACE "X+" ${sig} name ${root})
-    list(APPEND expanded_files_cc_impl ${CMAKE_CURRENT_BINARY_DIR}/${name}_impl.cc)
-    list(APPEND expanded_files_h_impl ${CMAKE_CURRENT_BINARY_DIR}/${name}_impl.h)
-    list(APPEND expanded_files_h ${CMAKE_CURRENT_BINARY_DIR}/../include/${name}.h)
-  endforeach(sig)
-
-  #create a command to generate the _impl.cc files
-  add_custom_command(
-    OUTPUT ${expanded_files_cc_impl}
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${root}_impl.cc.t
-    COMMAND ${PYTHON_EXECUTABLE} ${PYTHON_DASH_B}
-    ${CMAKE_CURRENT_BINARY_DIR}/generate_helper.py
-    ${root} ${root}_impl.cc.t ${ARGN}
-  )
-
-  #create a command to generate the _impl.h files
-  add_custom_command(
-    OUTPUT ${expanded_files_h_impl}
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${root}_impl.h.t
-    COMMAND ${PYTHON_EXECUTABLE} ${PYTHON_DASH_B}
-    ${CMAKE_CURRENT_BINARY_DIR}/generate_helper.py
-    ${root} ${root}_impl.h.t ${ARGN}
-  )
-
-  #make _impl.cc source files depend on headers to force generation
-  set_source_files_properties(${expanded_files_cc_impl}
-    PROPERTIES OBJECT_DEPENDS "${expanded_files_h_impl}"
-  )
-
-  #make _impl.h source files depend on headers to force generation
-  set_source_files_properties(${expanded_files_h_impl}
-    PROPERTIES OBJECT_DEPENDS "${expanded_files_h}"
-  )
-
-  #install rules for the generated cc files
-  list(APPEND generated_sources ${expanded_files_cc_impl})
-endmacro(expand_cc_h_impl)
-
-########################################################################
-# Invoke macro to generate various sources
-########################################################################
-add_custom_target(gnugym_generated_sources DEPENDS ${generated_sources})
-add_dependencies(gnugym_generated_sources gnugym_generated_includes)
+if(SSE2_SUPPORTED)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -msse2")
+    add_definitions(-DIEEE80211_MSSE2)
+endif(SSE2_SUPPORTED)
 
 ########################################################################
 # Setup library
@@ -106,26 +44,62 @@ list(APPEND gr_gnugym_sources
     gnugym_parse_seqnr_impl.cc
 )
 
-set(GR_REQUIRED_COMPONENTS RUNTIME FILTER DIGITAL)
+# use SSE2 optimized viterbi implementation if SSE2 is enabled
+if(SSE2_SUPPORTED)
+    list(APPEND gnugym_sources
+        viterbi_decoder/viterbi_decoder_x86.cc
+    )
+else()
+    list(APPEND gnugym_sources
+        viterbi_decoder/viterbi_decoder_generic.cc
+    )
+endif(SSE2_SUPPORTED)
 
-list(APPEND gr_gnugym_libs
-    ${Boost_LIBRARIES}
-    ${GNURADIO_ALL_LIBRARIES}
-    ${LOG4CPP_LIBRARIES}
-)
+set(gnugym_sources "${gnugym_sources}" PARENT_SCOPE)
+if(NOT gnugym_sources)
+    MESSAGE(STATUS "No C++ sources... skipping lib/")
+    return()
+endif(NOT gnugym_sources)
 
-include_directories(${GNURADIO_ALL_INCLUDE_DIRS})
-
-add_library(gnuradio-gnugym SHARED ${gr_gnugym_sources})
-add_dependencies(gnuradio-gnugym gnugym_generated_sources)
-target_link_libraries(gnuradio-gnugym ${gr_gnugym_libs})
+add_library(gnuradio-gnugym SHARED ${gnugym_sources})
+target_link_libraries(gnuradio-gnugym
+        gnuradio::gnuradio-runtime
+        gnuradio::gnuradio-filter
+        gnuradio::gnuradio-blocks
+        gnuradio::gnuradio-analog
+        gnuradio::gnuradio-fft
+        gnuradio::gnuradio-digital)
+target_include_directories(gnuradio-gnugym
+    PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/../include>
+    PUBLIC $<INSTALL_INTERFACE:include>
+  )
 set_target_properties(gnuradio-gnugym PROPERTIES DEFINE_SYMBOL "gnuradio_gnugym_EXPORTS")
+
+if(APPLE)
+    set_target_properties(gnuradio-gnugym PROPERTIES
+        INSTALL_NAME_DIR "${CMAKE_INSTALL_PREFIX}/lib"
+    )
+endif(APPLE)
 
 ########################################################################
 # Install built library files
 ########################################################################
-install(TARGETS gnuradio-gnugym
-    LIBRARY DESTINATION lib${LIB_SUFFIX} # .so/.dylib file
-    ARCHIVE DESTINATION lib${LIB_SUFFIX} # .lib file
-    RUNTIME DESTINATION bin              # .dll file
+include(GrMiscUtils)
+GR_LIBRARY_FOO(gnuradio-gnugym)
+
+########################################################################
+# Print summary
+########################################################################
+message(STATUS "Using install prefix: ${CMAKE_INSTALL_PREFIX}")
+message(STATUS "Building for version: ${VERSION} / ${LIBVER}")
+
+########################################################################
+# Build and register unit test
+########################################################################
+include(GrTest)
+
+# If your unit tests require special include paths, add them here
+#include_directories()
+# List all files that contain Boost.UTF unit tests here
+list(APPEND test_gnugym_sources
 )
