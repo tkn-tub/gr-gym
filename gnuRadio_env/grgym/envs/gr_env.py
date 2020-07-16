@@ -88,7 +88,10 @@ class GrEnv(gym.Env):
             pass
 
         return (obs, reward, done, info)
-
+    
+    def set_interval(self, interval):
+        self.bridge.set_interval(interval)
+        
     def reset(self):
         self._logger.info("reset usecase scenario")
         self.scenario.reset()
