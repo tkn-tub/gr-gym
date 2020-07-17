@@ -142,11 +142,11 @@ class GR_Bridge:
     
     # create thread to listen on pipe
     # add thread to pipe
-    def subscribe_parameter(self, name, address, dtype, elements):
+    def subscribe_parameter(self, name, address, dtype, elements, comTyp=BridgeConnectionType.PIPE):
         if name in self.pipes:
             raise Exception("There is already an parameter of this name")
             self.log.error("Parameter already exists '%s'" % (name))
-        self.pipes[name] = PipeListener(address, dtype, elements)
+        self.pipes[name] = PipeListener(address, dtype, elements,comTyp)
         self.pipes[name].start()
     
     # return result of pipe if name exists there
