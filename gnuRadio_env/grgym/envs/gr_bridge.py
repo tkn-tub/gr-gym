@@ -4,9 +4,73 @@ import threading
 import xmlrpc.client
 import numpy as np
 import logging
+import socket
+import sys
+import time
+from enum import Enum
+
+class BridgeConnectionType(Enum):
+    PIPE = 0
+    UDP = 1
+    TCP = 2
+
+class CommunicationElement:
+    def __init__(self, address):
+        pass
+    def read(self, structlen):
+        pass
+    def close(self):
+        pass
+
+class CommunicationPipe(CommunicationElement):
+    def __init__(self, address):
+        if not os.path.exists(address):
+            os.mkfifo(address, 0o666)
+        self.pipein = open(address, 'rb')
+    def read(self, structlen):
+        return self.pipein.read(structlen)
+    def close(self):
+        return self.pipein.close()
+
+class CommunicationUDP(CommunicationElement):
+    def __init__(self, address):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        ip, port = address.split(':')
+        port = int(port)
+        server_address = (ip, port)
+        self.sock.bind(server_address)
+    def read(self, structlen):
+        return self.sock.recvfrom(structlen)[0]
+    def close(self):
+        return self.sock.close()
+
+class CommunicationTCP(CommunicationElement):
+    def __init__(self, address):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        ip, port = address.split(':')
+        port = int(port)
+        server_address = (ip, port)
+        error = True
+        while error:
+            print('connect')
+            try:
+                self.sock.connect(server_address)
+                error = False
+            except Exception:
+                time.sleep(0.1)
+        #self.sock.listen(1)
+        #self.client, addr = self.sock.accept()
+        print("connected")
+        mystr = "connected"
+        self.sock.send(mystr.encode())
+        
+    def read(self, structlen):
+        return self.sock.recv(structlen)
+    def close(self):
+        return self.sock.close()
 
 class PipeListener(threading.Thread):
-    def __init__(self, address, mydtype, elements):
+    def __init__(self, address, mydtype, elements, comTyp=BridgeConnectionType.PIPE):
         threading.Thread.__init__(self) 
         self.dtype = np.dtype(mydtype)
         self.address = address
@@ -21,6 +85,7 @@ class PipeListener(threading.Thread):
         self.waitevent = threading.Event()
         self.waitcounter_mutex = threading.Lock()
         self.waitcounter = 0
+        self.comTyp = comTyp
     
     # listen on pipe with address
     # create pipe if id does not exists
@@ -28,15 +93,19 @@ class PipeListener(threading.Thread):
     def run(self):
         structlen = self.dtype.itemsize * self.elements
         while not self.stop:
-            if not os.path.exists(self.address):
-                #os.remove(self.address)
-                os.mkfifo(self.address, 0o666)
-            pipein = open(self.address, 'rb')
-            #f = open("." + self.address + ".csv", "a")
+            if self.comTyp == BridgeConnectionType.PIPE:
+                connection = CommunicationPipe(self.address)
+            elif self.comTyp == BridgeConnectionType.UDP:
+                connection = CommunicationUDP(self.address)
+            elif self.comTyp == BridgeConnectionType.TCP:
+                connection = CommunicationTCP(self.address)
+            else:
+                raise ValueError('Type of connection is unkown!')
+            
             self.log.debug("open pipe")
 
             while not self.stop:
-                buf = (pipein.read(structlen))
+                buf = connection.read(structlen)
                 if len(buf) == 0:
                     break
                 #print("read data")
@@ -51,7 +120,7 @@ class PipeListener(threading.Thread):
                 self.mutex.release()
                 self.waitevent.set()
 
-            pipein.close()
+            connection.close()
             #f.close()
             self.waitevent.set()
     
@@ -90,11 +159,11 @@ class GR_Bridge:
     
     # create thread to listen on pipe
     # add thread to pipe
-    def subscribe_parameter(self, name, address, dtype, elements):
+    def subscribe_parameter(self, name, address, dtype, elements, comTyp=BridgeConnectionType.PIPE):
         if name in self.pipes:
             raise Exception("There is already an parameter of this name")
             self.log.error("Parameter already exists '%s'" % (name))
-        self.pipes[name] = PipeListener(address, dtype, elements)
+        self.pipes[name] = PipeListener(address, dtype, elements,comTyp)
         self.pipes[name].start()
     
     # return result of pipe if name exists there
