@@ -6,10 +6,10 @@ import numpy as np
 from tensorflow import keras
 
 logresult = 'agentdata/result_nn_avgsqrt.csv'
-runsPerEpisode = 150
-epsilonDecay = 0.994
+runsPerEpisode = 1200
+epsilonDecay = 0.9994
 epsilonStartDecay = 0.99999
-epsilonStartPow = 1.6
+epsilonStartPow = 1.5
 decayLimit = 0.005
 
 env = gym.make('grgym:grenv-v0')
@@ -28,7 +28,7 @@ s_range = s_max - s_min
 
 model = keras.Sequential()
 model.add(keras.layers.Dense(1, input_shape=(1,), activation='sigmoid'))
-model.add(keras.layers.Dense(a_size*2, activation='relu'))
+model.add(keras.layers.Dense(a_size, activation='relu'))
 model.add(keras.layers.Dense(a_size, activation='relu'))
 model.add(keras.layers.Dense(a_size, activation='softmax'))
 model.compile(optimizer=tf.train.AdamOptimizer(0.001),
@@ -36,7 +36,7 @@ model.compile(optimizer=tf.train.AdamOptimizer(0.001),
               metrics=['accuracy'])
 
 epsilon = 1
-epsilon_start = 0.99999
+epsilon_start = 0.99999999999
 maxreward = 0.00000000000001 #[]
 #for i in range(a_size):
 #    maxreward.append(0.00000000000001)
@@ -69,7 +69,7 @@ while True:
     
     maxreward = max(reward, maxreward)
     
-    target = np.power((reward)/maxreward,1/3) #[action] * (0.3 + action / (a_size / 0.3))
+    target = np.power((reward)/maxreward,1/2) #[action] * (0.3 + action / (a_size / 0.3))
     
     print("scaled reward: " + str(target))
     
