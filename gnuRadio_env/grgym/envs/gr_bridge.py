@@ -5,6 +5,14 @@ import xmlrpc.client
 import numpy as np
 import logging
 
+class CommunicationElement:
+    def __int__(self, address):
+        pass
+    def read(self):
+        pass
+    def close(self):
+        pass
+
 class PipeListener(threading.Thread):
     def __init__(self, address, mydtype, elements):
         threading.Thread.__init__(self) 
