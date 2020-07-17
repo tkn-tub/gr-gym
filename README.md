@@ -47,7 +47,8 @@ No you are ready to use the gr-env!
 
 ## Running the example
 
-Now you are ready to do some testing. Perhaps, you want to start with our example? Therefore, please choose an agent and start it. You find some agents in `example/agents`. Start GNU-Radio-Companion (GRC). Please open our example `.grc` file with GRC. You find it at `example/ieee802_11/wifi_loopback_w_fr_channel.grc`. If the environment requests the start of GRC please t click on the `Run` button in GRC. The request of the environment is written in the agent window. Now, you can watch your agent at work.
+Now you are ready to do some testing. Perhaps, you want to start with our example? Therefore, please choose an agent and start it. You find some agents in `example/agents`. If the automatic execution is enabled, the environment will compile and start the `grc` file.
+If you don't want to use the automatic compilation and startup, because the agent is on a separate machine, you have to start the GNU-Radio programm manually. Therefore, start GNU-Radio-Companion (GRC). Please open our example `.grc` file with GRC. You find it at `example/grc/wifi_loopback_w_fr_channel.grc`. If the environment requests the start of GRC please t click on the `Run` button in GRC. The request of the environment is written in the agent window. Now, you can watch your agent at work.
 Once, you used the `Run` button in GRC, there will be a python file of the example. You now can directly run the GNU-Radio example from your command line.
 
 ## Setting up an own scenario
