@@ -12,6 +12,7 @@ There are several parts, you have to install.
 Please, first get and install OpenAI gym. Perhaps, you should do the installation in a new virtual python environment. You find OpenAI gym here: https://github.com/openai/gym
 Next, you need an installation of GNU-Radio. For linux, you can use the official GNU-Radio packet repository. We are using GNU-Radio 3.7.11. Here, you find information for the installation of GNU-Radio: https://wiki.gnuradio.org/index.php/UbuntuInstall
 If you want to use the IEEE 802.11p example, you have to install the GNU-Radio blocks of Bastian Bloessl. See his github repository for the code and more information: https://github.com/bastibl/gr-ieee802-11
+Depending on your installation of GNU-Radio you have to set `-DCMAKE_INSTALL_PREFIX=/usr` to the `cmake` commands.
 
 ### Installing
 
@@ -30,6 +31,7 @@ make
 sudo make install
 sudo ldconfig
 ```
+Depending on your installation of GNU-Radio you have to set `-DCMAKE_INSTALL_PREFIX=/usr` to the `cmake` command.
 You can also run the installation Skript in `example/ieee802_11/gnuradio_blocks/gr-gnugym`.
 
 To install our OpenAI gym environment, please do the following steps:
@@ -38,6 +40,8 @@ To install our OpenAI gym environment, please do the following steps:
 cd gnuRadio_env
 pip install -e .
 ```
+### Bugfix for GNU-Radio 3.8
+/usr/share/gnuradio/grc/blocks/xmlrpc_server.block.yml
 
 No you are ready to use the gr-env!
 
