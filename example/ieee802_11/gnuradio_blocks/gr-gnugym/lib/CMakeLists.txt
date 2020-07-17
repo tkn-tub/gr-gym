@@ -30,7 +30,7 @@ endif(SSE2_SUPPORTED)
 # Setup library
 ########################################################################
 list(APPEND gnugym_sources
-    ${generated_sources}
+#    ${generated_sources}
     constellations_impl.cc
     gnugym_rssi_cb_impl.cc
     gnugym_snr_cb_impl.cc

@@ -1,35 +1,36 @@
-id: gnugym_gnugym_snr_cb
-label: GnuGym SNR Calculation
-category: [gnugym]
+id: gnugym_gnugym_rssi_cb
+label: GnuGym RSSI Calculation
+category: '[gnugym]'
 
 parameters:
 -   id: algo
     label: Algorithm
     dtype: int
     default: gnugym.LS
-    options: ['gnugym.LS_SNR', 'gnugym.LMS_SNR', 'gnugym.COMB_SNR', 'gnugym.STA_SNR']
-    option_labels: ['LS', 'LMS', 'COMB', 'STA']
+    options: [gnugym.LS, gnugym.LMS, gnugym.COMB, gnugym.STA]
+    option_labels: [LS, LMS, COMB, STA']
     category: standard
 -   id: freq
     label: Frequency
-    dtype: real
+    dtype: float
     default: 5.89e9
     category: standard
 -   id: bw
     label: Bandwidth
-    dtype: real
+    dtype: float
     default: 10e6
     category: standard
+-   id: log   
     label: Log
     dtype: bool
-    default: False
+    default: 'False'
     options: ['False', 'True']
-    option_labels: ['Disable', 'Enable']
+    option_labels: [Disable, Enable]
     category: standard
 -   id: debug
     label: Debug
     dtype: bool
-    default: False
+    default: 'False'
     options: ['False', 'True']
     option_labels: ['Disable', 'Enable']
     category: standard
@@ -42,14 +43,14 @@ inputs:
 
 outputs:
 -   domain: stream
-    dtype: real
+    dtype: float
     vlen: 64
     multiplicity: '1'
 
 
 templates:
     imports: import gnugym
-    make: gnugym.gnugym_snr_cb($algo, $freq, $bw, $log, $debug)
+    make: gnugym.gnugym_rssi_cb( ${algo}, ${freq}, ${bw}, ${log}, ${debug})
     callbacks:
     - set_algorithm(${algo})
     - set_frequency(${freq})

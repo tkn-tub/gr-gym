@@ -1,15 +1,17 @@
 id: gnugym_gnugym_snrdebug_ff
 label: GnuGym SNR Debug
-category: [gnugym]
+category: '[gnugym]'
 
 inputs:
 -   domain: stream
+    id: in
     dtype: float
     vlen: 64
     multiplicity: '1'
 
 outputs:
 -   domain: stream
+    id: out
     dtype: float
     vlen: 64
     multiplicity: '1'

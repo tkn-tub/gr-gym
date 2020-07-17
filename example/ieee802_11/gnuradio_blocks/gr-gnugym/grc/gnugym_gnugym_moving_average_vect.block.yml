@@ -1,6 +1,6 @@
 id: gnugym_gnugym_moving_average_vect_ff
 label: Moving Average for Vector
-category: [gnugym]
+category: '[gnugym]'
 
 parameters:
 -   id: vlen
@@ -16,18 +16,20 @@ parameters:
 
 inputs:
 -   domain: stream
+    id: in
     dtype: float
     vlen: ${ vlen }
     multiplicity: '1'
 
 outputs:
 -   domain: stream
+    id: out
     dtype: float
     vlen: ${ vlen }
     multiplicity: '1'
 
 templates:
     imports: import gnugym
-    make: gnugym.gnugym_moving_average_vect_ff($vlen, $buffer)
+    make: gnugym.gnugym_moving_average_vect_ff(${vlen}, ${buffer})
 
 file_format: 1

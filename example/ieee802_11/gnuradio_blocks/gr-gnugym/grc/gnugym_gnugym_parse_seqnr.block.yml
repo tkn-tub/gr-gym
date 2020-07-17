@@ -1,43 +1,40 @@
 id: gnugym_parse_seqnr
 label: GnuGym Parse Sequence Number
-category: [gnugym]
+category: '[gnugym]'
 
 parameters:
 -   id: log
     label: Log
     dtype: bool
-    default: False
+    default: 'False'
     options: ['False', 'True']
-    option_labels: ['Disable', 'Enable']
+    option_labels: [Disable, Enable]
     category: standard
 -   id: debug
     label: Debug
     dtype: bool
-    default: False
+    default: 'False'
     options: ['False', 'True']
-    option_labels: ['Disable', 'Enable']
+    option_labels: [Disable, Enable]
     category: standard
 
 inputs:
 -   domain: message
+    id: in
     multiplicity: '1'
 
 outputs:
--   domain: stream
-    id: seqnr
+-   doamin: stream  
     label: Sequence Number
     dtype: int
     vlen: 1
-    multiplicity: '1'
--   domain: stream
-    id: missing_seqnr
+-   doamin: stream
     label: Missing Sequence Numbers
     dtype: int
     vlen: 1
-    multiplicity: '1'
 
 templates:
     imports: import gnugym
-    make: gnugym.gnugym_parse_seqnr($log, $debug)
+    make: gnugym.gnugym_parse_seqnr(${log}, ${debug})
 
 file_format: 1

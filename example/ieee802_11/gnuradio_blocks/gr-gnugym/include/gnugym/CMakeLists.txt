@@ -52,7 +52,7 @@
 ########################################################################
 
 list(APPEND include_sources
-    ${generated_includes}
+#    ${generated_includes}
     api.h
     constellations.h
     gnugym_rssi_cb.h
@@ -64,6 +64,6 @@ list(APPEND include_sources
 
 install(
 	FILES ${include_sources}
-	DESTINATION ${GR_INCLUDE_DIR}/gnuradio/gnugym
+	DESTINATION ${GR_INCLUDE_DIR}
 	COMPONENT "gnugym_devel"
 )
