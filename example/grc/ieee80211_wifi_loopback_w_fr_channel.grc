@@ -15,8 +15,8 @@ options:
     output_language: python
     placement: (0,0)
     qt_qss_theme: ''
-    realtime_scheduling: ''
-    run: 'True'
+    realtime_scheduling: '1'
+    run: 'False'
     run_command: '{python} -u {filename}'
     run_options: prompt
     sizing_mode: fixed
