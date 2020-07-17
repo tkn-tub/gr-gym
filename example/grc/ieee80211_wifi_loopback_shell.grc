@@ -8,14 +8,14 @@ options:
     description: ''
     gen_cmake: 'On'
     gen_linking: dynamic
-    generate_options: qt_gui
+    generate_options: no_gui
     hier_block_src_path: '.:'
     id: wifi_loopback
     max_nouts: '0'
     output_language: python
     placement: (0,0)
     qt_qss_theme: ''
-    realtime_scheduling: '1'
+    realtime_scheduling: ''
     run: 'False'
     run_command: '{python} -u {filename}'
     run_options: prompt
@@ -60,7 +60,19 @@ blocks:
     bus_structure: null
     coordinate: [192, 8]
     rotation: 0
-    state: enabled
+    state: disabled
+- name: chan_est
+  id: variable
+  parameters:
+    comment: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [192, 108.0]
+    rotation: 0
+    state: true
 - name: dist
   id: variable_qtgui_range
   parameters:
@@ -80,6 +92,18 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [1112, 12.0]
+    rotation: 0
+    state: disabled
+- name: dist
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [1112, 124.0]
     rotation: 0
     state: true
 - name: encoding
@@ -111,7 +135,31 @@ blocks:
     bus_structure: null
     coordinate: [376, 8]
     rotation: 0
-    state: enabled
+    state: disabled
+- name: encoding
+  id: variable
+  parameters:
+    comment: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [376, 116.0]
+    rotation: 0
+    state: true
+- name: epsilon
+  id: variable
+  parameters:
+    comment: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [688, 124.0]
+    rotation: 0
+    state: true
 - name: epsilon
   id: variable_qtgui_range
   parameters:
@@ -132,7 +180,19 @@ blocks:
     bus_structure: null
     coordinate: [688, 8]
     rotation: 0
-    state: enabled
+    state: disabled
+- name: interval
+  id: variable
+  parameters:
+    comment: ''
+    value: '300'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [808, 124.0]
+    rotation: 0
+    state: true
 - name: interval
   id: variable_qtgui_range
   parameters:
@@ -153,7 +213,7 @@ blocks:
     bus_structure: null
     coordinate: [808, 8]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: out_buf_size
   id: variable
   parameters:
@@ -166,6 +226,18 @@ blocks:
     coordinate: [16, 76]
     rotation: 0
     state: enabled
+- name: pdu_length
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [552, 124.0]
+    rotation: 0
+    state: true
 - name: pdu_length
   id: variable_qtgui_range
   parameters:
@@ -186,7 +258,19 @@ blocks:
     bus_structure: null
     coordinate: [560, 8]
     rotation: 0
-    state: enabled
+    state: disabled
+- name: snr
+  id: variable
+  parameters:
+    comment: ''
+    value: '20'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [936, 124.0]
+    rotation: 0
+    state: true
 - name: snr
   id: variable_qtgui_range
   parameters:
@@ -207,7 +291,7 @@ blocks:
     bus_structure: null
     coordinate: [936, 8]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_file_sink_0
   id: blocks_file_sink
   parameters:
@@ -331,6 +415,23 @@ blocks:
     bus_source: false
     bus_structure: null
     coordinate: [704, 732.0]
+    rotation: 0
+    state: true
+- name: blocks_null_sink_0
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: ''
+    num_inputs: '1'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [408, 320.0]
     rotation: 0
     state: true
 - name: blocks_null_sink_1_0
@@ -643,7 +744,7 @@ blocks:
     bus_structure: null
     coordinate: [152, 364.0]
     rotation: 180
-    state: enabled
+    state: disabled
 - name: wifi_phy_hier_0
   id: wifi_phy_hier
   parameters:
@@ -675,13 +776,14 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [192, 124.0]
+    coordinate: [64, 164.0]
     rotation: 0
     state: true
 
 connections:
 - [blocks_message_strobe_0, strobe, ieee802_11_mac_0, app in]
 - [blocks_multiply_const_xx_0, '0', channels_channel_model_0, '0']
+- [blocks_pdu_to_tagged_stream_0_0, '0', blocks_null_sink_0, '0']
 - [blocks_pdu_to_tagged_stream_0_0, '0', qtgui_const_sink_x_0, '0']
 - [channels_channel_model_0, '0', pfb_arb_resampler_xxx_0, '0']
 - [foo_packet_pad2_0, '0', blocks_multiply_const_xx_0, '0']
