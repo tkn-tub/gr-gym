@@ -6,6 +6,7 @@ import numpy as np
 import logging
 import socket
 import sys
+import time
 from enum import Enum
 
 class BridgeConnectionType(Enum):
@@ -14,7 +15,7 @@ class BridgeConnectionType(Enum):
     TCP = 2
 
 class CommunicationElement:
-    def __int__(self, address):
+    def __init__(self, address):
         pass
     def read(self, structlen):
         pass
@@ -22,7 +23,7 @@ class CommunicationElement:
         pass
 
 class CommunicationPipe(CommunicationElement):
-    def __int__(self, address):
+    def __init__(self, address):
         if not os.path.exists(address):
             os.mkfifo(address, 0o666)
         self.pipein = open(address, 'rb')
@@ -32,22 +33,37 @@ class CommunicationPipe(CommunicationElement):
         return self.pipein.close()
 
 class CommunicationUDP(CommunicationElement):
-    def __int__(self, address):
+    def __init__(self, address):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         ip, port = address.split(':')
+        port = int(port)
         server_address = (ip, port)
-        sock.bind(server_address)
+        self.sock.bind(server_address)
     def read(self, structlen):
         return self.sock.recvfrom(structlen)[0]
     def close(self):
         return self.sock.close()
 
 class CommunicationTCP(CommunicationElement):
-    def __int__(self, address):
+    def __init__(self, address):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         ip, port = address.split(':')
+        port = int(port)
         server_address = (ip, port)
-        self.sock.connect(server_address)
+        error = True
+        while error:
+            print('connect')
+            try:
+                self.sock.connect(server_address)
+                error = False
+            except Exception:
+                time.sleep(0.1)
+        #self.sock.listen(1)
+        #self.client, addr = self.sock.accept()
+        print("connected")
+        mystr = "connected"
+        self.sock.send(mystr.encode())
+        
     def read(self, structlen):
         return self.sock.recv(structlen)
     def close(self):
@@ -69,6 +85,7 @@ class PipeListener(threading.Thread):
         self.waitevent = threading.Event()
         self.waitcounter_mutex = threading.Lock()
         self.waitcounter = 0
+        self.comTyp = comTyp
     
     # listen on pipe with address
     # create pipe if id does not exists
@@ -76,12 +93,12 @@ class PipeListener(threading.Thread):
     def run(self):
         structlen = self.dtype.itemsize * self.elements
         while not self.stop:
-            if comTyp == BridgeConnectionType.PIPE:
-                connection = CommunicationPipe(address)
-            else if comTyp == BridgeConnectionType.UDP:
-                connection = CommunicationUDP(address)
-            else if comTyp == BridgeConnectionType.TCP:
-                connection = CommunicationTCP(address)
+            if self.comTyp == BridgeConnectionType.PIPE:
+                connection = CommunicationPipe(self.address)
+            elif self.comTyp == BridgeConnectionType.UDP:
+                connection = CommunicationUDP(self.address)
+            elif self.comTyp == BridgeConnectionType.TCP:
+                connection = CommunicationTCP(self.address)
             else:
                 raise ValueError('Type of connection is unkown!')
             
