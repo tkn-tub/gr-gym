@@ -237,7 +237,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [824, 476.0]
+    coordinate: [864, 468.0]
     rotation: 0
     state: true
 - name: blocks_multiply_xx_0
@@ -653,7 +653,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [976, 836.0]
+    coordinate: [976, 820.0]
     rotation: 0
     state: true
 - name: pad_source_0
@@ -747,7 +747,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [112, 704]
+    coordinate: [280, 680.0]
     rotation: 0
     state: enabled
 
