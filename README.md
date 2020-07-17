@@ -12,6 +12,7 @@ There are several parts, you have to install.
 Please, first get and install OpenAI gym. Perhaps, you should do the installation in a new virtual python environment. You find OpenAI gym here: https://github.com/openai/gym
 Next, you need an installation of GNU-Radio. For linux, you can use the official GNU-Radio packet repository. We are using GNU-Radio 3.7.11. Here, you find information for the installation of GNU-Radio: https://wiki.gnuradio.org/index.php/UbuntuInstall
 If you want to use the IEEE 802.11p example, you have to install the GNU-Radio blocks of Bastian Bloessl. See his github repository for the code and more information: https://github.com/bastibl/gr-ieee802-11
+Depending on your installation of GNU-Radio you have to set `-DCMAKE_INSTALL_PREFIX=/usr` to the `cmake` commands.
 
 ### Installing
 
@@ -30,6 +31,7 @@ make
 sudo make install
 sudo ldconfig
 ```
+Depending on your installation of GNU-Radio you have to set `-DCMAKE_INSTALL_PREFIX=/usr` to the `cmake` command.
 You can also run the installation Skript in `example/ieee802_11/gnuradio_blocks/gr-gnugym`.
 
 To install our OpenAI gym environment, please do the following steps:
@@ -38,18 +40,21 @@ To install our OpenAI gym environment, please do the following steps:
 cd gnuRadio_env
 pip install -e .
 ```
+### Bugfix for GNU-Radio 3.8
+Our environment uses the `SimpleXMLRPCServer`. GNU-Radio can have a wrong file yaml for this funciton. Please open `/usr/share/gnuradio/grc/blocks/xmlrpc_server.block.yml` and change the module name to `xmlrpc.server`. Don't change the name of the class.
 
 No you are ready to use the gr-env!
 
 ## Running the example
 
-Now you are ready to do some testing. Perhaps, you want to start with our example? Therefore, please choose an agent and start it. You find some agents in `example/agents`. Start GNU-Radio-Companion (GRC). Please open our example `.grc` file with GRC. You find it at `example/ieee802_11/wifi_loopback_w_fr_channel.grc`. If the environment requests the start of GRC please t click on the `Run` button in GRC. The request of the environment is written in the agent window. Now, you can watch your agent at work.
+Now you are ready to do some testing. Perhaps, you want to start with our example? Therefore, please choose an agent and start it. You find some agents in `example/agents`. If the automatic execution is enabled, the environment will compile and start the `grc` file.
+If you don't want to use the automatic compilation and startup, because the agent is on a separate machine, you have to start the GNU-Radio programm manually. Therefore, start GNU-Radio-Companion (GRC). Please open our example `.grc` file with GRC. You find it at `example/grc/wifi_loopback_w_fr_channel.grc`. If the environment requests the start of GRC please t click on the `Run` button in GRC. The request of the environment is written in the agent window. Now, you can watch your agent at work.
 Once, you used the `Run` button in GRC, there will be a python file of the example. You now can directly run the GNU-Radio example from your command line.
 
 ## Setting up an own scenario
 
 ### At GNU-Radio-Companion
-If you want to create your own scenario, perhaps you should start with GRC. Please build your protocol stack within GRC. You should also think about the parameter, you want to control, the values, you need for your reward function and the values you need for your observation. For your parameter, please add a variable or a GUI block in your GRC sheet. Add the `XMLRPC-Server` block to make your parameter accessable. Configure the block by choosing a valid port number. For the variables, you need for reward and observation, please add `File-Sink` blocks. Activate the unbuffered option and choose the path to the future named pipe.
+If you want to create your own scenario, perhaps you should start with GRC. Please build your protocol stack within GRC. You should also think about the parameter, you want to control, the values, you need for your reward function and the values you need for your observation. For your parameter, please add a variable or a GUI block in your GRC sheet. Add the `XMLRPC-Server` block to make your parameter accessable. Configure the block by choosing a valid port number. For the variables, you need for reward and observation, please add a block which sends the variable to GNU-Radio. This can be a `File-Sink` block if you want to use named pipes. Activate the unbuffered option and choose the path to the future pipe for this variable. If you want to use a TCP connection, please add the `TCPServer-Sink` block. For UDP, please add the `UDP-sink` block to your flowchart.
 
 ### Describing your scenario
 Create your scenario file in `gnuRadio_env/grgym/scenarios`. You have to implement the `gnu_case` interface. Therefore, you have to include 
@@ -70,8 +75,8 @@ The interface expects you to implement the functions:
 - `simulate(self)`: If you want to change simulation values in your GNU-Radio scenario, you can implement the changes here
 
 To do the communication to GNU-Radio, you can use the `gnuradio` object. It is of type `GR-Brigde` and provides some helpful methods:
-- `self.gnuradio.subscribe_parameter('gr_var', 'path/to/pipe', numpy type of var, length of array)`: If you want to read from a pipe, you should tell the `GR-Bridge` that it has to listen on it. Please specify, how to read the data via `numpy.dtype` and the length of the array. `GR-Bridge` will buffer the last value for you. If the pipe does not exists, `GR-Bridge` will create it. It is necessary to call this method before you start GNU-Radio. Otherwise, GNU-Radio will create a file and the communication will break.
-- `(value, timestamp) = self.gnuradio.get_parameter('gr_var')`: Using get parameter, you can read a variable from GNU-Radio. If the variable is a pipe, you can get the last value of the pipe via this method. You get the timestamp, when the data arrived at `GR-Bridge`, too. If there is no subscibtion for the variable, `GR-Bridge` uses the XMLRPC connection to read the data from GNU-Radio.
+- `self.gnuradio.subscribe_parameter('gr_var', 'path/to/pipe' or 'server:port', numpy type of var, length of array, type of connection)`: If you want to listen to a variable, you should tell the `GR-Bridge` that it has to listen on it. Please specify, how to read the data via `numpy.dtype` and the length of the array. `GR-Bridge` will buffer the last value for you. Perhaps, you should specify the type (`BridgeConnectionType.PIPE`, `BridgeConnectionType.TCP`, `BridgeConnectionType.UDP`). The pipe is the default type. If the pipe does not exists, `GR-Bridge` will create it. For pipes is necessary to call this method before you start GNU-Radio. Otherwise, GNU-Radio will create a file and the communication will break.
+- `(value, timestamp) = self.gnuradio.get_parameter('gr_var')`: Using get parameter, you can read a variable from GNU-Radio. If you are listening to the variable, you get the last value of the pipe via this method. You get the timestamp, when the data arrived at `GR-Bridge`, too. If there is no subscibtion for the variable, `GR-Bridge` uses the XMLRPC connection to read the data from GNU-Radio.
 - `self.gnuradio.set_parameter('gr_var', value)`: You can set a variable of a GNU-Radio GUI block or a variable block via this method.
 
 ### Changing the configuration file

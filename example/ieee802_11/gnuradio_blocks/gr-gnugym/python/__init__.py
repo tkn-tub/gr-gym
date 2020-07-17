@@ -26,7 +26,7 @@ description here (python/__init__.py).
 # import swig generated symbols into the gnugym namespace
 try:
 	# this might fail if the module is python-only
-	from gnugym_swig import *
+	from .gnugym_swig import *
 except ImportError:
 	pass
 

@@ -16,37 +16,34 @@
 #
 
 ########################################################################
+# Check if there is C++ code at all
+########################################################################
+if(NOT gnugym_sources)
+    MESSAGE(STATUS "No C++ sources... skipping swig/")
+    return()
+endif(NOT gnugym_sources)
+
+########################################################################
 # Include swig generation macros
 ########################################################################
 find_package(SWIG)
-find_package(PythonLibs 2)
+find_package(PythonLibs)
 if(NOT SWIG_FOUND OR NOT PYTHONLIBS_FOUND)
-    message(FATAL_ERROR "Python or Swig not found (or version not supported).")
     return()
 endif()
 include(GrSwig)
 include(GrPython)
 
-set(GR_SWIG_INCLUDE_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../include/
-    ${CMAKE_CURRENT_BINARY_DIR}/../include/
-)
-
 ########################################################################
 # Setup swig generation
 ########################################################################
-foreach(incdir ${GNURADIO_RUNTIME_INCLUDE_DIRS})
-    list(APPEND GR_SWIG_INCLUDE_DIRS ${incdir}/gnuradio/swig)
-endforeach(incdir)
+set(GR_SWIG_INCLUDE_DIRS $<TARGET_PROPERTY:gnuradio::runtime_swig,INTERFACE_INCLUDE_DIRECTORIES>)
+set(GR_SWIG_TARGET_DEPS gnuradio::runtime_swig)
 
 set(GR_SWIG_LIBRARIES gnuradio-gnugym)
-set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/gnugym_swig_doc.i)
-set(GR_SWIG_DOC_DIRS
-    ${CMAKE_CURRENT_SOURCE_DIR}/../include/gnugym/
-    ${CMAKE_CURRENT_BINARY_DIR}/../include/gnugym/
-)
 
-set(GR_SWIG_TARGET_DEPS gnugym_generated_includes)
+set(GR_SWIG_DOC_FILE ${CMAKE_CURRENT_BINARY_DIR}/gnugym_swig_doc.i)
+set(GR_SWIG_DOC_DIRS ${CMAKE_CURRENT_SOURCE_DIR}/../include)
 
 GR_SWIG_MAKE(gnugym_swig gnugym_swig.i)
 

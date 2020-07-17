@@ -22,9 +22,10 @@ FIND_LIBRARY(
           /usr/local/lib64
           /usr/lib
           /usr/lib64
-)
+          )
+
+include("${CMAKE_CURRENT_LIST_DIR}/gnugymTarget.cmake")
 
 INCLUDE(FindPackageHandleStandardArgs)
 FIND_PACKAGE_HANDLE_STANDARD_ARGS(GNUGYM DEFAULT_MSG GNUGYM_LIBRARIES GNUGYM_INCLUDE_DIRS)
 MARK_AS_ADVANCED(GNUGYM_LIBRARIES GNUGYM_INCLUDE_DIRS)
-
