@@ -41,7 +41,7 @@ cd gnuRadio_env
 pip install -e .
 ```
 ### Bugfix for GNU-Radio 3.8
-/usr/share/gnuradio/grc/blocks/xmlrpc_server.block.yml
+Our environment uses the `SimpleXMLRPCServer`. GNU-Radio can have a wrong file yaml for this funciton. Please open `/usr/share/gnuradio/grc/blocks/xmlrpc_server.block.yml` and change the module name to `xmlrpc.server`. Don't change the name of the class.
 
 No you are ready to use the gr-env!
 
