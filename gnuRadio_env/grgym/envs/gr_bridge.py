@@ -4,17 +4,57 @@ import threading
 import xmlrpc.client
 import numpy as np
 import logging
+import socket
+import sys
+from enum import Enum
+
+class BridgeConnectionType(Enum):
+    PIPE = 0
+    UDP = 1
+    TCP = 2
 
 class CommunicationElement:
     def __int__(self, address):
         pass
-    def read(self):
+    def read(self, structlen):
         pass
     def close(self):
         pass
 
+class CommunicationPipe(CommunicationElement):
+    def __int__(self, address):
+        if not os.path.exists(address):
+            os.mkfifo(address, 0o666)
+        self.pipein = open(address, 'rb')
+    def read(self, structlen):
+        return self.pipein.read(structlen)
+    def close(self):
+        return self.pipein.close()
+
+class CommunicationUDP(CommunicationElement):
+    def __int__(self, address):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        ip, port = address.split(':')
+        server_address = (ip, port)
+        sock.bind(server_address)
+    def read(self, structlen):
+        return self.sock.recvfrom(structlen)[0]
+    def close(self):
+        return self.sock.close()
+
+class CommunicationTCP(CommunicationElement):
+    def __int__(self, address):
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        ip, port = address.split(':')
+        server_address = (ip, port)
+        self.sock.connect(server_address)
+    def read(self, structlen):
+        return self.sock.recv(structlen)
+    def close(self):
+        return self.sock.close()
+
 class PipeListener(threading.Thread):
-    def __init__(self, address, mydtype, elements):
+    def __init__(self, address, mydtype, elements, comTyp=BridgeConnectionType.PIPE):
         threading.Thread.__init__(self) 
         self.dtype = np.dtype(mydtype)
         self.address = address
@@ -36,15 +76,19 @@ class PipeListener(threading.Thread):
     def run(self):
         structlen = self.dtype.itemsize * self.elements
         while not self.stop:
-            if not os.path.exists(self.address):
-                #os.remove(self.address)
-                os.mkfifo(self.address, 0o666)
-            pipein = open(self.address, 'rb')
-            #f = open("." + self.address + ".csv", "a")
+            if comTyp == BridgeConnectionType.PIPE:
+                connection = CommunicationPipe(address)
+            else if comTyp == BridgeConnectionType.UDP:
+                connection = CommunicationUDP(address)
+            else if comTyp == BridgeConnectionType.TCP:
+                connection = CommunicationTCP(address)
+            else:
+                raise ValueError('Type of connection is unkown!')
+            
             self.log.debug("open pipe")
 
             while not self.stop:
-                buf = (pipein.read(structlen))
+                buf = connection.read(structlen)
                 if len(buf) == 0:
                     break
                 #print("read data")
@@ -59,7 +103,7 @@ class PipeListener(threading.Thread):
                 self.mutex.release()
                 self.waitevent.set()
 
-            pipein.close()
+            connection.close()
             #f.close()
             self.waitevent.set()
     
