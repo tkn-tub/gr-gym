@@ -13,7 +13,6 @@ from packaging import version
 import gym
 from gym.utils import seeding
 from grgym.envs.gr_bridge import GR_Bridge
-from gnuradio import gr
 
 from grgym.envs.gr_utils import *
 
@@ -148,10 +147,10 @@ class GrEnv(gym.Env):
     def _compile_radio_program(self, gr_radio_programs_path, grc_radio_program_name):
         grProgramPath = os.path.join(gr_radio_programs_path, grc_radio_program_name + '.grc')
         
-        if version.parse(gr.version()) > version.parse('3.8.0'):
-            outdir = "--output=%s" % gr_radio_programs_path
-        else:
-            outdir = "--directory=%s" % gr_radio_programs_path
+        #if version.parse(gr.version()) > version.parse('3.8.0'):
+        outdir = "--output=%s" % gr_radio_programs_path
+        #else:
+        #    outdir = "--directory=%s" % gr_radio_programs_path
         try:
             sh.grcc(outdir, grProgramPath)
         except Exception as e:
@@ -163,10 +162,11 @@ class GrEnv(gym.Env):
             self.gr_process_io = {'stdout': open('/tmp/gnuradio.log', 'w+'), 'stderr': open('/tmp/gnuradio-err.log', 'w+')}
         try:
             # start GNURadio process
+            print("For the gnuradio process, see:\n\t/tmp/gnuradio.log and \n\t/tmp/gnuradio-err.log")
             pyRadioProgPath = os.path.join(gr_radio_programs_path, grc_radio_program_name + '.py')
             self._logger.info("Start radio program: {}".format(pyRadioProgPath))
             self.gr_radio_program_name = grc_radio_program_name
-            self.gr_process = subprocess.Popen(["env", "python2", pyRadioProgPath],
+            self.gr_process = subprocess.Popen(["env", "python3", pyRadioProgPath],
                                                stdout=self.gr_process_io['stdout'], stderr=self.gr_process_io['stderr'])
             self.gr_state = RadioProgramState.RUNNING
         except OSError:
