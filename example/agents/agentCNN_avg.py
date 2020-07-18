@@ -51,9 +51,10 @@ while True:
     print("new step")
     print("run " + str(run) + ", epsiode " + str(episode) + " eps = " + str(epsilon))
     action = 0
-    
+    print("Part obs: " + str([obs[11], obs[25], obs[39], obs[53]]))
     obs = np.average([obs[11], obs[25], obs[39], obs[53]])
-    obs = 6* ((obs - s_min) / s_range -1/2) 
+    print("Avg : " + str(obs))
+    obs = 2* 2* ((obs - s_min) / s_range -1/2) 
     obs = np.reshape(obs, [1, 1])
 
     print("observation:", str(obs))
@@ -69,7 +70,7 @@ while True:
     
     maxreward = max(reward, maxreward)
     
-    target = np.power((reward)/maxreward,1/2) #[action] * (0.3 + action / (a_size / 0.3))
+    target = np.power((reward)/maxreward,1/2) + (4 - np.abs(obs + 2.0)) / (4.0) * 0.4 
     
     print("scaled reward: " + str(target))
     

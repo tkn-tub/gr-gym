@@ -33,7 +33,7 @@ rpchost:
   help:
 
 eventbased:
-  default: False
+  default: True
   help:
 
 stepTime:
@@ -41,7 +41,7 @@ stepTime:
   help:
 
 simulate:
-  default: True
+  default: False
   help: Enable or disable the simulation methode
 
 simTime:

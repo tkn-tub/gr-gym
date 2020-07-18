@@ -16,7 +16,8 @@ class ieee80211_scenario(gnu_case):
         self.lastDoneRecvSeqnr = 0
         self.lastObsTime = 0
         self.simcount = 0
-        self.low = 0.0
+        self.simrrcount = 0
+        self.low = 10.0
         self.bitrates = [
             1.5,  # Mbps BPSK 1/2
             1.25,  # Mbps BPSK 3/4
@@ -34,7 +35,7 @@ class ieee80211_scenario(gnu_case):
         self.reset()
 
     def get_observation_space(self):
-        return spaces.Box(low=self.low, high=50.0, shape=(64, 1), dtype=np.float32)
+        return spaces.Box(low=self.low, high=30.0, shape=(64, 1), dtype=np.float32)
 
     def get_action_space(self):
         return spaces.Discrete(8)
@@ -72,6 +73,10 @@ class ieee80211_scenario(gnu_case):
         # detected missing frames at receiver, and difference between sender and receiver
         missingPackets = (missingcounter - self.lastMissingCounter)
         
+        #print("send: " + str(senderSeqNr) + "- last send: " + str(self.lastSendSeqnr))
+        #print("receive: " + str(reveicerSeqNr) + "- last receive: " + str(self.lastRecvSeqnr))
+        #print("missing: " + str(missingcounter) + "- last missing: " + str(self.lastMissingCounter))
+        
         if(totalSend < -4000):
             totalSend += 4096
         if(totalRecv < -4000):
@@ -96,8 +101,15 @@ class ieee80211_scenario(gnu_case):
             return np.full((1, 64), self.low)[0]
         #reset after simulation
         self.lastObsTime = time
+        
+        self.gnuradio.wait_for_value('snr_vect')
+        (obs2, time) = self.gnuradio.get_parameter('snr_vect')
+        
+        avg = np.full((1, 64), self.low)[0]
+        for i in range(64):
+            avg[i] = np.average([obs[i], obs2[i]])
         (totalSend, totalRecv, missingPackets) = self._get_reward_state(False)
-        return obs[-64:]
+        return avg[-64:]
 
     def get_reward(self):
         encoding = self.gnuradio.get_parameter('encoding')[0]
@@ -125,13 +137,7 @@ class ieee80211_scenario(gnu_case):
         # set inital action
         self.execute_actions(0)
         # reset local counter
-        missingcounter = self.gnuradio.get_parameter('seqnr_missing_recv')[0]
-        senderSeqNr = self.gnuradio.get_parameter('seqnr_send')[0]
-        reveicerSeqNr = self.gnuradio.get_parameter('seqnr_recv')[0]
-        
-        self.lastMissingCounter = missingcounter[-1]
-        self.lastSendSeqnr = senderSeqNr[-1]
-        self.lastRecvSeqnr = reveicerSeqNr[-1]
+        self._get_reward_state(False)
         
         self.nopacketCounter = 0
         self.lastDoneRecvSeqnr = 0
@@ -141,11 +147,16 @@ class ieee80211_scenario(gnu_case):
 
     def simulate(self):
         if self.simcount % self.args.simSteps == 0:
-            f_d = np.random.uniform(0,1363)
-            dist = np.random.uniform(self.args.simDistMin,self.args.simDistMax)
+            #f_d = np.random.uniform(0,1363)
+            noise_level = (self.args.simDistMax - self.args.simDistMin)/ 100 * 10 
+            dist_noise = np.random.uniform(0, noise_level)
+            dist = dist_noise + self.simrrcount
             print("The distance is " + str(dist) + "dB")
-            self.gnuradio.set_parameter("f_d",f_d)
+            #self.gnuradio.set_parameter("f_d",f_d)
             self.gnuradio.set_parameter("dist",dist)
             self.simcount = 0
+            self.simrrcount += 1.5
+            if self.args.simDistMax < self.simrrcount:
+                self.simrrcount = self.args.simDistMin
         self.simcount += 1
         return
