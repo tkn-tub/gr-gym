@@ -6,8 +6,8 @@ import numpy as np
 from tensorflow import keras
 
 logresult = 'agentdata/result_nn_avgsqrt.csv'
-runsPerEpisode = 1200
-epsilonDecay = 0.9994
+runsPerEpisode = 1000
+epsilonDecay = 0.9993
 epsilonStartDecay = 0.99999
 epsilonStartPow = 1.5
 decayLimit = 0.005
