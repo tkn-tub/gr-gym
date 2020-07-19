@@ -19,14 +19,14 @@ class ieee80211_scenario(gnu_case):
         self.simrrcount = 0
         self.low = 10.0
         self.bitrates = [
-            1.5,  # Mbps BPSK 1/2
-            1.25,  # Mbps BPSK 3/4
-            3,  # Mbps QPSK 1/2
-            4.5,  # Mbps QPSK 3/4
-            6,  # Mbps 16QAM 1/2
-            9,  # Mbps 16QAM 3/4
-            16,  # Mbps 64QAM 2/3
-            18  # Mbps 64QAM 3/4
+            3,  # Mbps BPSK 1/2
+            4.5,  # Mbps BPSK 3/4
+            6,  # Mbps QPSK 1/2
+            9,  # Mbps QPSK 3/4
+            12,  # Mbps 16QAM 1/2
+            18,  # Mbps 16QAM 3/4
+            24,  # Mbps 64QAM 2/3
+            17  # Mbps 64QAM 3/4
         ]
         self.gnuradio.subscribe_parameter('seqnr_missing_recv', '/tmp/gr_seq_missing_recv', np.int32, 1)
         self.gnuradio.subscribe_parameter('seqnr_recv', '/tmp/gr_seq_recv', np.int32, 1)
