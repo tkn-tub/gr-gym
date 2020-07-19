@@ -32,7 +32,7 @@ class ieee80211_scenario(gnu_case):
         self.gnuradio.subscribe_parameter('seqnr_recv', '/tmp/gr_seq_recv', np.int32, 1)
         self.gnuradio.subscribe_parameter('seqnr_send', '/tmp/gr_seq_send', np.int32, 1)
         self.gnuradio.subscribe_parameter('snr_vect', '/tmp/gr_snr_vect', np.float32, 64)
-        self.reset()
+        #self.reset()
 
     def get_observation_space(self):
         return spaces.Box(low=self.low, high=30.0, shape=(64, 1), dtype=np.float32)
@@ -136,6 +136,8 @@ class ieee80211_scenario(gnu_case):
     def reset(self):
         # set inital action
         self.execute_actions(0)
+        self.gnuradio.set_parameter('snr',self.args.modelSNR)
+        self.gnuradio.set_parameter('interval',self.args.packetInterval)
         # reset local counter
         self._get_reward_state(False)
         

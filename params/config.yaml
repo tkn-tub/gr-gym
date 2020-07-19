@@ -64,7 +64,15 @@ simDistMax:
 maxRewardLoss:
   default: 30
   help: Maximum numper of steps with reward == 0 in a row
-  
+
+modelSNR:
+  default: 17
+  help: SNR variable in the GNU-Radio flowchart
+
+packetInterval:
+  default: 100
+  help: interval between two packets in ms
+
 sync_length:
   default:
   help:
