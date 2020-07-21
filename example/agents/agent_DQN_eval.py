@@ -3,8 +3,9 @@ import numpy as np
 import tensorflow as tf
 import tensorflow.contrib.slim as slim
 import numpy as np
-import time
 from tensorflow import keras
+
+logresult = 'agentdata/result_nn_avg.csv'
 
 env = gym.make('grgym:grenv-v0')
 obs = env.reset()
@@ -21,41 +22,30 @@ s_max = ob_space.high[0]
 s_range = s_max - s_min
 
 model = keras.Sequential()
-model.add(keras.layers.Dense(s_size, input_shape=(s_size,), activation='sigmoid'))
-#model.add(keras.layers.Dense(32, activation='relu'))
-model.add(keras.layers.Dense(16, activation='relu'))
+model.add(keras.layers.Dense(1, input_shape=(1,), activation='sigmoid'))
+model.add(keras.layers.Dense(a_size, activation='relu'))
+model.add(keras.layers.Dense(a_size, activation='relu'))
 model.add(keras.layers.Dense(a_size, activation='softmax'))
 model.compile(optimizer=tf.train.AdamOptimizer(0.001),
               loss='categorical_crossentropy',
               metrics=['accuracy'])
-model.load_weights("nn_weights.bin")
-run = 0
-maxreward = 0.0000001
-
-#with open('result_nn.csv','a') as fd:
-#    fd.write("Run" +"," + "Episode" + ","+ "Action" + "," + "Reward" + "\n")
+model.load_weights('agentdata/nn_avgsqrt_weights.bin')
 
 while True:
     print("--------------------------------------------------------")
     print("new step")
     
-    print("run " + str(run))
-    obs = (obs - s_min) / s_range
-    obs = np.reshape(obs, [1, s_size])
-    
+    obs = np.average([obs[11], obs[25], obs[39], obs[53]])
+    print("Avg : " + str(obs))
+    obs = 2* 2* ((obs - s_min) / s_range -1/2) 
+    obs = np.reshape(obs, [1, 1])
+
     print("observation:", str(obs))
     action = np.argmax(model.predict(obs)[0])
+
     
     print("action:", str(action))
-    obs_new, reward, done, info = env.step(int(action))
-    print("reward:", str(reward), " max reward: ", str(maxreward))
+    obs, reward, done, info = env.step(int(action))
+    print("reward:", str(reward))
     
-    obs = obs_new
-    
-    maxreward = max(reward, maxreward)
-    
-    #with open('result_nn.csv','a') as fd:
-    #    fd.write(str(run) + "," +str(episode)+ ","+ str(action) + "," + str(reward) + "\n")
-    
-    run += 1
 env.close()
