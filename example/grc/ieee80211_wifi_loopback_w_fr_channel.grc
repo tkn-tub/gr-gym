@@ -459,7 +459,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [728, 340.0]
+    coordinate: [720, 348.0]
     rotation: 0
     state: true
 - name: gnugym_parse_seqnr_0
