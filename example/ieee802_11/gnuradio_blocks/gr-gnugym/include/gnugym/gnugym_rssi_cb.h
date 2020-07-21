@@ -1,6 +1,7 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2020 <+YOU OR YOUR COMPANY+>.
+ * Copyright (C) 2016 Bastian Bloessl <bloessl@ccs-labs.org>
+ * and 2020 Sascha Rösler, TU Berlin <s.roesler@campus.tu-berlin.de>
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,13 +26,6 @@
 #include <gnugym/api.h>
 #include <gnuradio/block.h>
 
-enum Equalizer {
-	LS   = 0,
-	LMS  = 1,
-	COMB = 2,
-	STA  = 3,
-};
-
 namespace gr {
   namespace gnugym {
 
@@ -53,7 +47,7 @@ namespace gr {
        * class. gnugym::gnugym_rssi_cb::make is the public interface for
        * creating new instances.
        */
-      static sptr make(Equalizer algo, double freq, double bw, bool log, bool debug);
+      static sptr make(double freq, double bw, bool log, bool debug);
     };
 
   } // namespace gnugym
