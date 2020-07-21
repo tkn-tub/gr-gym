@@ -37,11 +37,11 @@ eventbased:
   help:
 
 stepTime:
-  default: 1
+  default: 1.5
   help:
 
 simulate:
-  default: True
+  default: False
   help: Enable or disable the simulation methode
 
 simTime:

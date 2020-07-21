@@ -51,39 +51,42 @@ while True:
     print("new step")
     print("run " + str(run) + ", epsiode " + str(episode) + " eps = " + str(epsilon))
     action = 0
-    print("Part obs: " + str([obs[11], obs[25], obs[39], obs[53]]))
-    obs = np.average([obs[11], obs[25], obs[39], obs[53]])
+    #print("Part obs: " + str([obs[11], obs[25], obs[39], obs[53]]))
+    #obs = np.average([obs[11], obs[25], obs[39], obs[53]])
+    obs = np.average(obs)
     print("Avg : " + str(obs))
-    obs = 2* 2* ((obs - s_min) / s_range -1/2) 
-    obs = np.reshape(obs, [1, 1])
+    obs_norm = 2* 2* ((obs - s_min) / s_range -1/2) 
+    obs_norm = np.reshape(obs_norm, [1, 1])
 
-    print("observation:", str(obs))
+    print("observation:", str(obs_norm))
     if np.random.rand(1) < epsilon:
         action = np.random.randint(a_size)
     else:
-        action = np.argmax(model.predict(obs)[0])
+        action = np.argmax(model.predict(obs_norm)[0])
 
     
     print("action:", str(action))
     obs_new, reward, done, info = env.step(int(action))
     print("reward:", str(reward), " max reward: ", str(maxreward))
     
-    maxreward = max(reward, maxreward)
-    
-    target = np.power((reward)/maxreward,1/2) + (4 - np.abs(obs + 2.0)) / (4.0) * 0.4 
-    
-    print("scaled reward: " + str(target))
-    
-    target_f = model.predict(obs)
-    target_f[0][action] = target
-    
-    if target < 0.1:
-        for i in range(action, 8):
-            target_f[0][i] = target
-    
-    print('New targets '+ str(target_f))
-    model.fit(obs, target_f, epochs=1, verbose=0)
-    
+    if obs > 2.0 and reward >= 0:
+        maxreward = max(reward, maxreward)
+        
+        target = np.power((reward)/maxreward,1/2) * ((4 - np.abs(obs_norm + 2.0)) / (4.0)  + 1) 
+        
+        print("scaled reward: " + str(target))
+        
+        target_f = model.predict(obs_norm)
+        target_f[0][action] = target
+        
+        if target < 0.1:
+            for i in range(action, 8):
+                target_f[0][i] = target
+        
+        print('New targets '+ str(target_f))
+        model.fit(obs_norm, target_f, epochs=1, verbose=0)
+    else:
+        print("Observation is not in range - No training!")
     with open(logresult,'a') as fd:
         fd.write(str(run) + "," +str(episode)+ ","+ str(action) + "," + str(reward) + "\n")
     

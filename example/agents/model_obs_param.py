@@ -7,7 +7,7 @@ import xmlrpc.client
 import pandas as pd
 from tensorflow import keras
 
-filename = 'snr_sl_raw_short.csv'
+filename = 'rssi_sl_raw_short.csv'
 
 env = gym.make('grgym:grenv-v0')
 obs = env.reset()
