@@ -1,6 +1,7 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2020 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2020 Sascha Rösler TU Berlin, 2016 Bastian Bloessl <bloessl@ccs-labs.org>
+ * and 2020 Sascha Rösler, TU Berlin <s.roesler@campus.tu-berlin.de>
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -42,7 +43,6 @@ namespace gr {
     gnugym_moving_average_vect_ff_impl::gnugym_moving_average_vect_ff_impl(int vlen)
       : gr::block("gnugym_moving_average_vect",
 			gr::io_signature::make(1, 1, vlen * sizeof(float)),
-			//gr::io_signature::make(0, 0, 0))){
 			gr::io_signature::make(1, 1, vlen * sizeof(float))),
 			d_vlen(vlen){
 	    set_tag_propagation_policy(block::TPP_DONT);
@@ -77,31 +77,12 @@ namespace gr {
 	    int i = 0;
 	    int o = 0;
 	    
-	    //int snr_vect[48];
-
+        // IIR over SNR data
 	    while((i < ninput_items[0]) ) {
 	        const float *in = (const float *) input_items[i];
-	        // store data in buffer
-	        /*for(int k = 0; k < d_vlen; k ++){
-	            *(d_buffer + (d_vlen * d_buffercount + k) * sizeof(float)) = in[k];
-	            //std::cout << "store " << in[k] << " @ " <<  d_buffercount << "," << k << ":" << *(d_buffer + (d_vlen * d_buffercount + k) * sizeof(float)) << "\n";
-	        }
-	        
-            //memcpy(d_buffer + (d_vlen * d_buffercount * sizeof(float)), in + (d_vlen * i * sizeof(float)), (d_vlen * sizeof(float)));
-            d_buffercount ++;
-            if(d_buffercount >= d_bufferlen)
-                d_buffercount = 0;
-            */
             for(int j = 0;j < d_vlen; j ++){
-                /*float sum = 0;
-                for(int m= 0; m < d_bufferlen; m ++){
-                    sum += *(d_buffer + (d_vlen * m + j) * sizeof(float));
-                    //std::cout << "\tEinzel[" << j << "][" << m << "]" << *(d_buffer + (d_vlen * m + j) * sizeof(float)) << "\n";
-                }*/
                 d_buffer[j] = 0.5 * in[j] + 0.5 * d_buffer [j];
                 (out + o * d_vlen* sizeof(float))[j] = d_buffer[j];
-                //(out + o * d_vlen* sizeof(float))[j] = sum / d_bufferlen;
-                //std::cout << "Output[" << j << "]" << sum / d_bufferlen << "\n";
             }
 		    i++;
 		    o ++;

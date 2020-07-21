@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2013, 2016 Bastian Bloessl <bloessl@ccs-labs.org>
+ * and 2020 Sascha Rösler, TU Berlin <s.roesler@campus.tu-berlin.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -45,10 +46,6 @@ gnugym_parse_seqnr_impl(bool log, bool debug) :
 		d_debug(debug) {
 
 	message_port_register_in(pmt::mp("in"));
-	//set_msg_handler(pmt::mp("in"), boost::bind(&gnugym_parse_seqnr_impl::parse, this, _1));
-
-	//message_port_register_out(pmt::mp("seqnr"));
-    //message_port_register_out(pmt::mp("missing_seqnr"));
 }
 
 ~gnugym_parse_seqnr_impl() {
@@ -85,11 +82,10 @@ int general_work(int noutput, gr_vector_int& ninput_items,
 		return 0;
 	}
 	
+	// Extract sequence number and missing sequence numbers
 	int seqnr = int(h->seq_nr >> 4);
-	//std::cout << "Seq Nr: " << seqnr << ", Last Seq Nr: " << d_last_seq_no;
 	d_missing_seq_no += seqnr - d_last_seq_no -1;
 	d_last_seq_no = seqnr;
-	//std::cout << ", missing counter: " << d_missing_seq_no << std::endl;
 	
 	out1[0] = seqnr;
 	out2[0] = d_missing_seq_no;

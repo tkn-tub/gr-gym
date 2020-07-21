@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 2015 Bastian Bloessl <bloessl@ccs-labs.org>
+ * and 2020 Sascha Rösler, TU Berlin <s.roesler@campus.tu-berlin.de>
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -19,7 +20,7 @@
 
 using namespace gr::gnugym::equalizer;
 
-void comb::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, boost::shared_ptr<gr::digital::constellation> mod, double* snrVect, bool onlyRssi) {
+void comb::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, boost::shared_ptr<gr::digital::constellation> mod, float* snrVect, bool onlyRssi) {
 
     for(int i = 0; i < 64; i ++){
         snrVect[i] = 0;

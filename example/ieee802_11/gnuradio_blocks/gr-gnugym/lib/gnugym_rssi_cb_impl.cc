@@ -1,6 +1,7 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2020 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2020 Sascha Rösler TU Berlin, 2016 Bastian Bloessl <bloessl@ccs-labs.org>
+ * and 2020 Sascha Rösler, TU Berlin <s.roesler@campus.tu-berlin.de>
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,31 +26,26 @@
 #include <gnuradio/io_signature.h>
 #include <gnugym/constellations.h>
 #include "gnugym_rssi_cb_impl.h"
-#include "equalizer/base.h"
-#include "equalizer/comb.h"
-#include "equalizer/lms.h"
-#include "equalizer/ls.h"
-#include "equalizer/sta.h"
 #define dout d_debug && std::cout
 
 namespace gr {
   namespace gnugym {
 
     gnugym_rssi_cb::sptr
-    gnugym_rssi_cb::make(Equalizer algo, double freq, double bw, bool log, bool debug)
+    gnugym_rssi_cb::make(double freq, double bw, bool log, bool debug)
     {
       return gnuradio::get_initial_sptr
-        (new gnugym_rssi_cb_impl(algo,  freq, bw, log, debug));
+        (new gnugym_rssi_cb_impl(freq, bw, log, debug));
     }
 
     /*
      * The private constructor
      */
-    gnugym_rssi_cb_impl::gnugym_rssi_cb_impl(Equalizer algo, double freq, double bw, bool log, bool debug)
+    gnugym_rssi_cb_impl::gnugym_rssi_cb_impl(double freq, double bw, bool log, bool debug)
       : gr::block("gnugym_rssi_cb",
 			gr::io_signature::make(1, -1, 64 * sizeof(gr_complex)),
 			gr::io_signature::make(1, -1, 64 * sizeof(float))),
-	d_current_symbol(0), d_log(log), d_debug(debug), d_equalizer(NULL),
+	d_current_symbol(0), d_log(log), d_debug(debug),
 	d_freq(freq), d_bw(bw), d_frame_bytes(0), d_frame_symbols(0),
 	d_freq_offset_from_synclong(0.0) {
 
@@ -63,7 +59,6 @@ namespace gr {
 	    d_frame_mod = d_bpsk;
 
 	    set_tag_propagation_policy(block::TPP_DONT);
-	    set_algorithm(algo);
 	}
 
     /*
@@ -71,34 +66,6 @@ namespace gr {
      */
     gnugym_rssi_cb_impl::~gnugym_rssi_cb_impl()
     {
-    }
-
-    void
-    gnugym_rssi_cb_impl::set_algorithm(Equalizer algo) {
-	    gr::thread::scoped_lock lock(d_mutex);
-	    delete d_equalizer;
-
-	    switch(algo) {
-
-	    case COMB:
-		    dout << "Comb" << std::endl;
-		    //d_equalizer = new equalizer::comb();
-		    break;
-	    case LS:
-		    dout << "LS" << std::endl;
-		    d_equalizer = new equalizer::ls();
-		    break;
-	    case LMS:
-		    dout << "LMS" << std::endl;
-		    //d_equalizer = new equalizer::lms();
-		    break;
-	    case STA:
-		    dout << "STA" << std::endl;
-		    //d_equalizer = new equalizer::sta();
-		    break;
-	    default:
-		    throw std::runtime_error("Algorithm not implemented");
-	    }
     }
 
     void
@@ -209,17 +176,7 @@ namespace gr {
 			    current_symbol[i] *= exp(gr_complex(0, -beta));
 		    }
 
-		    // update estimate of residual frequency offset
-		    /*if(d_current_symbol >= 2) {
-
-			    double alpha = 0.1;
-			    d_er = (1-alpha) * d_er + alpha * er;
-		    }*/
-
-		    // do equalization
-		    if(d_current_symbol < 2)
-		        //d_equalizer->equalize(current_symbol, d_current_symbol,
-				//        symbols, bits, d_frame_mod, out + o * 64 * sizeof(float), true);
+		    // calculate RSSI from first sample
 	        if(d_current_symbol == 1){
 	            // calculate RSSI
 	            float *rssiVect = out + o * 64 * sizeof(float);
@@ -230,41 +187,15 @@ namespace gr {
 			        double mySignal = std::pow(std::abs(in[i]), 2);
 			        
 			        rssiVect[i] = 10 * std::log10(mySignal / 2);
-			        //std::cout << "signal: " << mySignal << ", noise: " << myNoise << ", SNR: " << snrVect[i] << "\n";
 		        }
 	            o ++;
 	            }
-
-		    // signal field
-		    /*if(d_current_symbol == 2) {
-
-			    if(decode_signal_field(out + o * 48)) {
-
-				    pmt::pmt_t dict = pmt::make_dict();
-				    dict = pmt::dict_add(dict, pmt::mp("frame_bytes"), pmt::from_uint64(d_frame_bytes));
-				    dict = pmt::dict_add(dict, pmt::mp("encoding"), pmt::from_uint64(d_frame_encoding));
-				    dict = pmt::dict_add(dict, pmt::mp("snr"), pmt::from_double(d_equalizer->get_snr()));
-				    dict = pmt::dict_add(dict, pmt::mp("freq"), pmt::from_double(d_freq));
-				    dict = pmt::dict_add(dict, pmt::mp("freq_offset"), pmt::from_double(d_freq_offset_from_synclong));
-				    add_item_tag(0, nitems_written(0) + o,
-						    pmt::string_to_symbol("wifi_start"),
-						    dict,
-						    pmt::string_to_symbol(alias()));
-			    }
-		    }
-
-		    if(d_current_symbol > 2) {
-			    o++;
-			    pmt::pmt_t pdu = pmt::make_dict();
-			    message_port_pub(pmt::mp("symbols"), pmt::cons(pmt::make_dict(), pmt::init_c32vector(48, symbols)));
-		    }*/
 
 		    i++;
 		    d_current_symbol++;
 	    }
 
 	    consume(0, i);
-	    //std::cout << "return " << o;
 	    return o;
     }
 

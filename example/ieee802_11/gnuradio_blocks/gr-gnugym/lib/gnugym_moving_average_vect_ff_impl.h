@@ -1,6 +1,7 @@
 /* -*- c++ -*- */
 /* 
  * Copyright 2020 Sascha Rösler TU Berlin, 2016 Bastian Bloessl <bloessl@ccs-labs.org>
+ * and 2020 Sascha Rösler, TU Berlin <s.roesler@campus.tu-berlin.de>
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

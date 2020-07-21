@@ -1,6 +1,7 @@
 /* -*- c++ -*- */
 /* 
  * Copyright 2020 Sascha Rösler TU Berlin, 2016 Bastian Bloessl <bloessl@ccs-labs.org>
+ * and 2020 Sascha Rösler, TU Berlin <s.roesler@campus.tu-berlin.de>
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,10 +35,9 @@ namespace gr {
       // Nothing to declare in this block.
 
      public:
-      gnugym_rssi_cb_impl(Equalizer algo, double freq, double bw, bool log, bool debug);
+      gnugym_rssi_cb_impl(double freq, double bw, bool log, bool debug);
       ~gnugym_rssi_cb_impl();
       
-      void set_algorithm(Equalizer algo);
 	  void set_bandwidth(double bw);
 	  void set_frequency(double freq);
 	

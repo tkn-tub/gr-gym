@@ -1,6 +1,7 @@
 /* -*- c++ -*- */
 /* 
- * Copyright 2020 <+YOU OR YOUR COMPANY+>.
+ * Copyright 2020 Sascha Rösler TU Berlin, 2016 Bastian Bloessl <bloessl@ccs-labs.org>
+ * and 2020 Sascha Rösler, TU Berlin <s.roesler@campus.tu-berlin.de>
  * 
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -53,8 +54,6 @@ namespace gr {
 	d_freq(freq), d_bw(bw), d_frame_bytes(0), d_frame_symbols(0),
 	d_freq_offset_from_synclong(0.0) {
 
-	    //message_port_register_out(pmt::mp("symbols"));
-
 	    d_bpsk = constellation_bpsk::make();
 	    d_qpsk = constellation_qpsk::make();
 	    d_16qam = constellation_16qam::make();
@@ -82,7 +81,7 @@ namespace gr {
 
 	    case COMB_SNR:
 		    dout << "Comb" << std::endl;
-		    //d_equalizer = new equalizer::comb();
+		    d_equalizer = new equalizer::comb();
 		    break;
 	    case LS_SNR:
 		    dout << "LS" << std::endl;
@@ -90,11 +89,11 @@ namespace gr {
 		    break;
 	    case LMS_SNR:
 		    dout << "LMS" << std::endl;
-		    //d_equalizer = new equalizer::lms();
+		    d_equalizer = new equalizer::lms();
 		    break;
 	    case STA_SNR:
 		    dout << "STA" << std::endl;
-		    //d_equalizer = new equalizer::sta();
+		    d_equalizer = new equalizer::sta();
 		    break;
 	    default:
 		    throw std::runtime_error("Algorithm not implemented");
@@ -209,55 +208,18 @@ namespace gr {
 			    current_symbol[i] *= exp(gr_complex(0, -beta));
 		    }
 
-		    // update estimate of residual frequency offset
-		    /*if(d_current_symbol >= 2) {
-
-			    double alpha = 0.1;
-			    d_er = (1-alpha) * d_er + alpha * er;
-		    }*/
-
-		    // do equalization
+		    // calculate SNR from first two samples
 		    if(d_current_symbol < 2)
 		        d_equalizer->equalize(current_symbol, d_current_symbol,
 				        symbols, bits, d_frame_mod, out + o * 64 * sizeof(float), true);
 	        if(d_current_symbol == 1){
-	            for(int j = 0; j < 64; j ++){
-	                //std::cout << "SNR: " << (out + o * 64 * sizeof(float))[j] << "\n";
-	                
-	            }
 	            o ++;
 	            }
-
-		    // signal field
-		    /*if(d_current_symbol == 2) {
-
-			    if(decode_signal_field(out + o * 48)) {
-
-				    pmt::pmt_t dict = pmt::make_dict();
-				    dict = pmt::dict_add(dict, pmt::mp("frame_bytes"), pmt::from_uint64(d_frame_bytes));
-				    dict = pmt::dict_add(dict, pmt::mp("encoding"), pmt::from_uint64(d_frame_encoding));
-				    dict = pmt::dict_add(dict, pmt::mp("snr"), pmt::from_double(d_equalizer->get_snr()));
-				    dict = pmt::dict_add(dict, pmt::mp("freq"), pmt::from_double(d_freq));
-				    dict = pmt::dict_add(dict, pmt::mp("freq_offset"), pmt::from_double(d_freq_offset_from_synclong));
-				    add_item_tag(0, nitems_written(0) + o,
-						    pmt::string_to_symbol("wifi_start"),
-						    dict,
-						    pmt::string_to_symbol(alias()));
-			    }
-		    }
-
-		    if(d_current_symbol > 2) {
-			    o++;
-			    pmt::pmt_t pdu = pmt::make_dict();
-			    message_port_pub(pmt::mp("symbols"), pmt::cons(pmt::make_dict(), pmt::init_c32vector(48, symbols)));
-		    }*/
-
 		    i++;
 		    d_current_symbol++;
 	    }
 
 	    consume(0, i);
-	    //std::cout << "return " << o;
 	    return o;
     }
 
