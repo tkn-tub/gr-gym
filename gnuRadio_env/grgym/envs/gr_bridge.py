@@ -1,6 +1,6 @@
 '''
 gnugym project, TU-Berlin 2020
-Sascha Rösler <ali.alouane@campus.tu-berlin.de>
+Sascha Rösler <s.roesler@campus.tu-berlin.de>
 '''
 
 from timeit import default_timer as timer

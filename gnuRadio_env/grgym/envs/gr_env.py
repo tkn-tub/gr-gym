@@ -1,7 +1,7 @@
 '''
 gnugym project, TU-Berlin 2020
 Ali Alouane <ali.alouane@campus.tu-berlin.de>
-Sascha Rösler <ali.alouane@campus.tu-berlin.de>
+Sascha Rösler <s.roesler@campus.tu-berlin.de>
 '''
 import importlib
 import logging
