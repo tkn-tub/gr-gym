@@ -5,6 +5,7 @@ from tensorflow import keras
 from random import *
 
 df = pd.read_csv('rssi_sl_raw_long.csv')
+logresult = "log_.csv"
 
 # get dataset of best action for each observation (obs and label)
 cols = []
@@ -103,6 +104,9 @@ maxreward = 0.00000000000001 #[]
 run = 0
 episode = 0
 
+with open(logresult,'a') as fd:
+    fd.write("Run" +"," + "Episode" + ","+ "Action" + "," + "Reward" + "\n")
+
 while True:
     #print("--------------------------------------------------------")
     #print("new step")
@@ -125,10 +129,11 @@ while True:
     #print("action:", str(action))
     obs_new, reward, done, info = env.step(int(action))
     reward = float(reward)
+    maxreward = max(reward, maxreward)
     #print("reward:", str(reward))
         
     if obs > 2.0 and reward >= 0:        
-        target = np.power((reward),1) #* ((4 - np.abs(obs_norm + 2.0)) / (4.0)  + 1)[0][0]
+        target = np.power((reward / maxreward),1) #* ((4 - np.abs(obs_norm + 2.0)) / (4.0)  + 1)[0][0]
         
         #print("scaled reward: " + str(target))
         
@@ -147,6 +152,9 @@ while True:
     obs = obs_new
     epsilon *= epsilonDecay
     run += 1
+    
+    with open(logresult,'a') as fd:
+        fd.write(str(run) + "," +str(episode)+ ","+ str(action) + "," + str(reward) + "\n")
     
     if (run % runsPerEpisode) == 0:
         print("New episode" + str(episode+1))
