@@ -1,3 +1,5 @@
+# (C) Sascha Rösler, TU Berlin. <s.roesler@campus.tu-berlin.de>
+
 id: gnugym_gnugym_moving_average_vect_ff
 label: Moving Average for Vector
 category: '[gnugym]'

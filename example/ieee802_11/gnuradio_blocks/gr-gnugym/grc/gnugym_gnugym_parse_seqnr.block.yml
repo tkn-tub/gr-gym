@@ -1,3 +1,5 @@
+# (C) Sascha Rösler, TU Berlin. <s.roesler@campus.tu-berlin.de>
+
 id: gnugym_parse_seqnr
 label: GnuGym Parse Sequence Number
 category: '[gnugym]'
