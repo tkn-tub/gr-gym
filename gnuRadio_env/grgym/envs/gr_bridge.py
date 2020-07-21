@@ -1,3 +1,8 @@
+'''
+gnugym project, TU-Berlin 2020
+Sascha Rösler <ali.alouane@campus.tu-berlin.de>
+'''
+
 from timeit import default_timer as timer
 import os
 import threading
@@ -52,15 +57,11 @@ class CommunicationTCP(CommunicationElement):
         server_address = (ip, port)
         error = True
         while error:
-            print('connect')
             try:
                 self.sock.connect(server_address)
                 error = False
             except Exception:
                 time.sleep(0.1)
-        #self.sock.listen(1)
-        #self.client, addr = self.sock.accept()
-        print("connected")
         mystr = "connected"
         self.sock.send(mystr.encode())
         
@@ -79,7 +80,6 @@ class PipeListener(threading.Thread):
         self.stop = False
         self.data = np.zeros(shape=(self.elements,1))
         self.data = (self.data.astype(self.dtype), timer())
-        #self.prev = self.data
         self.mutex = threading.Lock()
         self.log = logging.getLogger('PipeListener[' + self.address+ ']')
         self.waitevent = threading.Event()
@@ -108,20 +108,16 @@ class PipeListener(threading.Thread):
                 buf = connection.read(structlen)
                 if len(buf) == 0:
                     break
-                #print("read data")
+                
                 tmp = np.frombuffer(buf, dtype=self.dtype)
                 
-                #for i in range(0,int(len(arr) / self.elements)):
-                #tmp = arr[(i * self.elements) : (self.elements * (i+1))]
-                #f.write(str(self.interval) + "," + str(timer() - self.data[1]) + "\n")
                 self.mutex.acquire()
-                #self.prev = self.data
+                
                 self.data = (tmp, timer())
                 self.mutex.release()
                 self.waitevent.set()
 
             connection.close()
-            #f.close()
             self.waitevent.set()
     
     #return data from buffer
@@ -177,18 +173,6 @@ class GR_Bridge:
             except Exception as e:
                 self.log.error("Unknown variable '%s -> %s'" % (name, e))
             return res
-    
-    # return result of pipe if name exists there
-    # otherwise forward request to rpc
-    #def get_parameter_prev(self, name):
-    #    if name in self.pipes:
-    #        return self.pipes[name].get_prev()
-    #    else:
-    #        try:
-    #            res = (getattr(self.rpc, "get_%s" % name)(), timer())
-    #        except Exception as e:
-    #            self.log.error("Unknown variable '%s -> %s'" % (name, e))
-    #        return res
 
     # set parameter via rpc
     def set_parameter(self, name, value):
@@ -208,7 +192,3 @@ class GR_Bridge:
     def wait_for_value(self, name):
         if name in self.pipes:
             self.pipes[name].wait_for_value()
-    
-    #def set_interval(self, interval):
-    #    for key, elem in self.pipes.items():
-    #        elem.set_interval(interval)

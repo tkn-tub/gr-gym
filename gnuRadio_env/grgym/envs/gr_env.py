@@ -1,3 +1,8 @@
+'''
+gnugym project, TU-Berlin 2020
+Ali Alouane <ali.alouane@campus.tu-berlin.de>
+Sascha Rösler <ali.alouane@campus.tu-berlin.de>
+'''
 import importlib
 import logging
 import subprocess
@@ -28,12 +33,14 @@ class GrEnv(gym.Env):
         self.gr_process = None
         self.gr_process_io = None
         
+        #read configuration from yaml
         self.root_dir = get_dir_by_indicator(indicator=".git")
         yaml_path = str(Path(self.root_dir) / "params" / "config.yaml")
         self.args = yaml_argparse(yaml_path=yaml_path)
         
         self.bridge = GR_Bridge(self.args.rpchost, self.args.rpcport)
         
+        #compile and start gnuradio
         if self.args.radio_programs_compile_execute:
             self._compile_radio_program(str(Path(self.root_dir) / self.args.radio_programs_path), self.args.gnu_radio_program_filename)
             self._start_radio_program(str(Path(self.root_dir) / self.args.radio_programs_path), self.args.gnu_radio_program)
@@ -54,11 +61,6 @@ class GrEnv(gym.Env):
         
         signal.signal(signal.SIGINT, self.handle_termination)
         signal.signal(signal.SIGTERM, self.handle_termination)
-
-    def _init_proxy(self):
-        if self.ctrl_socket == None:
-            self.ctrl_socket = xmlrpc.client.ServerProxy(
-                "http://%s:%d" % (self.ctrl_socket_host, self.ctrl_socket_port))
 
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
@@ -91,9 +93,6 @@ class GrEnv(gym.Env):
 
         return (obs, reward, done, info)
     
-    #def set_interval(self, interval):
-    #    self.bridge.set_interval(interval)
-        
     def reset(self):
         self._logger.info("reset usecase scenario")
         self.scenario.reset()

@@ -1,7 +1,11 @@
+'''
+gnugym project, TU-Berlin 2020
+Ali Alouane <ali.alouane@campus.tu-berlin.de>
+'''
+
 import abc
 
 
-# TODO
 class gnu_case(abc.ABC):
     @abc.abstractmethod
     def __init__(self, gnuradio, args):
