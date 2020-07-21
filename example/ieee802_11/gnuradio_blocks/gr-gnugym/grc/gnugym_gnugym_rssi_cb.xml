@@ -4,34 +4,9 @@
   <key>gnugym_gnugym_rssi_cb</key>
   <category>[gnugym]</category>
   <import>import gnugym</import>
-  <make>gnugym.gnugym_rssi_cb($algo, $freq, $bw, $log, $debug)</make>
-  <callback>set_algorithm($algo)</callback>
+  <make>gnugym.gnugym_rssi_cb($freq, $bw, $log, $debug)</make>
   <callback>set_frequency($freq)</callback>
   <callback>set_bandwidth($bw)</callback>
-	
-	<param>
-		<name>Algorithm</name>
-		<key>algo</key>
-		<value>gnugym.LS</value>
-		<type>int</type>
-
-		<option>
-			<name>LS</name>
-			<key>gnugym.LS</key>
-		</option>
-		<option>
-			<name>LMS</name>
-			<key>gnugym.LMS</key>
-		</option>
-		<option>
-			<name>Comb</name>
-			<key>gnugym.COMB</key>
-		</option>
-		<option>
-			<name>STA</name>
-			<key>gnugym.STA</key>
-		</option>
-	</param>
 
 	<param>
 		<name>Frequency</name>
