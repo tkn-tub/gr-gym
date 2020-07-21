@@ -1,3 +1,8 @@
+'''
+gnugym project, TU-Berlin 2020
+Ali Alouane <ali.alouane@campus.tu-berlin.de>
+'''
+
 import os
 from ruamel import yaml as yaml
 from pathlib import Path
