@@ -1,3 +1,8 @@
+'''
+gnugym project, TU-Berlin 2020
+Sascha Rösler <s.roesler@campus.tu-berlin.de>
+Tien Dat Phan <t.phan@campus.tu-berlin.de>
+'''
 from gym import spaces
 import numpy as np
 from grgym.envs.gnu_case import gnu_case
