@@ -43,7 +43,6 @@ class Myenv:
         self.runmax = np.max(df['Run'])
     
     def _get_observation(self):
-        #print("Sim run: " + str(self.run))
         cols = []
         for i in range(64):
             cols.append('Sc' + str(i))
@@ -98,9 +97,8 @@ model.compile(optimizer=tf.optimizers.Adam(0.001),
 
 epsilon = 1
 epsilon_start = 0.99999999999
-maxreward = 0.00000000000001 #[]
-#for i in range(a_size):
-#    maxreward.append(0.00000000000001)
+maxreward = 0.00000000000001
+
 run = 0
 episode = 0
 
@@ -164,8 +162,6 @@ while True:
         episode += 1
         model.save_weights('nn_avgsqrt_weights.bin')
     
-    #print("Mean:", str(avg))
-    #print("Dist:", str(num))
     if episode > 30 or (epsilon_start < decayLimit and epsilon < decayLimit):
         print("Fertig")
         break
