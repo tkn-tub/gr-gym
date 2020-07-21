@@ -1,7 +1,6 @@
 import gym
 import numpy as np
 import tensorflow as tf
-#import tensorflow.contrib.slim as slim
 import numpy as np
 from tensorflow import keras
 
@@ -37,9 +36,8 @@ model.compile(optimizer=tf.train.AdamOptimizer(0.001),
 
 epsilon = 1
 epsilon_start = 0.99999999999
-maxreward = 0.00000000000001 #[]
-#for i in range(a_size):
-#    maxreward.append(0.00000000000001)
+maxreward = 0.00000000000001 
+
 run = 0
 episode = 0
 
@@ -100,9 +98,6 @@ while True:
         epsilon_start = pow(epsilon_start, epsilonStartPow)
         episode += 1
         model.save_weights('agentdata/nn_avgsqrt_weights.bin')
-    
-    #print("Mean:", str(avg))
-    #print("Dist:", str(num))
     
     if done:
         run = 0
