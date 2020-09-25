@@ -79,7 +79,7 @@ class GrEnv(gym.Env):
 
         if self.check_is_alive():
             self._logger.info("perform step: send action to gnuradio")
-            self.scenario.execute_actions(action)
+            self.scenario.execute_action(action)
 
             if not self.args.eventbased:
                 self._logger.info("wait for step time")

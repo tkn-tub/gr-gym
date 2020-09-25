@@ -61,11 +61,11 @@ class ieee80211_scenario(gnu_case):
     def get_action_space(self):
         return spaces.Discrete(len(self.act_to_idx))
 
-    def execute_actions(self, action):
+    def execute_action(self, action):
         # map action ID to MCS index
         mcs_idx = self.act_to_idx[action]
         if self.debug:
-            print('%s. execute_actions: MCS idx: %d' % (datetime.now().time(), mcs_idx))
+            print('%s. execute_action: MCS idx: %d' % (datetime.now().time(), mcs_idx))
 
         # set MCS/bitrate on GnuRadio process
         self.gnuradio.set_parameter('encoding', int(mcs_idx))
@@ -152,7 +152,7 @@ class ieee80211_scenario(gnu_case):
 
     def reset(self):
         # set initial action
-        self.execute_actions(0) # reset to lowest action/MCS
+        self.execute_action(0) # reset to lowest action/MCS
         self.gnuradio.set_parameter('snr', self.args.channel_SNR)
         self.gnuradio.set_parameter('interval', self.args.packet_interval)
 

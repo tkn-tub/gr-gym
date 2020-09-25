@@ -28,7 +28,7 @@ class gnu_case(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def execute_actions(self, action):
+    def execute_action(self, action):
         pass
 
     @abc.abstractmethod

@@ -121,7 +121,7 @@ env.close()
 ```
 def get_observation_space()
 def get_action_space()
-def execute_actions(action)
+def execute_action(action)
 def get_obs()
 def get_reward()
 def get_done()
