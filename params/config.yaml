@@ -1,0 +1,75 @@
+radio_programs_compile_execute:
+  default: True
+  help: Enable or disable gnu radio program compilation and execution. Disable it,
+    if GNU-Radio runs on a separate machine.
+
+radio_programs_path:
+  default: example/grc
+  help: Path to the collection of radio programms (GNU Radio Companion (GRC) files)
+
+gnu_radio_program_filename:
+  default: ieee80211_wifi_loopback_w_fr_channel
+  help: The name of the GNU Radio Companion (GRC) file to be used.
+
+gnu_radio_program:
+  default: wifi_loopback
+  help: The ID of the grc radio program, see Id under Options block in grc.
+
+scenario:
+  default: ieee80211codemodscenario.ieee80211_scenario
+  help: A string pointing to a function that is inside one or multiple modules. The
+    function will be imported and executed without any arguments. It must return a
+    tuple of inputs and targets.
+
+scenario_args:
+  default: [3, 5, 7]
+  help: Additional arguments for scenario, i.e. array of MCS (0-7) to be tested
+
+rpc_host:
+  default: "localhost"
+  help: Configuration needed to connect to GnuRadio process, host name / IP address
+
+rpc_port:
+  default: 8080
+  help: Configuration needed to connect to GnuRadio process, RPC port of Gnuradio flow.
+
+eventbased:
+  default: False
+  help: Under development; untested
+
+step_time:
+  default: 0.5
+  help: The duration of a single step [in ms]
+
+simulate:
+  default: True
+  help: Enable or disable the simulation methode
+
+sim_time:
+  default: 0.25
+  help: The duration [in ms] over which the observation is obtained; must be smaller than step_time
+
+longterm_channel_coherence_time:
+  default: 1
+  help: Number of steps with same average observation, i.e. distance is constant between nodes. The average channel
+    quality changes after longterm_channel_coherence_time steps
+
+sim_channel_min_dist:
+  default: 2
+  help: Minimum simulated distance [in dB] between nodes
+
+sim_channel_max_dist:
+  default: 23 
+  help: Maximum simulated distance [in dB] between nodes
+
+max_steps_zero_reward:
+  default: 30
+  help: Maximum numper of steps with reward == 0 in a row
+
+channel_SNR:
+  default: 25
+  help: value of SNR variable used by channel block in the GNU-Radio flowchart
+
+packet_interval:
+  default: 10
+  help: interval between two transmitted packets in ms
