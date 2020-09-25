@@ -6,10 +6,7 @@ gr-gym
 Installation
 ============
 
-In order tu rin gr-gym you need to install both OpenAI Gym and Gnu Radio.
-Please, first get and install OpenAI Gym. Perhaps, you should do the installation in a new virtual python environment. You find OpenAI Gym here: https://github.com/openai/gym
-Next, you need an installation of GNU-Radio. For linux, you can use the official GNU-Radio packet repository. Here, you find information for the installation of GNU-Radio: https://wiki.gnuradio.org/index.php/UbuntuInstall
-If you want to use the IEEE 802.11p example, you have to install the GNU-Radio blocks of Bastian Bloessl. See his github repository for the code and more information: https://github.com/bastibl/gr-ieee802-11
+In order to run gr-gym you need to install both OpenAI Gym and Gnu Radio. Moreover in order to run the 802.11p example you need additional Gnu Radio blocks.
 
 1. Install dependencies for Gnu Radio
 ```
@@ -23,9 +20,8 @@ python3-zmq python3-scipy python3-gi python3-gi-cairo gobject-introspection gir1
 see https://wiki.gnuradio.org/index.php/UbuntuInstall
 ```
 
-2. Install Gnu Radio from source
+2. Install Gnu Radio from source on Ubuntu 20.04
 ```
-# Ubuntu 20.04:
 sudo apt install git cmake g++ libboost-all-dev libgmp-dev swig python3-numpy python3-mako python3-sphinx python3-lxml doxygen libfftw3-dev libsdl1.2-dev libgsl-dev libqwt-qt5-dev libqt5opengl5-dev python3-pyqt5 liblog4cpp5-dev libzmq3-dev python3-yaml python3-click python3-click-plugins python3-zmq python3-scipy python3-pip python3-gi-cairo
 pip3 install git+https://github.com/pyqtgraph/pyqtgraph@develop
 pip3 install numpy scipy
@@ -51,7 +47,6 @@ see https://wiki.gnuradio.org/index.php/InstallingGR#From_Source
 
 3. Install additional Gnu Radio blocks for IEEE 802.11p scenario
 ```
-# Ubuntu 20.04:
 git clone https://github.com/bastibl/gr-foo.git
 cd gr-foo
 mkdir build
