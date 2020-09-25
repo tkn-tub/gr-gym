@@ -8,7 +8,7 @@ Installation
 
 In order to run gr-gym you need to install both OpenAI Gym and Gnu Radio. Moreover in order to run the 802.11p example you need additional Gnu Radio blocks.
 
-1. Install dependencies for Gnu Radio
+##### 1. Install dependencies for Gnu Radio
 ```
 # dependencies for Ubuntu 20.04:
 sudo apt install git cmake g++ libboost-all-dev libgmp-dev swig python3-numpy \
@@ -16,11 +16,10 @@ python3-mako python3-sphinx python3-lxml doxygen libfftw3-dev \
 libsdl1.2-dev libgsl-dev libqwt-qt5-dev libqt5opengl5-dev python3-pyqt5 \
 liblog4cpp5-dev libzmq3-dev python3-yaml python3-click python3-click-plugins \
 python3-zmq python3-scipy python3-gi python3-gi-cairo gobject-introspection gir1.2-gtk-3.0
-
-see https://wiki.gnuradio.org/index.php/UbuntuInstall
 ```
+See https://wiki.gnuradio.org/index.php/UbuntuInstall
 
-2. Install Gnu Radio from source on Ubuntu 20.04
+##### 2. Install Gnu Radio from source on Ubuntu 20.04:
 ```
 sudo apt install git cmake g++ libboost-all-dev libgmp-dev swig python3-numpy python3-mako python3-sphinx python3-lxml doxygen libfftw3-dev libsdl1.2-dev libgsl-dev libqwt-qt5-dev libqt5opengl5-dev python3-pyqt5 liblog4cpp5-dev libzmq3-dev python3-yaml python3-click python3-click-plugins python3-zmq python3-scipy python3-pip python3-gi-cairo
 pip3 install git+https://github.com/pyqtgraph/pyqtgraph@develop
@@ -41,11 +40,10 @@ cmake -DENABLE_GR_UHD=OFF ..
 make -j $(nproc --all)
 sudo make install
 sudo ldconfig
-
-see https://wiki.gnuradio.org/index.php/InstallingGR#From_Source
 ```
+see https://wiki.gnuradio.org/index.php/InstallingGR#From_Source
 
-3. Install additional Gnu Radio blocks for IEEE 802.11p scenario
+##### 3. Install additional Gnu Radio blocks for IEEE 802.11p scenario
 ```
 git clone https://github.com/bastibl/gr-foo.git
 cd gr-foo
@@ -64,11 +62,10 @@ cmake ..
 make
 sudo make install
 sudo ldconfig
-
-see https://github.com/bastibl/gr-ieee802-11
 ```
+See https://github.com/bastibl/gr-ieee802-11
 
-3. Install OpenAI Gym
+##### 4. Install OpenAI Gym
 ```
 # minimal install of the packaged version directly from PyPI:
 pip3 install gym
@@ -76,7 +73,7 @@ pip3 install gym
 see https://github.com/openai/gym
 ```
 
-4. Install the Gnu Radio blocks from grgym
+##### 5. Install the Gnu Radio blocks from grgym
 ```
 cd example/ieee802_11/gnuradio_blocks/grgym
 mkdir build
@@ -87,12 +84,12 @@ sudo make install
 sudo ldconfig
 ```
 
-5. Install grgym located in ./grgym (Python3 required)
+##### 6. Install grgym located in ./grgym (Python3 required)
 ```
 pip3 install -e ./grgym
 ```
 
-6. (Optional) Install all libraries required by your agent (like tensorflow, keras, etc.).
+##### 7. (Optional) Install all libraries required by your agent (like tensorflow, keras, etc.).
 
 
 Examples
@@ -102,7 +99,7 @@ All examples can be found [here](./example/agents/).
 
 ## Basic Interface
 
-1. Example Python script. Note, that `gym.make('grgym:grenv-v0')` starts Gnu Radio program configured in the ./params/config.yaml file.
+##### 1. Example Python script. Note, that `gym.make('grgym:grenv-v0')` starts Gnu Radio program configured in the ./params/config.yaml file.
 ```
 import gym
 import MyAgent
@@ -120,7 +117,7 @@ while True:
 env.close()
 
 ```
-2. Any Gnu Radio program be used as a Gym environment. This requires only to create a Python class derived from gnu_case class and to implement the following functions:
+##### 2. Any Gnu Radio program be used as a Gym environment. This requires only to create a Python class derived from gnu_case class and to implement the following functions:
 ```
 def get_observation_space()
 def get_action_space()
