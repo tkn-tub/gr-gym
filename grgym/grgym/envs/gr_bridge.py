@@ -111,6 +111,9 @@ class PipeListener(threading.Thread):
         self.waitcounter_mutex = threading.Lock()
         self.waitcounter = 0
         self.comTyp = comTyp
+        
+        self.intervallog = open("timing_" + address.split(':')[-1] + ".csv", "a")
+        
     
     # listen on pipe with address
     # create pipe if id does not exists
@@ -137,6 +140,8 @@ class PipeListener(threading.Thread):
                     break
                 
                 tmp = np.frombuffer(buf, dtype=self.dtype)
+                
+                self.intervallog.write(str(timer() - self.data[1]))
                 
                 self.mutex.acquire()
                 

@@ -34,7 +34,7 @@ rpc_port:
   help: Configuration needed to connect to GnuRadio process, RPC port of Gnuradio flow.
 
 eventbased:
-  default: False
+  default: True
   help: Under development; untested
 
 step_time:
@@ -42,7 +42,7 @@ step_time:
   help: The duration of a single step [in ms]
 
 simulate:
-  default: True
+  default: False
   help: Enable or disable the simulation methode
 
 sim_time:
