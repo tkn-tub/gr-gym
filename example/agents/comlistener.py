@@ -15,7 +15,7 @@ import sys
 import time
 from enum import Enum
 import zmq
-from thread import start_new_thread
+from _thread import start_new_thread
 
 class BridgeConnectionType(Enum):
     PIPE = 0
@@ -102,13 +102,13 @@ dataZMQ = []
 stop = False
 loggerfile = open("comlog.csv", "a")
 
-def listenPipe:
-    structlen = np.int32 #* self.elements
+def listenPipe():
+    structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
     while not stop:
         connection = CommunicationPipe('/tmp/grpipe')
         #connection = CommunicationZMQ(self.address)
 
-        while not self.stop:
+        while not stop:
             buf = connection.read(structlen)
             if len(buf) == 0:
                 break
@@ -121,18 +121,18 @@ def listenPipe:
             while len(dataZMQ) > 0 and len(dataPipe) > 0:
                 pipe = dataPipe.pop(0)
                 zmq = dataZMQ.pop(0)
-                loggerfile.write(str(pipe) + ", " +  str(zmq))
+                loggerfile.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
             datalock.release()
 
         connection.close()
 
-def listenZMQ:
-    structlen = np.int32 #* self.elements
+def listenZMQ():
+    structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
     while not stop:
         #connection = CommunicationPipe(self.address)
-        connection = CommunicationZMQ('127.0.0.1:8021')
+        connection = CommunicationZMQ('tcp://127.0.0.1:8021')
 
-        while not self.stop:
+        while not stop:
             buf = connection.read(structlen)
             if len(buf) == 0:
                 break
@@ -145,13 +145,15 @@ def listenZMQ:
             while len(dataZMQ) > 0 and len(dataPipe) > 0:
                 pipe = dataPipe.pop(0)
                 zmq = dataZMQ.pop(0)
-                loggerfile.write(str(pipe) + ", " +  str(zmq))
+                loggerfile.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
             datalock.release()
 
         connection.close()
 
 start_new_thread(listenPipe,())
-start_new_thread(listenZMQ,())
+listenZMQ()
+
+print("stop")
 
 '''
 class PipeListener(threading.Thread):
