@@ -141,7 +141,7 @@ class PipeListener(threading.Thread):
                 
                 tmp = np.frombuffer(buf, dtype=self.dtype)
                 
-                self.intervallog.write(str(timer() - self.data[1]))
+                self.intervallog.write(str(interval) + ", " + str(timer() - self.data[1]) + "\n")
                 
                 self.mutex.acquire()
                 
@@ -151,6 +151,7 @@ class PipeListener(threading.Thread):
 
             connection.close()
             self.waitevent.set()
+        
     
     # return data from buffer
     def get_data(self):
@@ -162,8 +163,8 @@ class PipeListener(threading.Thread):
     def set_stop(self):
         self.stop = True
     
-    #def set_interval(self, interval):
-    #    self.interval = interval
+    def set_interval(self, interval):
+        self.interval = interval
     
     def wait_for_value(self):
         if not self.stop:
@@ -224,3 +225,7 @@ class GR_Bridge:
     def wait_for_value(self, name):
         if name in self.pipes:
             self.pipes[name].wait_for_value()
+    
+    def set_interval(self, interval):
+        for key, elem in self.pipes.items():
+            elem.set_interval(interval)

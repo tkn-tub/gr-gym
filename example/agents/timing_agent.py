@@ -26,7 +26,7 @@ for run in range(1):
         print("Interval " + str(interval))
         interval = int(interval)
         gr.set_interval(interval)
-        #env.set_interval(interval)
+        env.set_interval(interval)
         
         for i in range(10):
             start = timer()
