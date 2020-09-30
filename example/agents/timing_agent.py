@@ -23,9 +23,10 @@ for run in range(1):
     #for dist in range(0,22,0.1):
     gr.set_dist(5.0)
     for interval in np.linspace(1000, 1, num=50):
+        print("Interval " + str(interval))
         interval = int(interval)
         gr.set_interval(interval)
-        #env.set_interval(interval)
+        env.set_interval(interval)
         
         for i in range(10):
             start = timer()
