@@ -102,7 +102,8 @@ dataZMQ = []
 dataPipe2 = []
 dataZMQ2 = []
 stop = False
-loggerfile = open("comlog.csv", "a")
+loggerfile  = open("comlog.csv",  "a")
+loggerfile2 = open("comlog2.csv", "a")
 
 def listenPipe():
     structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
@@ -147,7 +148,7 @@ def listenPipe2():
             while len(dataZMQ2) > 0 and len(dataPipe2) > 0:
                 pipe = dataPipe2.pop(0)
                 zmq = dataZMQ2.pop(0)
-                loggerfile.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
+                loggerfile2.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
             datalock.release()
 
         connection.close()
@@ -176,7 +177,7 @@ def listenZMQ():
 
         connection.close()
 
-def listenZMQ():
+def listenZMQ2():
     structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
     while not stop:
         #connection = CommunicationPipe(self.address)
@@ -195,7 +196,7 @@ def listenZMQ():
             while len(dataZMQ2) > 0 and len(dataPipe2) > 0:
                 pipe = dataPipe2.pop(0)
                 zmq = dataZMQ2.pop(0)
-                loggerfile.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
+                loggerfile2.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
             datalock.release()
 
         connection.close()
