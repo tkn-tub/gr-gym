@@ -99,6 +99,8 @@ class CommunicationTCP(AbstractCommunicationElement):
 datalock = threading.Lock()
 dataPipe = []
 dataZMQ = []
+dataPipe2 = []
+dataZMQ2 = []
 stop = False
 loggerfile = open("comlog.csv", "a")
 
@@ -126,6 +128,30 @@ def listenPipe():
 
         connection.close()
 
+def listenPipe2():
+    structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
+    while not stop:
+        connection = CommunicationPipe('/tmp/grpipe2')
+        #connection = CommunicationZMQ(self.address)
+
+        while not stop:
+            buf = connection.read(structlen)
+            if len(buf) == 0:
+                break
+            
+            tmp = np.frombuffer(buf, dtype=np.int32)
+            
+            datalock.acquire()
+            
+            dataPipe2.append(tmp)
+            while len(dataZMQ2) > 0 and len(dataPipe2) > 0:
+                pipe = dataPipe2.pop(0)
+                zmq = dataZMQ2.pop(0)
+                loggerfile.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
+            datalock.release()
+
+        connection.close()
+        
 def listenZMQ():
     structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
     while not stop:
@@ -150,7 +176,34 @@ def listenZMQ():
 
         connection.close()
 
+def listenZMQ():
+    structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
+    while not stop:
+        #connection = CommunicationPipe(self.address)
+        connection = CommunicationZMQ('tcp://127.0.0.1:8022')
+
+        while not stop:
+            buf = connection.read(structlen)
+            if len(buf) == 0:
+                break
+            
+            tmp = np.frombuffer(buf, dtype=np.int32)
+            
+            datalock.acquire()
+            
+            dataZMQ2.append(tmp)
+            while len(dataZMQ2) > 0 and len(dataPipe2) > 0:
+                pipe = dataPipe2.pop(0)
+                zmq = dataZMQ2.pop(0)
+                loggerfile.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
+            datalock.release()
+
+        connection.close()
+
+
 start_new_thread(listenPipe,())
+start_new_thread(listenPipe2,())
+start_new_thread(listenZMQ2,())
 listenZMQ()
 
 print("stop")
