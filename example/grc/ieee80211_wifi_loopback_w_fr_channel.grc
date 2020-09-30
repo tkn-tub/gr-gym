@@ -163,7 +163,7 @@ blocks:
     bus_structure: null
     coordinate: [1408, 82]
     rotation: 0
-    state: true
+    state: disabled
 - name: blocks_file_sink_1_0
   id: blocks_file_sink
   parameters:
@@ -181,7 +181,7 @@ blocks:
     bus_structure: null
     coordinate: [367, 800]
     rotation: 0
-    state: true
+    state: disabled
 - name: blocks_file_sink_4
   id: blocks_file_sink
   parameters:
@@ -543,7 +543,7 @@ blocks:
     bus_structure: null
     coordinate: [1203, 27]
     rotation: 0
-    state: true
+    state: disabled
 - name: zeromq_pub_sink_0_1_0
   id: zeromq_pub_sink
   parameters:
@@ -562,7 +562,7 @@ blocks:
     bus_structure: null
     coordinate: [162, 745]
     rotation: 0
-    state: true
+    state: disabled
 - name: zeromq_pub_sink_1
   id: zeromq_pub_sink
   parameters:
@@ -581,7 +581,7 @@ blocks:
     bus_structure: null
     coordinate: [96, 495]
     rotation: 0
-    state: true
+    state: enabled
 
 connections:
 - [blocks_message_strobe_0, strobe, ieee802_11_mac_0, app in]

@@ -141,7 +141,7 @@ class PipeListener(threading.Thread):
                 
                 tmp = np.frombuffer(buf, dtype=self.dtype)
                 
-                self.intervallog.write(str(interval) + ", " + str(timer() - self.data[1]) + "\n")
+                self.intervallog.write(str(self.interval) + ", " + str(timer() - self.data[1]) + "\n")
                 
                 self.mutex.acquire()
                 

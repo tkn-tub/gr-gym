@@ -67,7 +67,7 @@ class GrEnv(gym.Env):
         signal.signal(signal.SIGTERM, self.handle_termination)
 
     def set_interval(self, interval):
-        self.bridge.set_interval(iterval)
+        self.bridge.set_interval(interval)
     
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
