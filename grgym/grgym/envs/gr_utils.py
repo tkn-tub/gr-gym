@@ -1,7 +1,8 @@
 '''
-gnugym project, TU-Berlin 2020
+GrGym
+
 Ali Alouane <ali.alouane@campus.tu-berlin.de>
-Anatolij Zubow
+Anatolij Zubow <zubow@tkn.tu-berlin.de>
 '''
 
 import os
