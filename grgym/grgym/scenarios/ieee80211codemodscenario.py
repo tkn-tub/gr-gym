@@ -1,5 +1,7 @@
 '''
-gnugym project, TU-Berlin 2020
+A scenario based on the gr-80211 gnu radio implementation showcasing rate adaptation.
+Designed to run locally, i.e. transmitter and receiver are connected via simulated channel (loopback)
+
 Sascha Rösler <s.roesler@campus.tu-berlin.de>
 Tien Dat Phan <t.phan@campus.tu-berlin.de>
 Anatolij Zubow <zubow@tkn.tu-berlin.de>
@@ -11,9 +13,16 @@ from grgym.envs.gr_bridge import BridgeConnectionType
 from datetime import datetime
 
 class ieee80211_scenario(gnu_case):
-    def __init__(self, gnuradio, args):
-        super().__init__(gnuradio, args)
+    def __init__(self, gnuradio, conf):
+        super().__init__(gnuradio, conf)
         self.debug = False
+        self.name = 'gr-gnugym-80211-mcs-selection'
+
+        if not self.conf.grgym_environment.run_local:
+            # if remote just use first remote bridge
+            self.gnuradio = self.gnuradio[0]
+            print('%s:: Warning: this scenario is designed to run locally; not tested in remote mode' % (self.name))
+            print('%s:: connecting to %s' % (self.name, self.gnuradio.host))
 
         # variables
         self.last_send_pkt_cnt = 0
@@ -39,21 +48,22 @@ class ieee80211_scenario(gnu_case):
             27.0  # Mbps 64QAM 3/4
         ]
 
+        self.mcs = list(conf.grgym_scenario.mcs)
         if self.debug:
-            print('Available MCS: %s' % (str(self.args.scenario_args)))
+            print('%s:: Available MCS: %s' % (self.name, str(self.mcs)))
 
         # mapping table from action ID to MCS index; only bitrates from this table are available
         # see config.yaml file for configuration
         self.act_to_idx = dict()
-        for id, mcs in enumerate(self.args.scenario_args):
+        for id, mcs in enumerate(self.mcs):
             self.act_to_idx[id] = mcs
 
         self.NSC = 64 # no. OFDM subcarriers
 
         # IPC with GnuRadio process to collect observations and data needed to calculate the reward
-        self.gnuradio.subscribe_parameter('pkt_snd_cnt', 'tcp://127.0.0.1:8001', np.int32, 1, BridgeConnectionType.ZMQ)
-        self.gnuradio.subscribe_parameter('pkt_recv_cnt', 'tcp://127.0.0.1:8002', np.int32, 1, BridgeConnectionType.ZMQ)
-        self.gnuradio.subscribe_parameter('rssi_obs', 'tcp://127.0.0.1:8003', np.float32, self.NSC, BridgeConnectionType.ZMQ)
+        self.gnuradio.subscribe_parameter('pkt_snd_cnt', 8001, np.int32, 1, BridgeConnectionType.ZMQ)
+        self.gnuradio.subscribe_parameter('pkt_recv_cnt', 8002, np.int32, 1, BridgeConnectionType.ZMQ)
+        self.gnuradio.subscribe_parameter('rssi_obs', 8003, np.float32, self.NSC, BridgeConnectionType.ZMQ)
 
     def get_observation_space(self):
         return spaces.Box(low=self.low, high=self.high, shape=(self.NSC, 1), dtype=np.float32)
@@ -65,7 +75,7 @@ class ieee80211_scenario(gnu_case):
         # map action ID to MCS index
         mcs_idx = self.act_to_idx[action]
         if self.debug:
-            print('%s. execute_action: MCS idx: %d' % (datetime.now().time(), mcs_idx))
+            print('%s::%s. execute_action: MCS idx: %d' % (self.name, datetime.now().time(), mcs_idx))
 
         # set MCS/bitrate on GnuRadio process
         self.gnuradio.set_parameter('encoding', int(mcs_idx))
@@ -93,16 +103,16 @@ class ieee80211_scenario(gnu_case):
         return (total_send, total_recv)
 
     def get_obs(self):
-        if self.args.eventbased:
+        if self.conf.grgym_environment.eventbased:
             self.gnuradio.wait_for_value('rssi_obs')
 
         if self.debug:
-            print('%s. get_obs' % (datetime.now().time()))
+            print('%s::%s. get_obs' % (self.name, datetime.now().time()))
 
         (obs, time) = self.gnuradio.get_parameter('rssi_obs')
 
         if time - self.last_obs_time == 0:
-            print("Warning: processing old observation caused by too slow CPU")
+            print("%s:: Warning: processing old observation caused by too slow CPU" % (self.name))
             return np.full((1, self.NSC), self.low)[0]
 
         self.last_obs_time = time
@@ -120,12 +130,12 @@ class ieee80211_scenario(gnu_case):
 
     def get_reward(self):
         if self.debug:
-            print('%s. get_reward' % (datetime.now().time()))
+            print('%s::%s. get_reward' % (self.name, datetime.now().time()))
 
         encoding = self.gnuradio.get_parameter('encoding')[0]
         assert encoding >= 0 and encoding < len(self.bitrates)
 
-        (totalSend, totalRecv) = self._get_reward_state(self.args.eventbased)
+        (totalSend, totalRecv) = self._get_reward_state(self.conf.grgym_environment.eventbased)
         # calculate effective throughput, i.e. packet success rate x bitrate
         return float(totalRecv) / (totalSend + 1) * self.bitrates[encoding]
 
@@ -140,7 +150,7 @@ class ieee80211_scenario(gnu_case):
 
         self.last_done_pkt_recv_cnt = pkt_recv_cnt
 
-        if self.no_packet_rx_within_step_cnt >= self.args.max_steps_zero_reward:
+        if self.no_packet_rx_within_step_cnt >= self.conf.grgym_environment.max_steps_zero_reward:
             # give up episode due to no reception during last max_steps_zero_reward steps
             return True
 
@@ -153,8 +163,8 @@ class ieee80211_scenario(gnu_case):
     def reset(self):
         # set initial action
         self.execute_action(0) # reset to lowest action/MCS
-        self.gnuradio.set_parameter('snr', self.args.channel_SNR)
-        self.gnuradio.set_parameter('interval', self.args.packet_interval)
+        self.gnuradio.set_parameter('snr', self.conf.grgym_scenario.channel_SNR)
+        self.gnuradio.set_parameter('interval', self.conf.grgym_scenario.packet_interval)
 
         # reset local counter
         self._get_reward_state(False)
@@ -163,18 +173,20 @@ class ieee80211_scenario(gnu_case):
         self.step_count = 0
         self.last_obs_time = 0
 
-
     def get_info(self):
-        return "gr-gnugym-80211-mcs-selection"
+        return self.name
 
     def sim_channel(self):
-        if self.debug:
-            print('%s. simulate_channel' % (datetime.now().time()))
+        if not self.conf.grgym_local.simulation.simulate_channel:
+            return
 
-        if self.step_count % self.args.longterm_channel_coherence_time == 0:
+        if self.debug:
+            print('%s::%s. simulate_channel' % (self.name, datetime.now().time()))
+
+        if self.step_count % self.conf.grgym_local.simulation.longterm_channel_coherence_time == 0:
             # simple block model, i.e. channel stays the same for sim_steps & afterwards a random value for the
             # attenuation is selected
-            dist = np.random.uniform(self.args.sim_channel_min_dist, self.args.sim_channel_max_dist)
+            dist = np.random.uniform(self.conf.grgym_local.simulation.sim_channel_min_dist, self.conf.grgym_local.simulation.sim_channel_max_dist)
             # set on Gnuradio process
             self.gnuradio.set_parameter("dist", dist)
 

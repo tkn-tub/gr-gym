@@ -11,6 +11,7 @@ To plot the results:
     python3 plot_reward.py -d results/agent_ac/
 """
 
+import os
 import gym
 import numpy as np
 import tensorflow as tf
@@ -33,6 +34,8 @@ eps = np.finfo(np.float32).eps.item()  # Smallest number such that 1.0 + eps != 
 
 # logging for later processing
 dir = './results/agent_ac/'
+if not os.path.exists(dir):
+    os.makedirs(dir)
 logfile = dir + 'running_reward.csv'
 with open(logfile, 'w') as fd:
     fd.write("\n")

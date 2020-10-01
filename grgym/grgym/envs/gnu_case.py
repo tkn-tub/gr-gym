@@ -9,11 +9,11 @@ import abc
 
 class gnu_case(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, gnuradio, args):
+    def __init__(self, gnuradio, conf):
         """ Init your scenario
         """
         self.gnuradio = gnuradio
-        self.args = args
+        self.conf = conf
 
     @abc.abstractmethod
     def get_observation_space(self):

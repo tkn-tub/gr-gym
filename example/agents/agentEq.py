@@ -60,7 +60,7 @@ while True:
     print("# %s: %d observation %.2f %.2f dB" % (datetime.now().time(), step, avg_obs, obs_db))
 
     # move to next MCS
-    action = (action + 1) % 8
+    action = (action + 1) % a_size
 
     print("# %s: %d action: %d" % (datetime.now().time(), step, action))
     obs, reward, done, info = env.step(int(action))

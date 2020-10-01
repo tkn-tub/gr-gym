@@ -10,7 +10,7 @@ options:
     gen_linking: dynamic
     generate_options: no_gui
     hier_block_src_path: '.:'
-    id: wifi_loopback
+    id: ieee80211_wifi_loopback_w_fr_channel
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -53,7 +53,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [909, 28]
+    coordinate: [752, 23]
     rotation: 0
     state: true
 - name: encoding
@@ -65,7 +65,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [806, 26]
+    coordinate: [664, 24]
     rotation: 0
     state: true
 - name: epsilon
@@ -120,7 +120,7 @@ blocks:
   id: variable
   parameters:
     comment: ''
-    value: '17'
+    value: '25'
   states:
     bus_sink: false
     bus_source: false
@@ -395,7 +395,7 @@ blocks:
     bus_structure: null
     coordinate: [542, 301]
     rotation: 180
-    state: enabled
+    state: disabled
 - name: pfb_arb_resampler_xxx_0
   id: pfb_arb_resampler_xxx
   parameters:

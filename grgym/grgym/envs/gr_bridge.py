@@ -44,12 +44,10 @@ class CommunicationPipe(AbstractCommunicationElement):
         return self.pipein.close()
 
 class CommunicationUDP(AbstractCommunicationElement):
-    def __init__(self, address):
+    def __init__(self, host, port):
         super().__init__()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        ip, port = address.split(':')
-        port = int(port)
-        server_address = (ip, port)
+        server_address = (host, port)
         self.sock.bind(server_address)
 
     def read(self, structlen):
@@ -59,11 +57,11 @@ class CommunicationUDP(AbstractCommunicationElement):
         return self.sock.close()
 
 class CommunicationZMQ(AbstractCommunicationElement):
-    def __init__(self, address):
+    def __init__(self, host, port):
         super().__init__()
         self.context = zmq.Context()
         self.sock = self.context.socket(zmq.SUB)
-        self.sock.connect(address)
+        self.sock.connect('tcp://' + host + ':' + str(port))
         self.sock.setsockopt(zmq.SUBSCRIBE, b"")
 
     def read(self, structlen):
@@ -73,12 +71,10 @@ class CommunicationZMQ(AbstractCommunicationElement):
         return self.sock.close()
 
 class CommunicationTCP(AbstractCommunicationElement):
-    def __init__(self, address):
+    def __init__(self, host, port):
         super().__init__()
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        ip, port = address.split(':')
-        port = int(port)
-        server_address = (ip, port)
+        server_address = (host, port)
         error = True
         while error:
             try:
@@ -96,9 +92,10 @@ class CommunicationTCP(AbstractCommunicationElement):
         return self.sock.close()
 
 class PipeListener(threading.Thread):
-    def __init__(self, address, mydtype, elements, comTyp=BridgeConnectionType.PIPE):
+    def __init__(self, host, address, mydtype, elements, comTyp=BridgeConnectionType.PIPE):
         threading.Thread.__init__(self) 
         self.dtype = np.dtype(mydtype)
+        self.host = host
         self.address = address
         self.elements = elements
         self.interval = 300
@@ -106,7 +103,7 @@ class PipeListener(threading.Thread):
         self.data = np.zeros(shape=(self.elements,1))
         self.data = (self.data.astype(self.dtype), timer())
         self.mutex = threading.Lock()
-        self.log = logging.getLogger('PipeListener[' + self.address+ ']')
+        self.log = logging.getLogger('PipeListener[' + str(self.address) + ']')
         self.waitevent = threading.Event()
         self.waitcounter_mutex = threading.Lock()
         self.waitcounter = 0
@@ -121,11 +118,11 @@ class PipeListener(threading.Thread):
             if self.comTyp == BridgeConnectionType.PIPE:
                 connection = CommunicationPipe(self.address)
             elif self.comTyp == BridgeConnectionType.UDP:
-                connection = CommunicationUDP(self.address)
+                connection = CommunicationUDP(self.host, self.address)
             elif self.comTyp == BridgeConnectionType.TCP:
-                connection = CommunicationTCP(self.address)
+                connection = CommunicationTCP(self.host, self.address)
             elif self.comTyp == BridgeConnectionType.ZMQ:
-                connection = CommunicationZMQ(self.address)
+                connection = CommunicationZMQ(self.host, self.address)
             else:
                 raise ValueError('Type of connection is unkown! ' + str(self.comTyp))
             
@@ -175,18 +172,19 @@ class PipeListener(threading.Thread):
 
 class GR_Bridge:
     # create RPC procxy
-    def __init__(self, rpcAddress, rpcPort):
+    def __init__(self, host, rpcPort):
         self.pipes = {}
-        self.rpc = xmlrpc.client.ServerProxy("http://" + rpcAddress + ":" + str(rpcPort) + "/")
+        self.host = host
+        self.rpc = xmlrpc.client.ServerProxy("http://" + host + ":" + str(rpcPort) + "/")
         self.log = logging.getLogger('GR-Bridge')
     
     # create thread to listen on pipe
     # add thread to pipe
     def subscribe_parameter(self, name, address, dtype, elements, comTyp=BridgeConnectionType.PIPE):
         if name in self.pipes:
-            raise Exception("There is already an parameter of this name")
             self.log.error("Parameter already exists '%s'" % (name))
-        self.pipes[name] = PipeListener(address, dtype, elements,comTyp)
+            raise Exception("There is already an parameter of this name")
+        self.pipes[name] = PipeListener(self.host, address, dtype, elements,comTyp)
         self.pipes[name].start()
     
     # return result of pipe if name exists there
