@@ -1,8 +1,8 @@
 '''
-gnugym project, TU-Berlin 2020
-Ali Alouane <ali.alouane@campus.tu-berlin.de>
+The base class for all scenarios.
 
-Base class for all scenarios.
+Anatolij Zubow <zubow@tkn.tu-berlin.de>
+Ali Alouane <ali.alouane@campus.tu-berlin.de>
 '''
 
 import abc

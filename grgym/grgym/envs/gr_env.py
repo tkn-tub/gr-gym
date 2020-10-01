@@ -31,8 +31,8 @@ class GrEnv(gym.Env):
         print('Starting GrGym ... ')
 
         # parse configuration from yaml config file
-        self.root_dir = get_dir_by_indicator(indicator=".git")
-        yaml_path = str(Path(self.root_dir) / "params" / "config.yaml")
+        self.example_dir = Path(os.getcwd()).parent
+        yaml_path = str(self.example_dir / "config.yaml")
         self.conf = parse_yaml(yaml_path=yaml_path)
 
         self.gr_state = RadioProgramState.INACTIVE
@@ -46,10 +46,10 @@ class GrEnv(gym.Env):
                 self.gr_process = None
                 self.gr_process_io = None
                 # compile grc
-                self._local_compile_radio_program(str(Path(self.root_dir) / self.conf.grgym_local.grc_program_folder),
+                self._local_compile_radio_program(str(self.example_dir / 'grc'),
                                                   self.conf.grgym_local.gr_grc)
                 # start gr
-                self._local_start_radio_program(str(Path(self.root_dir) / self.conf.grgym_local.grc_program_folder),
+                self._local_start_radio_program(str(self.example_dir / 'grc'),
                                                 self.conf.grgym_local.gr_grc)
         else:
             # remote mode; create list of bridges

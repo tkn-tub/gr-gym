@@ -1,4 +1,6 @@
 '''
+Classes for used for IPC between Python and Gnuradio
+
 gnugym project, TU-Berlin 2020
 Sascha Rösler <s.roesler@campus.tu-berlin.de>
 Anatolij Zubow <zubow@tkn.tu-berlin.de>
