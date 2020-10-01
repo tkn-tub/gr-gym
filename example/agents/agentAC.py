@@ -5,11 +5,6 @@ Date created: 2020/09/24
 Description: Implement Actor Critic Method in GnuGym environment with IEEE 802.11p MCS selection scenario.
 """
 
-"""
-To plot the results:
-    python3 plot_raw.py -d results/agent_ac/
-    python3 plot_reward.py -d results/agent_ac/
-"""
 
 import os
 import gym

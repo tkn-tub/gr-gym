@@ -1,3 +1,4 @@
+import os
 import gym
 import numpy as np
 from datetime import datetime
@@ -36,7 +37,11 @@ action = 0
 
 step = 1
 
-with open('agentEQ_res.csv', 'w') as fd:
+dir = './results/agent_eq/'
+if not os.path.exists(dir):
+    os.makedirs(dir)
+logfile = dir + 'raw.csv'
+with open(logfile, 'w') as fd:
     fd.write("\n")
 
 while True:
@@ -70,7 +75,7 @@ while True:
     num[action] += 1
 
     # save old observation
-    with open('agentEQ_res.csv', 'a') as fd:
+    with open(logfile, 'a') as fd:
         fd.write(str(avg_obs) + "," + str(action) + "," + str(reward) + "," + str(obs_db) + "\n")
 
     print("avg reward:", str(avg))

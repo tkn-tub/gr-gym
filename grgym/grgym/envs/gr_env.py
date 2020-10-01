@@ -1,8 +1,11 @@
 '''
-Anatolij Zubow
+The generic Gr-Gym environment which delegates the calls to the specific scenario.
+
+Anatolij Zubow <zubow@tkn.tu-berlin.de>
 Ali Alouane <ali.alouane@campus.tu-berlin.de>
 Sascha Rösler <s.roesler@campus.tu-berlin.de>
 '''
+
 import importlib
 import logging
 import subprocess
@@ -20,17 +23,11 @@ from grgym.envs.gr_utils import *
 class RadioProgramState(Enum):
     INACTIVE = 1
     RUNNING = 2
-    PAUSED = 3
-    STOPPED = 4
 
-'''
-    The generic Gr-Gym environment which delegates the calls to the specific scenario. 
-'''
 class GrEnv(gym.Env):
     def __init__(self):
         super(GrEnv, self).__init__()
         self._logger = logging.getLogger(self.__class__.__name__)
-
         print('Starting GrGym ... ')
 
         # parse configuration from yaml config file

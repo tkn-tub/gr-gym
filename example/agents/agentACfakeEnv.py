@@ -1,41 +1,8 @@
 """
-Title: Actor Critic Method
-Author: [Apoorv Nandan](https://twitter.com/NandanApoorv)
-Date created: 2020/05/13
-Last modified: 2020/05/13
-Description: Implement Actor Critic Method in CartPole environment.
-"""
-"""
-## Introduction
-
-This script shows an implementation of Actor Critic method on CartPole-V0 environment.
-
-### Actor Critic Method
-
-As an agent takes actions and moves through an environment, it learns to map
-the observed state of the environment to two possible outputs:
-
-1. Recommended action: A probabiltiy value for each action in the action space.
-   The part of the agent responsible for this output is called the **actor**.
-2. Estimated rewards in the future: Sum of all rewards it expects to receive in the
-   future. The part of the agent responsible for this output is the **critic**.
-
-Agent and Critic learn to perform their tasks, such that the recommended actions
-from the actor maximize the rewards.
-
-### CartPole-V0
-
-A pole is attached to a cart placed on a frictionless track. The agent has to apply
-force to move the cart. It is rewarded for every time step the pole
-remains upright. The agent, therefore, must learn to keep the pole from falling over.
-
-### References
-
-- [CartPole](http://www.derongliu.org/adp/adp-cdrom/Barto1983.pdf)
-- [Actor Critic Method](https://hal.inria.fr/hal-00840470/document)
-"""
-"""
-## Setup
+Title: Actor Critic Method for MCS Selection in IEEE 802.11p
+Author: Anatolij Zubow
+Date created: 2020/09/24
+Description: Implement Actor Critic Method with fake (mockup) environment.
 """
 
 import gym
