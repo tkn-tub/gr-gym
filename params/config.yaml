@@ -27,7 +27,7 @@ scenario_args:
 
 rpc_host:
   default: "localhost"
-  help: Configuration needed to connect to GnuRadio process, host name / IP address
+  help: Configuration needed to connect to local/remote GnuRadio process, host name / IP address
 
 rpc_port:
   default: 8080
