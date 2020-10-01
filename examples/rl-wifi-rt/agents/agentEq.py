@@ -2,12 +2,22 @@ import os
 import gym
 import numpy as np
 from datetime import datetime
+import optparse
+
+parser = optparse.OptionParser()
+
+parser.add_option('-c', '--config',
+    action="store", dest="config_file",
+    help="name of config file", default="config.yaml")
+
+options, args = parser.parse_args()
+print('Using config file: %s' % (options.config_file))
 
 #
 # Probe the MCSs in RR
 #
 
-env = gym.make('grgym:grenv-v0')
+env = gym.make('grgym:grenv-v0', config_file=options.config_file)
 obs = env.reset()
 
 ac_space = env.action_space

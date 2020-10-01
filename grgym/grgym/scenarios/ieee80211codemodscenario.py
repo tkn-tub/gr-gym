@@ -19,12 +19,11 @@ class ieee80211_scenario(gnu_case):
         self.name = 'gr-gnugym-80211-mcs-selection'
 
         if not self.conf.grgym_environment.run_local:
-            # if remote just use first remote bridge
+            # in remote mode we assume that full gnuradio is running on first remote node
             self.gnuradio = self.gnuradio[0]
-            print('%s:: Warning: this scenario is designed to run locally; not tested in remote mode' % (self.name))
-            print('%s:: connecting to %s' % (self.name, self.gnuradio.host))
+            print('%s:: connecting to remote node %s' % (self.name, self.gnuradio.host))
 
-        # variables
+        # state variables
         self.last_send_pkt_cnt = 0
         self.last_recv_pkt_cnt = 0
         self.no_packet_rx_within_step_cnt = 0 # count the number of steps without a single packet received
@@ -100,7 +99,7 @@ class ieee80211_scenario(gnu_case):
         self.last_send_pkt_cnt = pkt_snd_cnt
         self.last_recv_pkt_cnt = pkt_recv_cnt
 
-        return (total_send, total_recv)
+        return total_send, total_recv
 
     def get_obs(self):
         if self.conf.grgym_environment.eventbased:
@@ -177,6 +176,10 @@ class ieee80211_scenario(gnu_case):
         return self.name
 
     def sim_channel(self):
+        '''
+        In loopback mode the channel is simulated and changed here.
+        '''
+
         if not self.conf.grgym_local.simulation.simulate_channel:
             return
 

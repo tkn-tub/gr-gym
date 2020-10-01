@@ -19,20 +19,20 @@ from gym.utils import seeding
 from grgym.envs.gr_bridge import GR_Bridge
 from grgym.envs.gr_utils import *
 
-# keep track of gnuradio process state if running in local mode
+# keep track of gnuradio process state
 class RadioProgramState(Enum):
     INACTIVE = 1
     RUNNING = 2
 
 class GrEnv(gym.Env):
-    def __init__(self):
+    def __init__(self, config_file='config.yaml'):
         super(GrEnv, self).__init__()
         self._logger = logging.getLogger(self.__class__.__name__)
         print('Starting GrGym ... ')
 
         # parse configuration from yaml config file
         self.example_dir = Path(os.getcwd()).parent
-        yaml_path = str(self.example_dir / "config.yaml")
+        yaml_path = str(self.example_dir / config_file)
         self.conf = parse_yaml(yaml_path=yaml_path)
 
         self.gr_state = RadioProgramState.INACTIVE
@@ -73,10 +73,16 @@ class GrEnv(gym.Env):
         signal.signal(signal.SIGINT, self.handle_termination)
         signal.signal(signal.SIGTERM, self.handle_termination)
 
+    '''
+        Gym framework function
+    '''
     def seed(self, seed=None):
         self.np_random, seed = seeding.np_random(seed)
         return [seed]
 
+    '''
+        Gym framework function
+    '''
     def step(self, action):
         self._logger.info("grgym::step()")
 
@@ -109,6 +115,9 @@ class GrEnv(gym.Env):
 
         return (obs, reward, done, info)
 
+    '''
+        Gym framework function
+    '''
     def reset(self):
         self._logger.info("grgym::reset()")
 
@@ -135,8 +144,7 @@ class GrEnv(gym.Env):
                         time.sleep(10)
                     self._logger.error("Multiple Start Error %s" % (e))
 
-        # wait to gnuradio to settle down
-        time.sleep(2)
+        time.sleep(2) # wait to gnuradio to settle down
         self.gr_state = RadioProgramState.RUNNING
         self.scenario.reset()
 
@@ -147,10 +155,9 @@ class GrEnv(gym.Env):
 
         return obs
 
-    def handle_termination(self, signum, frame):
-        self.close()
-        sys.exit(1)
-
+    '''
+        Gym framework function
+    '''
     def close(self):
         if self.conf.grgym_environment.run_local:
             self.bridge.close()
@@ -165,6 +172,9 @@ class GrEnv(gym.Env):
                 self.gr_state = RadioProgramState.INACTIVE
         pass
 
+    '''
+        Gym framework function
+    '''
     def render(self, mode='human'):
         return
 
@@ -173,6 +183,10 @@ class GrEnv(gym.Env):
             return False
         if self.gr_state == RadioProgramState.RUNNING:
             return True
+
+    def handle_termination(self, signum, frame):
+        self.close()
+        sys.exit(1)
 
     #
     # Helper methods for local handling of gnuradio

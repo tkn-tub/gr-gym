@@ -12,6 +12,16 @@ import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+import optparse
+
+parser = optparse.OptionParser()
+
+parser.add_option('-c', '--config',
+    action="store", dest="config_file",
+    help="name of config file", default="config.yaml")
+
+options, args = parser.parse_args()
+print('Using config file: %s' % (options.config_file))
 
 debug = False
 
@@ -23,7 +33,7 @@ obs_high = 35
 seed = 42
 gamma = 0 #0.99  # Discount factor for past rewards; must be zero for MCS selection
 max_steps_per_episode = 100
-env = gym.make('grgym:grenv-v0')  # Create the environment
+env = gym.make('grgym:grenv-v0', config_file=options.config_file)  # Create the environment
 env.seed(seed)
 eps = np.finfo(np.float32).eps.item()  # Smallest number such that 1.0 + eps != 1.0
 
