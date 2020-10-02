@@ -17,9 +17,6 @@ parser = optparse.OptionParser()
 parser.add_option('-c', '--config',
     action="store", dest="config_file",
     help="name of config file", default="bench_pipe.yaml")
-parser.add_option('-N', '--num',
-    action="store", dest="N",
-    help="number of steps", default="1000")
 
 parser.add_option('-N', '--num',
     action="store", dest="N",
