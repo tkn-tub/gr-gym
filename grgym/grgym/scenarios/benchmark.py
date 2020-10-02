@@ -41,8 +41,8 @@ class BenchmarkScenario(GrScenario):
         self.gnuradio.set_parameter('action', action)
 
     def get_obs(self):
-        if self.conf.grgym_environment.eventbased:
-            self.gnuradio.wait_for_value('obs')
+        #if self.conf.grgym_environment.eventbased:
+        #    self.gnuradio.wait_for_value('obs')
 
         (obs, time) = self.gnuradio.get_parameter('obs')
         obs = obs[0]
