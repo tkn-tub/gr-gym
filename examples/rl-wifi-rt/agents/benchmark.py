@@ -1,6 +1,10 @@
 """
 Title: Benchmarking GrGym
 Author: Anatolij Zubow
+
+Usage:
+    python3 benchmark.py -c bench_pipe.yaml
+    python3 benchmark.py -c bench_zmq.yaml
 """
 
 import time
