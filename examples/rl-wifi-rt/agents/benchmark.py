@@ -5,6 +5,7 @@ Author: Anatolij Zubow
 
 import time
 import gym
+import optparse
 
 parser = optparse.OptionParser()
 
