@@ -11,6 +11,8 @@ grgym_local: # used if grgym_environment.run_local = True
   rpc_port: 8080 # RPC port of local/remote GnuRadio process
   gr_ipc: ZMQ # the IPC mechanism for communication between grgym and gnuradio; options: FILE|ZMQ
   gr_grc: simple_benchmark
+  simulation:
+    simulate_channel: False # enable if channel is simulated in GR
   help: Configuration used when gnuradio is running on local machine, i.e. co-located with grgym framework
 
 grgym_remote: # used if grgym_environment.run_local = False

@@ -23,9 +23,11 @@ class BenchmarkScenario(GrScenario):
         # IPC with GnuRadio process to collect observations and data needed to calculate the reward
         if self.conf.grgym_environment.run_local and self.conf.grgym_local.gr_ipc == 'FILE':
             # use named pipes if processes running on same machine
+            print('Use named pipes')
             self.gnuradio.subscribe_parameter('obs', '/tmp/obs', np.int32, 1, BridgeConnectionType.PIPE)
         else:
             # ZMQ for remote IPC
+            print('Use ZMQ')
             self.gnuradio.subscribe_parameter('obs', 8001, np.int32, 1, BridgeConnectionType.ZMQ)
 
     def get_observation_space(self):
@@ -43,7 +45,7 @@ class BenchmarkScenario(GrScenario):
             self.gnuradio.wait_for_value('obs')
 
         (obs, time) = self.gnuradio.get_parameter('obs')
-        obs = obs[0][0]
+        obs = obs[0]
 
         return obs
 
@@ -58,8 +60,10 @@ class BenchmarkScenario(GrScenario):
         return
 
     def reset(self):
-        pass
+        self.gnuradio.set_parameter('interval', self.conf.grgym_scenario.packet_interval)
 
     def get_info(self):
         return self.name
 
+    def sim_channel(self):
+        pass
