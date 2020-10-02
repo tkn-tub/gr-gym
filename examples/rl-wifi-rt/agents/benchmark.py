@@ -20,8 +20,16 @@ parser.add_option('-N', '--num',
     action="store", dest="N",
     help="number of steps", default="1000")
 
+parser.add_option('-N', '--num',
+    action="store", dest="N",
+    help="number of steps", default="1000")
+
+parser.add_option('-i', '--packet_interval',
+    action="store", dest="packet_interval",
+    help="tx packet interval", default="10")
+
 options, args = parser.parse_args()
-print('Using config file: %s' % (options.config_file))
+print('Benchmarking config file: %s, packet_interval: %s' % (options.config_file, options.packet_interval))
 
 #
 # Benchmark GrGym in eventbased mode
@@ -29,6 +37,8 @@ print('Using config file: %s' % (options.config_file))
 print('Benchmarking grgym ... ')
 N = int(options.N)
 env = gym.make('grgym:grenv-v0', config_file=options.config_file)
+# overwrite config file
+env.conf.grgym_scenario.packet_interval = int(options.packet_interval)
 obs = env.reset()
 
 ac_space = env.action_space
