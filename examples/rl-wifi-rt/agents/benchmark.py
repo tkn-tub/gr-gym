@@ -17,9 +17,6 @@ parser = optparse.OptionParser()
 parser.add_option('-c', '--config',
     action="store", dest="config_file",
     help="name of config file", default="bench_pipe.yaml")
-parser.add_option('-N', '--num',
-    action="store", dest="N",
-    help="number of steps", default="1000")
 
 parser.add_option('-N', '--num',
     action="store", dest="N",
@@ -72,7 +69,7 @@ for ii in range(N):
     obs, reward, done, info = env.step(int(action))
     if trace:
         s1 = time.time()
-        ts[ii] = s1 - s0
+        ts[ii] = (s1 - s0) * 1000
     step = step + 1
 
 end = int(round(time.time() * 1000))
@@ -87,10 +84,10 @@ print('Steps per second: %.4f' % (steps_per_second))
 if trace:
     print('statics of results')
     print('* num of valid data: {0}'.format(len(ts)))
-    print('* min: {0:.2f}cm'.format(min(ts)))
-    print('* max: {0:.2f}cm'.format(max(ts)))
-    print('* mean: {0:.2f}cm'.format(np.mean(ts)))
-    print('* median: {0:.2f}cm'.format(np.median(ts)))
-    print('* std: {0:.2f}cm'.format(np.std(ts)))
+    print('* min: {0:.6f} ms'.format(min(ts)))
+    print('* max: {0:.6f} ms'.format(max(ts)))
+    print('* mean: {0:.6f} ms'.format(np.mean(ts)))
+    print('* median: {0:.6f} ms'.format(np.median(ts)))
+    print('* std: {0:.6f} ms'.format(np.std(ts)))
 
 env.close()
