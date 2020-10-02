@@ -3,8 +3,8 @@ Title: Benchmarking GrGym
 Author: Anatolij Zubow
 
 Usage:
-    python3 benchmark.py -c bench_pipe.yaml
-    python3 benchmark.py -c bench_zmq.yaml
+    python3 benchmark.py -c bench_pipe.yaml -N 1000 -i 2 -t True
+    python3 benchmark.py -c bench_zmq.yaml -N 1000 -i 2 -t True
 """
 
 import time
