@@ -16,6 +16,9 @@ parser = optparse.OptionParser()
 parser.add_option('-c', '--config',
     action="store", dest="config_file",
     help="name of config file", default="bench_pipe.yaml")
+parser.add_option('-N', '--num',
+    action="store", dest="N",
+    help="number of steps", default="1000")
 
 options, args = parser.parse_args()
 print('Using config file: %s' % (options.config_file))
@@ -24,7 +27,7 @@ print('Using config file: %s' % (options.config_file))
 # Benchmark GrGym in eventbased mode
 #
 print('Benchmarking grgym ... ')
-N = 1000
+N = int(options.N)
 env = gym.make('grgym:grenv-v0', config_file=options.config_file)
 obs = env.reset()
 
