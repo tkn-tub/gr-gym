@@ -1,3 +1,8 @@
+"""
+Title: Benchmarking GrGym
+Author: Anatolij Zubow
+"""
+
 import time
 import gym
 
