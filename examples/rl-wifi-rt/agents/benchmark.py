@@ -10,6 +10,7 @@ Usage:
 import time
 import gym
 import optparse
+import numpy as np
 
 parser = optparse.OptionParser()
 
@@ -28,6 +29,10 @@ parser.add_option('-i', '--packet_interval',
     action="store", dest="packet_interval",
     help="tx packet interval", default="10")
 
+parser.add_option('-t', '--deep_trace',
+    action="store", dest="deep_trace",
+    help="activate deep tracing", default=False)
+
 options, args = parser.parse_args()
 print('Benchmarking config file: %s, packet_interval: %s' % (options.config_file, options.packet_interval))
 
@@ -36,6 +41,7 @@ print('Benchmarking config file: %s, packet_interval: %s' % (options.config_file
 #
 print('Benchmarking grgym ... ')
 N = int(options.N)
+trace = bool(options.deep_trace)
 env = gym.make('grgym:grenv-v0', config_file=options.config_file)
 # overwrite config file
 env.conf.grgym_scenario.packet_interval = int(options.packet_interval)
@@ -53,12 +59,20 @@ for ii in range(W):
 
 print('Measure N=%d steps' % (N))
 
+if trace:
+    ts = np.zeros(N)
+
 step = 0
 start = int(round(time.time() * 1000))
 for ii in range(N):
     # move to next MCS
     action = (action + 1) % a_size
+    if trace:
+        s0 = time.time()
     obs, reward, done, info = env.step(int(action))
+    if trace:
+        s1 = time.time()
+        ts[ii] = s1 - s0
     step = step + 1
 
 end = int(round(time.time() * 1000))
@@ -69,5 +83,14 @@ steps_per_second = 1.0 / (delta / N)
 print('Done')
 print('Start: %d, end: %d, delta=: %.4f [sec]' % (start, end, delta))
 print('Steps per second: %.4f' % (steps_per_second))
+
+if trace:
+    print('statics of results')
+    print('* num of valid data: {0}'.format(len(ts)))
+    print('* min: {0:.2f}cm'.format(min(ts)))
+    print('* max: {0:.2f}cm'.format(max(ts)))
+    print('* mean: {0:.2f}cm'.format(np.mean(ts)))
+    print('* median: {0:.2f}cm'.format(np.median(ts)))
+    print('* std: {0:.2f}cm'.format(np.std(ts)))
 
 env.close()
