@@ -60,7 +60,7 @@ class ieee80211_scenario(gnu_case):
         self.NSC = 64 # no. OFDM subcarriers
 
         # IPC with GnuRadio process to collect observations and data needed to calculate the reward
-        if self.conf.grgym_environment.run_local:
+        if False and self.conf.grgym_environment.run_local:
             # use named pipes if processes running on same machine
             self.gnuradio.subscribe_parameter('pkt_snd_cnt', '/tmp/pkt_snd_cnt', np.int32, 1, BridgeConnectionType.PIPE)
             self.gnuradio.subscribe_parameter('pkt_recv_cnt', '/tmp/pkt_recv_cnt', np.int32, 1, BridgeConnectionType.PIPE)

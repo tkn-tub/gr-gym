@@ -1,5 +1,5 @@
 grgym_environment:
-  run_local: True # whether gnuradio is running locally or remotely
+  run_local: False # whether gnuradio is running locally or remotely
   timebased: # a step results in progress of time for step_time seconds
     step_time: 0.5 # the duration of a single step [in s]
   eventbased: True # if false time based is used otherwise event based
