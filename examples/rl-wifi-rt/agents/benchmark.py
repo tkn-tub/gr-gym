@@ -1,6 +1,5 @@
 import time
 import gym
-import optparse
 
 #
 # Benchmark GrGym in eventbased mode
