@@ -35,16 +35,16 @@ class ieee80211_scenario(gnu_case):
         self.low = 10.0
         self.high = 35.0
 
-        # bitrates available in 802.11p GnuRadio stack
+        # bitrates available in 802.11p GnuRadio stack; position is the MCS index
         self.bitrates = [
-            3.0,  # Mbps BPSK 1/2
-            4.5,  # Mbps BPSK 3/4
-            6.0,  # Mbps QPSK 1/2
-            9.0,  # Mbps QPSK 3/4
-            12.0,  # Mbps 16QAM 1/2
-            18.0,  # Mbps 16QAM 3/4
-            24.0,  # Mbps 64QAM 2/3
-            27.0  # Mbps 64QAM 3/4
+            3.0,  # Mbps MCS0: BPSK 1/2
+            4.5,  # Mbps MCS1: BPSK 3/4
+            6.0,  # Mbps MCS2: QPSK 1/2
+            9.0,  # Mbps MCS3: QPSK 3/4
+            12.0,  # Mbps MCS4: 16QAM 1/2
+            18.0,  # Mbps MCS5: 16QAM 3/4
+            24.0,  # Mbps MCS6: 64QAM 2/3
+            27.0  # Mbps MCS7: 64QAM 3/4
         ]
 
         self.mcs = list(conf.grgym_scenario.mcs)
@@ -60,9 +60,16 @@ class ieee80211_scenario(gnu_case):
         self.NSC = 64 # no. OFDM subcarriers
 
         # IPC with GnuRadio process to collect observations and data needed to calculate the reward
-        self.gnuradio.subscribe_parameter('pkt_snd_cnt', 8001, np.int32, 1, BridgeConnectionType.ZMQ)
-        self.gnuradio.subscribe_parameter('pkt_recv_cnt', 8002, np.int32, 1, BridgeConnectionType.ZMQ)
-        self.gnuradio.subscribe_parameter('rssi_obs', 8003, np.float32, self.NSC, BridgeConnectionType.ZMQ)
+        if self.conf.grgym_environment.run_local:
+            # use named pipes if processes running on same machine
+            self.gnuradio.subscribe_parameter('/tmp/pkt_snd_cnt', np.int32, 1, BridgeConnectionType.PIPE)
+            self.gnuradio.subscribe_parameter('/tmp/pkt_recv_cnt', np.int32, 1, BridgeConnectionType.PIPE)
+            self.gnuradio.subscribe_parameter('/tmp/rssi_obs', np.float32, self.NSC, BridgeConnectionType.PIPE)
+        else:
+            # ZMQ for remote IPC
+            self.gnuradio.subscribe_parameter('pkt_snd_cnt', 8001, np.int32, 1, BridgeConnectionType.ZMQ)
+            self.gnuradio.subscribe_parameter('pkt_recv_cnt', 8002, np.int32, 1, BridgeConnectionType.ZMQ)
+            self.gnuradio.subscribe_parameter('rssi_obs', 8003, np.float32, self.NSC, BridgeConnectionType.ZMQ)
 
     def get_observation_space(self):
         return spaces.Box(low=self.low, high=self.high, shape=(self.NSC, 1), dtype=np.float32)

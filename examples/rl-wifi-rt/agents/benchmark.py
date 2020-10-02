@@ -2,13 +2,21 @@ import time
 import gym
 import optparse
 
+parser = optparse.OptionParser()
+
+parser.add_option('-c', '--config',
+    action="store", dest="config_file",
+    help="name of config file", default="bench_pipe.yaml")
+
+options, args = parser.parse_args()
+print('Using config file: %s' % (options.config_file))
+
 #
 # Benchmark GrGym in eventbased mode
 #
+print('Benchmarking grgym ... ')
 N = 1000
-config_file = 'bench.yaml'
-print('Using config file: %s' % (config_file))
-env = gym.make('grgym:grenv-v0', config_file=config_file)
+env = gym.make('grgym:grenv-v0', config_file=options.config_file)
 obs = env.reset()
 
 ac_space = env.action_space

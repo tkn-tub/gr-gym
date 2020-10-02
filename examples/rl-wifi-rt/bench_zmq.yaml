@@ -1,5 +1,5 @@
 grgym_environment:
-  run_local: True # whether gnuradio is running locally or remotely
+  run_local: False # whether gnuradio is running locally or remotely
   timebased: # a step results in progress of time for step_time seconds
     step_time: 0.5 # the duration of a single step [in s]
   eventbased: True # if false time based is used otherwise event based
@@ -22,13 +22,9 @@ grgym_local: # used if grgym_environment.run_local = True
 grgym_remote: # used if grgym_environment.run_local = False
   num_nodes: 1
   node0:
-    name: TX
+    name: TX_RX_channel
     host: localhost # local/remote GnuRadio process
     rpc_port: 8080 # RPC port of local/remote GnuRadio process
-#  node1:
-#    name: RX
-#    host: localhost2 # local/remote GnuRadio process
-#    rpc_port: 8080 # RPC port of local/remote GnuRadio process
   help: configuration used when gnuradio is running on remote machine, i.e. host name, Gnu Radio ID, Gnu Radio GRC filename, rpc port.
 
 grgym_scenario:
