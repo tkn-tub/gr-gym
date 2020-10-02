@@ -32,5 +32,5 @@ grgym_scenario:
   scenario_class: ieee80211codemodscenario.ieee80211_scenario # class is a string pointing to a function that is inside one or multiple modules. The function will be imported and executed without any arguments.
   mcs: [3, 5, 7] # scenario specific: only those MCS will be used
   channel_SNR: 25 # scenario specific: value of SNR variable used by channel block in the GNU-Radio flowchart
-  packet_interval: 10 # interval between two transmitted packets in ms
+  packet_interval: 1 # interval between two transmitted packets in ms
   help: configuration of a specific grgym scenario
