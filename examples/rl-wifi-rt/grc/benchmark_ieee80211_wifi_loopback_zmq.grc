@@ -1,0 +1,495 @@
+options:
+  parameters:
+    author: ''
+    category: Custom
+    cmake_opt: ''
+    comment: ''
+    copyright: ''
+    description: ''
+    gen_cmake: 'On'
+    gen_linking: dynamic
+    generate_options: no_gui
+    hier_block_src_path: '.:'
+    id: benchmark_ieee80211_wifi_loopback_zmq
+    max_nouts: '0'
+    output_language: python
+    placement: (0,0)
+    qt_qss_theme: ''
+    realtime_scheduling: '1'
+    run: 'False'
+    run_command: '{python} -u {filename}'
+    run_options: prompt
+    sizing_mode: fixed
+    thread_safe_setters: ''
+    title: ''
+    window_size: 1280, 1024
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [16, 12]
+    rotation: 0
+    state: enabled
+
+blocks:
+- name: chan_est
+  id: variable
+  parameters:
+    comment: ''
+    value: ieee802_11.LS
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [141, 120]
+    rotation: 0
+    state: true
+- name: dist
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [411, 65]
+    rotation: 0
+    state: true
+- name: encoding
+  id: variable
+  parameters:
+    comment: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [245, 65]
+    rotation: 0
+    state: true
+- name: epsilon
+  id: variable
+  parameters:
+    comment: ''
+    value: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [123, 188]
+    rotation: 0
+    state: true
+- name: interval
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [604, 63]
+    rotation: 0
+    state: true
+- name: out_buf_size
+  id: variable
+  parameters:
+    comment: ''
+    value: '96000'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [17, 252]
+    rotation: 0
+    state: enabled
+- name: pdu_length
+  id: variable
+  parameters:
+    comment: ''
+    value: '10'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [18, 186]
+    rotation: 0
+    state: true
+- name: snr
+  id: variable
+  parameters:
+    comment: ''
+    value: '25'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [533, 64]
+    rotation: 0
+    state: true
+- name: blocks_message_strobe_0
+  id: blocks_message_strobe
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    msg: pmt.intern("".join("x" for i in range(pdu_length)))
+    period: interval
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [248, 164.0]
+    rotation: 0
+    state: enabled
+- name: blocks_multiply_const_xx_0
+  id: blocks_multiply_const_xx
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    const: (10**((snr-3.875-dist)/10.0))**.5
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    type: complex
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [430, 570]
+    rotation: 0
+    state: true
+- name: blocks_null_sink_1_0
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: ''
+    num_inputs: '1'
+    type: int
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [999, 141]
+    rotation: 0
+    state: true
+- name: blocks_null_sink_1_0_0
+  id: blocks_null_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    bus_structure_sink: '[[0,],]'
+    comment: ''
+    num_inputs: '1'
+    type: int
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [160, 448.0]
+    rotation: 0
+    state: true
+- name: channels_channel_model_0
+  id: channels_channel_model
+  parameters:
+    affinity: ''
+    alias: ''
+    block_tags: 'False'
+    comment: ''
+    epsilon: '1.0'
+    freq_offset: epsilon * 5.89e9 / 10e6
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    noise_voltage: '0.3'
+    seed: '0'
+    taps: '1.0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [648, 530]
+    rotation: 0
+    state: enabled
+- name: foo_packet_pad2_0
+  id: foo_packet_pad2
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    debug: 'False'
+    delay: 'False'
+    delay_sec: '0.001'
+    maxoutbuf: '0'
+    minoutbuf: out_buf_size * 10
+    pad_front: '500'
+    pad_tail: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [290, 476]
+    rotation: 0
+    state: enabled
+- name: gnugym_gnugym_rssi_cb_0
+  id: gnugym_gnugym_rssi_cb
+  parameters:
+    affinity: ''
+    alias: ''
+    bw: 10e6
+    comment: ''
+    debug: 'False'
+    freq: 5.89e9
+    log: 'False'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 260.0]
+    rotation: 0
+    state: true
+- name: gnugym_parse_seqnr_0
+  id: gnugym_parse_seqnr
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    debug: 'False'
+    log: 'False'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [144, 368.0]
+    rotation: 180
+    state: true
+- name: gnugym_parse_seqnr_1
+  id: gnugym_parse_seqnr
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    debug: 'False'
+    log: 'False'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [719, 109]
+    rotation: 0
+    state: true
+- name: ieee802_11_mac_0
+  id: ieee802_11_mac
+  parameters:
+    affinity: ''
+    alias: ''
+    bss_mac: '[0xff, 0xff, 0xff, 0xff, 0xff, 0xff]'
+    comment: ''
+    dst_mac: '[0x42, 0x42, 0x42, 0x42, 0x42, 0x42]'
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    src_mac: '[0x23, 0x23, 0x23, 0x23, 0x23, 0x23]'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [488, 172.0]
+    rotation: 0
+    state: enabled
+- name: note_0
+  id: note
+  parameters:
+    alias: ''
+    comment: ''
+    note: 'GrGym actions:'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [223, 17]
+    rotation: 0
+    state: true
+- name: note_0_0
+  id: note
+  parameters:
+    alias: ''
+    comment: ''
+    note: 'GrGym sim channel:'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [363, 17]
+    rotation: 0
+    state: true
+- name: note_0_0_0
+  id: note
+  parameters:
+    alias: ''
+    comment: ''
+    note: 'GrGym config.yaml:'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [533, 17]
+    rotation: 0
+    state: true
+- name: note_0_0_0_0
+  id: note
+  parameters:
+    alias: ''
+    comment: ''
+    note: 'GrGym channel sim:'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [651, 477]
+    rotation: 0
+    state: true
+- name: pfb_arb_resampler_xxx_0
+  id: pfb_arb_resampler_xxx
+  parameters:
+    affinity: ''
+    alias: ''
+    atten: '100'
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    nfilts: '32'
+    rrate: 1+epsilon
+    samp_delay: '0'
+    taps: ''
+    type: ccf
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [828, 344]
+    rotation: 90
+    state: enabled
+- name: wifi_phy_hier_0
+  id: wifi_phy_hier
+  parameters:
+    affinity: ''
+    alias: ''
+    bandwidth: 10e6
+    chan_est: chan_est
+    comment: ''
+    encoding: encoding
+    frequency: 5.9e6
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    sensitivity: '0.56'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [520, 368.0]
+    rotation: 180
+    state: true
+- name: xmlrpc_server_0
+  id: xmlrpc_server
+  parameters:
+    addr: localhost
+    alias: ''
+    comment: ''
+    port: '8080'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [17, 117]
+    rotation: 0
+    state: true
+- name: zeromq_pub_sink_0
+  id: zeromq_pub_sink
+  parameters:
+    address: tcp://127.0.0.1:8001
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    pass_tags: 'False'
+    timeout: '100'
+    type: int
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [986, 49]
+    rotation: 0
+    state: true
+- name: zeromq_pub_sink_0_0
+  id: zeromq_pub_sink
+  parameters:
+    address: tcp://127.0.0.1:8003
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    pass_tags: 'False'
+    timeout: '100'
+    type: float
+    vlen: '64'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [749, 234]
+    rotation: 0
+    state: true
+- name: zeromq_pub_sink_1
+  id: zeromq_pub_sink
+  parameters:
+    address: tcp://127.0.0.1:8002
+    affinity: ''
+    alias: ''
+    comment: ''
+    hwm: '-1'
+    pass_tags: 'False'
+    timeout: '100'
+    type: int
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [144, 284.0]
+    rotation: 0
+    state: true
+
+connections:
+- [blocks_message_strobe_0, strobe, ieee802_11_mac_0, app in]
+- [blocks_multiply_const_xx_0, '0', channels_channel_model_0, '0']
+- [channels_channel_model_0, '0', pfb_arb_resampler_xxx_0, '0']
+- [foo_packet_pad2_0, '0', blocks_multiply_const_xx_0, '0']
+- [gnugym_gnugym_rssi_cb_0, '0', zeromq_pub_sink_0_0, '0']
+- [gnugym_parse_seqnr_0, '0', zeromq_pub_sink_1, '0']
+- [gnugym_parse_seqnr_0, '1', blocks_null_sink_1_0_0, '0']
+- [gnugym_parse_seqnr_1, '0', zeromq_pub_sink_0, '0']
+- [gnugym_parse_seqnr_1, '1', blocks_null_sink_1_0, '0']
+- [ieee802_11_mac_0, phy out, gnugym_parse_seqnr_1, in]
+- [ieee802_11_mac_0, phy out, wifi_phy_hier_0, mac_in]
+- [pfb_arb_resampler_xxx_0, '0', wifi_phy_hier_0, '0']
+- [wifi_phy_hier_0, '0', foo_packet_pad2_0, '0']
+- [wifi_phy_hier_0, '1', gnugym_gnugym_rssi_cb_0, '0']
+- [wifi_phy_hier_0, mac_out, gnugym_parse_seqnr_0, in]
+
+metadata:
+  file_format: 1
