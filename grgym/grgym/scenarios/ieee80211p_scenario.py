@@ -8,11 +8,11 @@ Anatolij Zubow <zubow@tkn.tu-berlin.de>
 '''
 from gym import spaces
 import numpy as np
-from grgym.envs.gnu_case import gnu_case
+from grgym.envs.gr_scenario import GrScenario
 from grgym.envs.gr_bridge import BridgeConnectionType
 from datetime import datetime
 
-class ieee80211_scenario(gnu_case):
+class IEEE80211pRateControlScenario(GrScenario):
     def __init__(self, gnuradio, conf):
         super().__init__(gnuradio, conf)
         self.debug = False

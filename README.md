@@ -118,7 +118,7 @@ while True:
 env.close()
 
 ```
-##### 2. Any Gnu Radio program be used as a Gym environment. This requires only to create a Python class derived from gnu_case class and to implement the following functions:
+##### 2. Any Gnu Radio program be used as a Gym environment. This requires only to create a Python class derived from GrScenario class and to implement the following functions:
 ```
 def get_observation_space()
 def get_action_space()

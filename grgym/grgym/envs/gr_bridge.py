@@ -1,5 +1,7 @@
 '''
-Classes for used for IPC between Python and Gnuradio
+Communication classes used for IPC between Python and Gnuradio.
+Multiple options: named pipe (file) when GrGym and Gnu Radio processes are co-located on the same machine.
+Use ZMQ when located on different machines.
 
 Sascha Rösler <s.roesler@campus.tu-berlin.de>
 Anatolij Zubow <zubow@tkn.tu-berlin.de>
@@ -17,19 +19,24 @@ import time
 from enum import Enum
 import zmq
 
+
 class BridgeConnectionType(Enum):
     PIPE = 0
     UDP = 1
     TCP = 2
     ZMQ = 3
 
+
 class AbstractCommunicationElement:
     def __init__(self):
         pass
+
     def read(self, structlen):
         pass
+
     def close(self):
         pass
+
 
 class CommunicationPipe(AbstractCommunicationElement):
     def __init__(self, address):
@@ -44,6 +51,7 @@ class CommunicationPipe(AbstractCommunicationElement):
     def close(self):
         return self.pipein.close()
 
+
 class CommunicationUDP(AbstractCommunicationElement):
     def __init__(self, host, port):
         super().__init__()
@@ -56,6 +64,7 @@ class CommunicationUDP(AbstractCommunicationElement):
 
     def close(self):
         return self.sock.close()
+
 
 class CommunicationZMQ(AbstractCommunicationElement):
     def __init__(self, host, port):
@@ -70,6 +79,7 @@ class CommunicationZMQ(AbstractCommunicationElement):
 
     def close(self):
         return self.sock.close()
+
 
 class CommunicationTCP(AbstractCommunicationElement):
     def __init__(self, host, port):
@@ -92,8 +102,9 @@ class CommunicationTCP(AbstractCommunicationElement):
     def close(self):
         return self.sock.close()
 
+
 class PipeListener(threading.Thread):
-    def __init__(self, host, address, mydtype, elements, comTyp=BridgeConnectionType.PIPE):
+    def __init__(self, host, address, mydtype, elements, commtype=BridgeConnectionType.PIPE):
         threading.Thread.__init__(self) 
         self.dtype = np.dtype(mydtype)
         self.host = host
@@ -108,7 +119,7 @@ class PipeListener(threading.Thread):
         self.waitevent = threading.Event()
         self.waitcounter_mutex = threading.Lock()
         self.waitcounter = 0
-        self.comTyp = comTyp
+        self.comTyp = commtype
     
     # listen on pipe with address
     # create pipe if id does not exists
@@ -137,7 +148,6 @@ class PipeListener(threading.Thread):
                 tmp = np.frombuffer(buf, dtype=self.dtype)
                 
                 self.mutex.acquire()
-                
                 self.data = (tmp, timer())
                 self.mutex.release()
                 self.waitevent.set()
@@ -155,9 +165,6 @@ class PipeListener(threading.Thread):
     def set_stop(self):
         self.stop = True
     
-    #def set_interval(self, interval):
-    #    self.interval = interval
-    
     def wait_for_value(self):
         if not self.stop:
             self.waitcounter_mutex.acquire()
@@ -171,8 +178,12 @@ class PipeListener(threading.Thread):
                 self.waitevent.clear()
             self.waitcounter_mutex.release()
 
+
+'''
+    The GrGym Gnu Radio bridge
+'''
 class GR_Bridge:
-    # create RPC procxy
+    # create RPC proxy
     def __init__(self, host, rpcPort):
         self.pipes = {}
         self.host = host
@@ -181,11 +192,11 @@ class GR_Bridge:
     
     # create thread to listen on pipe
     # add thread to pipe
-    def subscribe_parameter(self, name, address, dtype, elements, comTyp=BridgeConnectionType.PIPE):
+    def subscribe_parameter(self, name, address, dtype, elements, commtype=BridgeConnectionType.PIPE):
         if name in self.pipes:
             self.log.error("Parameter already exists '%s'" % (name))
             raise Exception("There is already an parameter of this name")
-        self.pipes[name] = PipeListener(self.host, address, dtype, elements,comTyp)
+        self.pipes[name] = PipeListener(self.host, address, dtype, elements, commtype)
         self.pipes[name].start()
     
     # return result of pipe if name exists there
@@ -194,10 +205,11 @@ class GR_Bridge:
         if name in self.pipes:
             return self.pipes[name].get_data()
         else:
+            res = None
             try:
                 res = (getattr(self.rpc, "get_%s" % name)(), timer())
             except Exception as e:
-                self.log.error("Unknown variable '%s -> %s'" % (name, e))
+                self.log.error("Warning: unknown variable '%s -> %s'" % (name, e))
             return res
 
     # set parameter via rpc
@@ -205,7 +217,7 @@ class GR_Bridge:
         try:
             getattr(self.rpc, "set_%s" % name)(value)
         except Exception as e:
-            self.log.error("Unknown variable '%s -> %s'" % (name, e))
+            self.log.error("Warning: unknown variable '%s -> %s'" % (name, e))
     
     # send start via rpc
     def start(self):

@@ -1,5 +1,5 @@
 '''
-The base class for all scenarios.
+The base class for all custom GrGym scenarios.
 
 Anatolij Zubow <zubow@tkn.tu-berlin.de>
 Ali Alouane <ali.alouane@campus.tu-berlin.de>
@@ -7,7 +7,7 @@ Ali Alouane <ali.alouane@campus.tu-berlin.de>
 
 import abc
 
-class gnu_case(abc.ABC):
+class GrScenario(abc.ABC):
     @abc.abstractmethod
     def __init__(self, gnuradio, conf):
         """ Init your scenario
