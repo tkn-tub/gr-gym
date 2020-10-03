@@ -38,7 +38,7 @@ print('Benchmarking config file: %s, packet_interval: %s' % (options.config_file
 #
 print('Benchmarking grgym ... ')
 N = int(options.N)
-trace = bool(options.deep_trace)
+trace = options.deep_trace == 'True'
 env = gym.make('grgym:grenv-v0', config_file=options.config_file)
 # overwrite config file
 env.conf.grgym_scenario.packet_interval = int(options.packet_interval)
