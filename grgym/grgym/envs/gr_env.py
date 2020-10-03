@@ -137,7 +137,7 @@ class GrEnv(gym.Env):
                     if type(e) is ConnectionRefusedError:
                         # no rpc server
                         error = True
-                        if self.conf.grgym_local.compile_and_start_gr:
+                        if self.conf.grgym_environment.run_local and self.conf.grgym_local.compile_and_start_gr:
                             print("Wait for start of GNU-Radio. This should happen automatically.")
                         else:
                             print("Wait for start of GNU-Radio. Please start the scenario on the other machine now.")

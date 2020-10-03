@@ -1,0 +1,29 @@
+grgym_environment:
+  run_local: True # whether gnuradio is running locally or remotely
+  timebased: # a step results in progress of time for step_time seconds
+    step_time: 0.5 # the duration of a single step [in s]
+  eventbased: True # if false time based is used otherwise event based
+  help: GrGym configuration
+
+grgym_local: # used if grgym_environment.run_local = True
+  compile_and_start_gr: True # disable it, if GNU-Radio runs on a remote machine.
+  host: localhost # local GnuRadio process
+  rpc_port: 8080 # RPC port of local/remote GnuRadio process
+  gr_ipc: FILE # the IPC mechanism for communication between grgym and gnuradio; options: FILE|ZMQ
+  gr_grc: simple_benchmark_pipe
+  simulation:
+    simulate_channel: False # enable if channel is simulated in GR
+  help: Configuration used when gnuradio is running on local machine, i.e. co-located with grgym framework
+
+grgym_remote: # used if grgym_environment.run_local = False
+  num_nodes: 1
+  node0:
+    name: TX_RX_channel
+    host: localhost # local/remote GnuRadio process
+    rpc_port: 8080 # RPC port of local/remote GnuRadio process
+  help: configuration used when gnuradio is running on remote machine, i.e. host name, Gnu Radio ID, Gnu Radio GRC filename, rpc port.
+
+grgym_scenario:
+  scenario_class: benchmark.BenchmarkScenario # class is a string pointing to a function that is inside one or multiple modules. The function will be imported and executed without any arguments.
+  packet_interval: 1 # interval between two transmitted packets in ms
+  help: configuration of a specific grgym scenario
