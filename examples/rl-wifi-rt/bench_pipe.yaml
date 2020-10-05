@@ -23,7 +23,7 @@ grgym_local: # used if grgym_environment.run_local = True
 grgym_remote: # used if grgym_environment.run_local = False
   num_nodes: 1
   node0:
-    name: TX
+    name: TX_RX_channel
     host: localhost # local/remote GnuRadio process
     rpc_port: 8080 # RPC port of local/remote GnuRadio process
   help: configuration used when gnuradio is running on remote machine, i.e. host name, Gnu Radio ID, Gnu Radio GRC filename, rpc port.

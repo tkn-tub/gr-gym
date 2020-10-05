@@ -49,7 +49,7 @@ a_size = ac_space.n
 
 action = 0
 
-W = 10
+W = 5
 print('Warmup')
 for ii in range(W):
     obs, reward, done, info = env.step(int(action))
@@ -67,6 +67,7 @@ for ii in range(N):
     if trace:
         s0 = time.time()
     obs, reward, done, info = env.step(int(action))
+    #print(obs)
     if trace:
         s1 = time.time()
         ts[ii] = (s1 - s0) * 1000

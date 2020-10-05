@@ -62,11 +62,13 @@ class IEEE80211pRateControlScenario(GrScenario):
         # IPC with GnuRadio process to collect observations and data needed to calculate the reward
         if self.conf.grgym_environment.run_local and self.conf.grgym_local.gr_ipc == 'FILE':
             # use named pipes if processes running on same machine
+            print('Use FILE')
             self.gnuradio.subscribe_parameter('pkt_snd_cnt', '/tmp/pkt_snd_cnt', np.int32, 1, BridgeConnectionType.PIPE)
             self.gnuradio.subscribe_parameter('pkt_recv_cnt', '/tmp/pkt_recv_cnt', np.int32, 1, BridgeConnectionType.PIPE)
             self.gnuradio.subscribe_parameter('rssi_obs', '/tmp/rssi_obs', np.float32, self.NSC, BridgeConnectionType.PIPE)
         else:
             # ZMQ for remote IPC
+            print('Use ZMQ')
             self.gnuradio.subscribe_parameter('pkt_snd_cnt', 8001, np.int32, 1, BridgeConnectionType.ZMQ)
             self.gnuradio.subscribe_parameter('pkt_recv_cnt', 8002, np.int32, 1, BridgeConnectionType.ZMQ)
             self.gnuradio.subscribe_parameter('rssi_obs', 8003, np.float32, self.NSC, BridgeConnectionType.ZMQ)

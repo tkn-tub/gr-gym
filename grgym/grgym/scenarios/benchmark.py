@@ -24,11 +24,11 @@ class BenchmarkScenario(GrScenario):
         if self.conf.grgym_environment.run_local and self.conf.grgym_local.gr_ipc == 'FILE':
             # use named pipes if processes running on same machine
             print('Use named pipes')
-            self.gnuradio.subscribe_parameter('obs', '/tmp/obs', np.int32, 1, BridgeConnectionType.PIPE)
+            self.gnuradio.subscribe_parameter('obs', '/tmp/obs', np.float32, self.conf.grgym_scenario.obs_len, BridgeConnectionType.PIPE)
         else:
             # ZMQ for remote IPC
             print('Use ZMQ')
-            self.gnuradio.subscribe_parameter('obs', 8001, np.int32, 1, BridgeConnectionType.ZMQ)
+            self.gnuradio.subscribe_parameter('obs', 8001, np.float32, self.conf.grgym_scenario.obs_len, BridgeConnectionType.ZMQ)
 
     def get_observation_space(self):
         return spaces.Box(low=0, high=7, shape=(1, 1), dtype=np.int)
@@ -38,14 +38,17 @@ class BenchmarkScenario(GrScenario):
 
     def execute_action(self, action):
         # set action on GnuRadio process
+        # print('action: %d' % action)
         self.gnuradio.set_parameter('action', action)
 
     def get_obs(self):
         #if self.conf.grgym_environment.eventbased:
         #    self.gnuradio.wait_for_value('obs')
-
+        #aa = self.gnuradio.get_parameter('action')
+        #print('action from gr: %s' % str(aa))
+        #self.gnuradio.wait_for_value('obs')
         (obs, time) = self.gnuradio.get_parameter('obs')
-        obs = obs[0]
+        #print(obs)
 
         return obs
 
@@ -60,7 +63,10 @@ class BenchmarkScenario(GrScenario):
         return
 
     def reset(self):
+        print('obs_len: %d' % self.conf.grgym_scenario.obs_len)
+        print('interval: %d' % self.conf.grgym_scenario.packet_interval)
         self.gnuradio.set_parameter('interval', self.conf.grgym_scenario.packet_interval)
+        self.gnuradio.set_parameter('obs_len', self.conf.grgym_scenario.obs_len)
 
     def get_info(self):
         return self.name
