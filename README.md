@@ -51,7 +51,7 @@ cd gr-foo
 mkdir build
 cd build
 cmake ..
-make
+make -j $(nproc --all)
 sudo make install
 sudo ldconfig
 
@@ -60,7 +60,7 @@ cd gr-ieee802-11
 mkdir build
 cd build
 cmake ..
-make
+make -j $(nproc --all)
 sudo make install
 sudo ldconfig
 ```
@@ -69,7 +69,7 @@ See https://github.com/bastibl/gr-ieee802-11
 ##### 4. Install OpenAI Gym
 ```
 # minimal install of the packaged version directly from PyPI:
-pip3 install gym
+sudo pip3 install gym
 
 see https://github.com/openai/gym
 ```
@@ -80,14 +80,14 @@ cd ./examples/rl-wifi-rt/gr-grgym-ieee802-11/grgym
 mkdir build
 cd build
 cmake ../
-make
+make -j $(nproc --all)
 sudo make install
 sudo ldconfig
 ```
 
 ##### 6. Install grgym located in ./grgym (Python3 required)
 ```
-pip3 install -e ./grgym
+sudo pip3 install -e ./grgym
 ```
 
 ##### 7. (Optional) Install all libraries required by your agent (like tensorflow, keras, etc.).
@@ -139,7 +139,10 @@ We consider the problem of rate adaptation (MCS selection) in 802.11p. In this e
 cd ./examples/rl-wifi-rt/agents/
 python3 agentAC.py
 ```
-
+Note, you have to compile the wifi_phy_hier.grc before:
+```
+grcc ./examples/rl-wifi-rt/gr-grgym-ieee802-11/wifi_phy_hier.grc
+```
 Contact
 ============
 * Anatolij Zubow, TU-Berlin, zubow@tkn
