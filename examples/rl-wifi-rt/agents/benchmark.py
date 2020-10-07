@@ -68,6 +68,7 @@ for ii in range(N):
     if trace:
         s0 = time.time()
     obs, reward, done, info = env.step(int(action))
+    #print(time.time())
     #print(obs)
     if trace:
         s1 = time.time()
@@ -91,5 +92,8 @@ if trace:
     print('* mean: {0:.6f} ms'.format(np.mean(ts)))
     print('* median: {0:.6f} ms'.format(np.median(ts)))
     print('* std: {0:.6f} ms'.format(np.std(ts)))
+
+    with open(options.config_file + '.npy', 'wb') as f:
+        np.save(f, ts)
 
 env.close()
