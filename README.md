@@ -22,6 +22,7 @@ See https://wiki.gnuradio.org/index.php/UbuntuInstall
 ##### 2. Install Gnu Radio from source
 ```
 # install on Ubuntu 20.04:
+cd ~/
 sudo apt install git cmake g++ libboost-all-dev libgmp-dev swig python3-numpy python3-mako python3-sphinx python3-lxml doxygen libfftw3-dev libsdl1.2-dev libgsl-dev libqwt-qt5-dev libqt5opengl5-dev python3-pyqt5 liblog4cpp5-dev libzmq3-dev python3-yaml python3-click python3-click-plugins python3-zmq python3-scipy python3-pip python3-gi-cairo
 pip3 install git+https://github.com/pyqtgraph/pyqtgraph@develop
 pip3 install numpy scipy
@@ -46,21 +47,23 @@ see https://wiki.gnuradio.org/index.php/InstallingGR#From_Source
 
 ##### 3. Install additional Gnu Radio blocks for IEEE 802.11p scenario
 ```
+cd ~/
 git clone https://github.com/bastibl/gr-foo.git
 cd gr-foo
 mkdir build
 cd build
 cmake ..
-make
+make -j $(nproc --all)
 sudo make install
 sudo ldconfig
 
+cd ~/
 git clone git://github.com/bastibl/gr-ieee802-11.git
 cd gr-ieee802-11
 mkdir build
 cd build
 cmake ..
-make
+make -j $(nproc --all)
 sudo make install
 sudo ldconfig
 ```
@@ -69,29 +72,36 @@ See https://github.com/bastibl/gr-ieee802-11
 ##### 4. Install OpenAI Gym
 ```
 # minimal install of the packaged version directly from PyPI:
-pip3 install gym
+sudo pip3 install gym
 
 see https://github.com/openai/gym
 ```
 
 ##### 5. Install additional Gnu Radio blocks from grgym
 ```
+cd ~/gr-gym
 cd ./examples/rl-wifi-rt/gr-grgym-ieee802-11/grgym
 mkdir build
 cd build
 cmake ../
-make
+make -j $(nproc --all)
 sudo make install
 sudo ldconfig
 ```
 
 ##### 6. Install grgym located in ./grgym (Python3 required)
 ```
-pip3 install -e ./grgym
+cd ~/gr-gym
+sudo pip3 install -e ./grgym
 ```
 
 ##### 7. (Optional) Install all libraries required by your agent (like tensorflow, keras, etc.).
 
+```
+pip3 install --upgrade pip
+pip3 install tensorflow==2.3.1
+pip3 install keras
+```
 
 Examples
 ========
@@ -139,7 +149,10 @@ We consider the problem of rate adaptation (MCS selection) in 802.11p. In this e
 cd ./examples/rl-wifi-rt/agents/
 python3 agentAC.py
 ```
-
+Note, you have to compile the wifi_phy_hier.grc before:
+```
+grcc ./examples/rl-wifi-rt/gr-grgym-ieee802-11/wifi_phy_hier.grc
+```
 Contact
 ============
 * Anatolij Zubow, TU-Berlin, zubow@tkn
