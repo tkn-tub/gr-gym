@@ -29,8 +29,9 @@ grgym_remote: # used if grgym_environment.run_local = False
   help: configuration used when gnuradio is running on remote machine, i.e. host name, Gnu Radio ID, Gnu Radio GRC filename, rpc port.
 
 grgym_scenario:
-  scenario_class: ieee80211p_scenario.IEEE80211pRateControlScenario # class is a string pointing to a function that is inside one or multiple modules. The function will be imported and executed without any arguments.
+  scenario_class: benchmark.BenchmarkScenario # class is a string pointing to a function that is inside one or multiple modules. The function will be imported and executed without any arguments.
   mcs: [3, 5, 7] # scenario specific: only those MCS will be used
   channel_SNR: 25 # scenario specific: value of SNR variable used by channel block in the GNU-Radio flowchart
   packet_interval: 1 # interval between two transmitted packets in ms
+  obs_len: 64
   help: configuration of a specific grgym scenario
