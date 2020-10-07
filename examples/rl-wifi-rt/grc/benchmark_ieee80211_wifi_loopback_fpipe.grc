@@ -196,9 +196,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [248, 164.0]
+    coordinate: [249, 137]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_multiply_const_xx_0
   id: blocks_multiply_const_xx
   parameters:
@@ -292,6 +292,23 @@ blocks:
     coordinate: [290, 476]
     rotation: 0
     state: enabled
+- name: gnugym_gnugym_msg_src_0
+  id: gnugym_gnugym_msg_src
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    msg: pmt.intern("".join("x" for i in range(pdu_length)))
+    trigger: encoding
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [239, 211]
+    rotation: 0
+    state: true
 - name: gnugym_gnugym_rssi_cb_0
   id: gnugym_gnugym_rssi_cb
   parameters:
@@ -476,6 +493,7 @@ connections:
 - [blocks_multiply_const_xx_0, '0', channels_channel_model_0, '0']
 - [channels_channel_model_0, '0', pfb_arb_resampler_xxx_0, '0']
 - [foo_packet_pad2_0, '0', blocks_multiply_const_xx_0, '0']
+- [gnugym_gnugym_msg_src_0, strobe, ieee802_11_mac_0, app in]
 - [gnugym_gnugym_rssi_cb_0, '0', blocks_file_sink_0, '0']
 - [gnugym_parse_seqnr_0, '0', blocks_file_sink_1_0, '0']
 - [gnugym_parse_seqnr_0, '1', blocks_null_sink_1_0_0, '0']

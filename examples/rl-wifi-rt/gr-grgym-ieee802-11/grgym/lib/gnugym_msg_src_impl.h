@@ -43,7 +43,7 @@ namespace gr {
         void set_msg(pmt::pmt_t msg) { d_msg = msg; }
         pmt::pmt_t msg() const { return d_msg; }
         int trigger() const { return d_trigger; }
-
+        void set_trigger(int trigger);
     };
 
   } // namespace gnugym

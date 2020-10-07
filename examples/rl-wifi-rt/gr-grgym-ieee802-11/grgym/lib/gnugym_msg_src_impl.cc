@@ -52,6 +52,7 @@ namespace gr {
     void
     gnugym_msg_src_impl::set_trigger(int trigger) {
         d_trigger = trigger;
+	std::cout << "Message send" << std::endl;
         message_port_pub(d_port, d_msg);
     }
 

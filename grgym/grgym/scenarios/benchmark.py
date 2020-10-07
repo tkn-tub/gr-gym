@@ -39,7 +39,7 @@ class BenchmarkScenario(GrScenario):
     def execute_action(self, action):
         # set action on GnuRadio process
         # print('action: %d' % action)
-        self.gnuradio.set_parameter('action', action)
+        self.gnuradio.set_parameter('encoding', action)
 
     def get_obs(self):
         #if self.conf.grgym_environment.eventbased:
