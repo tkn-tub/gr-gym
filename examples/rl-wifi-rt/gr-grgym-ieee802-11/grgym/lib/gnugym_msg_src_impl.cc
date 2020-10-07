@@ -49,6 +49,13 @@ namespace gr {
 
     gnugym_msg_src_impl::~gnugym_msg_src_impl() {}
 
+    void
+    gnugym_msg_src_impl::set_trigger(int trigger) {
+        d_trigger = trigger;
+        message_port_pub(d_port, d_msg);
+    }
+
+
   } /* namespace gnugym */
 } /* namespace gr */
 

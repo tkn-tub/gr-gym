@@ -53,6 +53,7 @@ W = 5
 print('Warmup')
 for ii in range(W):
     obs, reward, done, info = env.step(int(action))
+    #print(obs)
 
 print('Measure N=%d steps' % (N))
 

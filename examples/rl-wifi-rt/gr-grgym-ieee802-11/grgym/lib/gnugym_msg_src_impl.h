@@ -42,7 +42,6 @@ namespace gr {
 
         void set_msg(pmt::pmt_t msg) { d_msg = msg; }
         pmt::pmt_t msg() const { return d_msg; }
-        void set_trigger(int trigger) { d_trigger = trigger; }
         int trigger() const { return d_trigger; }
 
     };
