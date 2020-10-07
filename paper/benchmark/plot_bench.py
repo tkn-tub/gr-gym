@@ -3,20 +3,22 @@ import numpy as np
 import seaborn as sns
 import pandas as pd
 
+dir = './data/' # ''./data/sb1/'
+
 names = []
 data = []
 
-with open('data/bench_pipe.yaml.npy', 'rb') as f:
+with open(dir + 'bench_pipe.yaml.npy', 'rb') as f:
     pipe = np.load(f)
     names.extend(['local FPIPE'] * len(pipe))
     data.extend(pipe)
 
-with open('data/bench_zmq.yaml.npy', 'rb') as f:
+with open(dir + 'bench_zmq.yaml.npy', 'rb') as f:
     zmq = np.load(f)
     names.extend(['local ZMQ'] * len(zmq))
     data.extend(zmq)
 
-with open('data/bench_zmq_fritz.yaml.npy', 'rb') as f:
+with open(dir + 'bench_zmq_fritz.yaml.npy', 'rb') as f:
     zmqr = np.load(f)
     names.extend(['remote ZMQ (100 Mbit/s)'] * len(zmqr))
     data.extend(zmqr)

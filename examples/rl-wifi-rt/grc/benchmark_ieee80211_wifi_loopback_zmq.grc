@@ -435,7 +435,7 @@ blocks:
 - name: xmlrpc_server_0
   id: xmlrpc_server
   parameters:
-    addr: localhost
+    addr: 127.0.0.1
     alias: ''
     comment: ''
     port: '8080'
