@@ -1,7 +1,6 @@
 /* -*- c++ -*- */
 /*
- * Copyright 2020 Sascha Rösler TU Berlin, 2016 Bastian Bloessl <bloessl@ccs-labs.org>
- * and 2020 Sascha Rösler, TU Berlin <s.roesler@campus.tu-berlin.de>
+ * (C) A. Zubow, TU Berlin. <zubow@tkn.tu-berlin.de>
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -25,7 +24,10 @@
 #include <gnugym/gnugym_msg_src.h>
 #include "equalizer/base.h"
 
-
+/*
+ * A Gnu Radio message source which sends out a message whenever the variable trigger
+ * changed its value.
+ */
 namespace gr {
   namespace gnugym {
 
@@ -43,7 +45,7 @@ namespace gr {
         void set_msg(pmt::pmt_t msg) { d_msg = msg; }
         pmt::pmt_t msg() const { return d_msg; }
         int trigger() const { return d_trigger; }
-
+        void set_trigger(int trigger);
     };
 
   } // namespace gnugym

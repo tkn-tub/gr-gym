@@ -38,17 +38,14 @@ class BenchmarkScenario(GrScenario):
 
     def execute_action(self, action):
         # set action on GnuRadio process
-        # print('action: %d' % action)
-        self.gnuradio.set_parameter('action', action)
+        if self.debug:
+            print('action: %d' % action)
+        self.gnuradio.set_parameter('encoding', action)
 
     def get_obs(self):
         #if self.conf.grgym_environment.eventbased:
         #    self.gnuradio.wait_for_value('obs')
-        #aa = self.gnuradio.get_parameter('action')
-        #print('action from gr: %s' % str(aa))
-        #self.gnuradio.wait_for_value('obs')
         (obs, time) = self.gnuradio.get_parameter('obs')
-        #print(obs)
 
         return obs
 
@@ -63,8 +60,10 @@ class BenchmarkScenario(GrScenario):
         return
 
     def reset(self):
-        print('obs_len: %d' % self.conf.grgym_scenario.obs_len)
-        print('interval: %d' % self.conf.grgym_scenario.packet_interval)
+        if self.debug:
+            print('obs_len: %d' % self.conf.grgym_scenario.obs_len)
+            print('interval: %d' % self.conf.grgym_scenario.packet_interval)
+
         self.gnuradio.set_parameter('interval', self.conf.grgym_scenario.packet_interval)
         self.gnuradio.set_parameter('obs_len', self.conf.grgym_scenario.obs_len)
 

@@ -1,6 +1,6 @@
 /* -*- c++ -*- */
 /*
- * A. Zubow
+ + (C) A. Zubow, TU Berlin. <zubow@tkn.tu-berlin.de>
  *
  * This is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -39,6 +39,12 @@ namespace gr {
       typedef boost::shared_ptr<gnugym_msg_src> sptr;
 
       /*!
+       * \brief Return a shared_ptr to a new instance of gnugym::gnugym_msg_src.
+       *
+       * To avoid accidental use of raw pointers, gnugym::gnugym_msg_src's
+       * constructor is in a private implementation
+       * class. gnugym::gnugym_msg_src::make is the public interface for
+       * creating new instances.
        */
       static sptr make(pmt::pmt_t msg, int trigger);
 
