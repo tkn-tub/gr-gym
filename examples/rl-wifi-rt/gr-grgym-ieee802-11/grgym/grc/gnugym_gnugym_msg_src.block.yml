@@ -28,7 +28,7 @@ templates:
     imports: |-
         import gnugym
         import pmt
-    make: gnugym.gnugym_rssi_cb(${msg}, ${trigger})
+    make: gnugym.gnugym_msg_src(${msg}, ${trigger})
     callbacks:
     - set_msg(${msg})
     - set_trigger(${trigger})

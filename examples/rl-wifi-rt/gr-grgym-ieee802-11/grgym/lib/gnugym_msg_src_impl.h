@@ -33,6 +33,7 @@ namespace gr {
     {
      private:
 	    pmt::pmt_t d_msg;
+            const pmt::pmt_t d_port;
 	    int d_trigger;
 
      public:
@@ -42,7 +43,7 @@ namespace gr {
         void set_msg(pmt::pmt_t msg) { d_msg = msg; }
         pmt::pmt_t msg() const { return d_msg; }
         void set_trigger(int trigger) { d_trigger = trigger; }
-        long trigger() const { return d_trigger; }
+        int trigger() const { return d_trigger; }
 
     };
 
