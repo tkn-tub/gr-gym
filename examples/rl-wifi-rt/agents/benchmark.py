@@ -1,11 +1,11 @@
 """
-Title: Benchmarking GrGym
+Title: Benchmarking GrGym by testing different IPC mechanisms
 Author: Anatolij Zubow
 
 Usage:
     python3 benchmark.py -c bench_pipe.yaml -N 10000 -i 2 -t True
     python3 benchmark.py -c bench_zmq.yaml -N 10000 -i 2 -t True
-    python3 benchmark.py -c bench_zmq_fritz.yaml -N 10000 -i 2 -t True
+    python3 benchmark.py -c bench_zmq_remote.yaml -N 10000 -i 2 -t True
 """
 
 import time
@@ -69,8 +69,7 @@ for ii in range(N):
     if trace:
         s0 = time.time()
     obs, reward, done, info = env.step(int(action))
-    #print(time.time())
-    #print(obs)
+
     if trace:
         s1 = time.time()
         ts[ii] = (s1 - s0) * 1000

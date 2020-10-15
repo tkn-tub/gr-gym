@@ -31,7 +31,7 @@ obs_high = 35
 
 # Configuration parameters for the whole setup
 seed = 42
-gamma = 0 #0.99  # Discount factor for past rewards; must be zero for MCS selection
+gamma = 0  # Discount factor for past rewards; must be zero for MCS selection
 max_steps_per_episode = 100
 env = gym.make('grgym:grenv-v0', config_file=options.config_file)  # Create the environment
 env.seed(seed)

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ "$1" == "" ] || [ $# -gt 1 ]; then
-    echo "Please set name of remote node"
+    echo "Please specify the IP address of this node"
     exit 1
 fi
 

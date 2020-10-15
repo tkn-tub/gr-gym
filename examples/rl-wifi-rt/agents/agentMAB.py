@@ -1,3 +1,9 @@
+"""
+Title: Simple multi-armed bandit agent
+Author: Anatolij Zubow
+Date created: 2020/09/24
+"""
+
 import os
 import gym
 import numpy as np

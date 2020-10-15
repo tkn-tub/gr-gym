@@ -1,5 +1,6 @@
 '''
-A simple scenario for benchmarking
+A scenario based on the gr-80211 gnu radio implementation used for benchmarking, i.e. computing the
+step duration in different configurations.
 
 Anatolij Zubow <zubow@tkn.tu-berlin.de>
 '''
@@ -43,10 +44,7 @@ class BenchmarkScenario(GrScenario):
         self.gnuradio.set_parameter('encoding', action)
 
     def get_obs(self):
-        #if self.conf.grgym_environment.eventbased:
-        #    self.gnuradio.wait_for_value('obs')
         (obs, time) = self.gnuradio.get_parameter('obs')
-
         return obs
 
     def get_reward(self):

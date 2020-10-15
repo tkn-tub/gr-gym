@@ -1,3 +1,9 @@
+"""
+Title: Non-learning agent. Just select the MCSs available in round-robin.
+Author: Anatolij Zubow
+Date created: 2020/10/1
+"""
+
 import os
 import gym
 import numpy as np
@@ -65,11 +71,8 @@ while True:
     obs = []
     obs.extend(obsl)
     obs.extend(obsr)
-    #print(obs)
 
     avg_obs = np.mean(obs)
-    #obs = (obs - s_min) / s_range
-    #obs = np.reshape(obs, [1, 1])
     obs_db = 10.0 * np.log10(avg_obs)
 
     print("# %s: %d observation %.2f %.2f dB" % (datetime.now().time(), step, avg_obs, obs_db))
@@ -91,8 +94,6 @@ while True:
     print("avg reward:", str(avg))
     print("num probes:", str(num))
 
-    #if done:
-    #    break
     step = step + 1
 
 env.close()
