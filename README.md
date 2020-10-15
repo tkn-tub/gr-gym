@@ -1,12 +1,19 @@
 gr-gym
 ============
 
-[OpenAI Gym](https://gym.openai.com/) is a toolkit for reinforcement learning (RL) widely used in research. Additionally, researcher are using [GNU Radio](https://www.gnuradio.org/) as Software Defined Radio (SDR) tool to do rapid and low cost prototyping of new and existing wired/wireless technologies. gr-gym is a framework that integrates both OpenAI Gym and Gnu Radio in order to encourage usage of RL in networking research.
+[OpenAI Gym](https://gym.openai.com/) is a toolkit for reinforcement learning (RL) 
+widely used in research. Additionally, researcher are using 
+[GNU Radio](https://www.gnuradio.org/) as Software Defined Radio (SDR) toolkit to 
+do rapid and low cost prototyping of new wireless protocols. 
+**GrGym** is a framework that integrates both OpenAI Gym and Gnu Radio in order 
+to encourage usage of RL in communication networks research.
 
 Installation
 ============
 
-In order to run gr-gym you need to install both OpenAI Gym and Gnu Radio. Moreover in order to run the 802.11p example you need additional Gnu Radio blocks.
+In order to run **GrGym** you need to install both OpenAI Gym and Gnu Radio. 
+Moreover in order to run the 802.11p scenario you need to install additional 
+Gnu Radio blocks.
 
 ##### 1. Install dependencies for Gnu Radio
 ```
@@ -77,7 +84,7 @@ sudo pip3 install gym
 see https://github.com/openai/gym
 ```
 
-##### 5. Install additional Gnu Radio blocks from grgym
+##### 5. Install additional Gnu Radio blocks from **GrGym**
 ```
 cd ~/gr-gym
 cd ./examples/rl-wifi-rt/gr-grgym-ieee802-11/grgym
@@ -89,13 +96,14 @@ sudo make install
 sudo ldconfig
 ```
 
-##### 6. Install grgym located in ./grgym (Python3 required)
+##### 6. Install **GrGym** located in ./grgym (Python3 required)
 ```
 cd ~/gr-gym
 sudo pip3 install -e ./grgym
 ```
 
-##### 7. (Optional) Install all libraries required by your agent (like tensorflow, keras, etc.).
+##### 7. (Optional) Install all libraries required by your agent 
+(like tensorflow, keras, etc.).
 
 ```
 pip3 install --upgrade pip
@@ -139,12 +147,17 @@ def get_done()
 def reset()
 def get_info()
 ```
-Note, that the generic grgym interface allows to observe any variable or parameter in Gnu Radio.
+Note, that the generic **GrGym** interface allows to observe any variable or 
+parameter in Gnu Radio.
 
-See the example scenario for rate control in IEEE 802.11p implemented in ./grgym/grgym/scenarios/ieee80211codemodscenario.py
+See the example scenario for rate control in IEEE 802.11p implemented 
+in ./grgym/grgym/scenarios/ieee80211p_scenario.py
 
 ## Closed-loop ratecontrol for IEEE 802.11p
-We consider the problem of rate adaptation (MCS selection) in 802.11p. In this example the agent can observe the channel state (RSSI per OFDM subcarrier) in order to adapt the MCS/rate for the subsequent data packets. This problem can be solved using the Actor Critic Method:
+We consider the problem of rate adaptation (MCS selection) in 802.11p. 
+In this example the agent can observe the channel state (RSSI per OFDM 
+subcarrier) in order to adapt the MCS/rate for the subsequent data packets. 
+This problem can be solved using the Actor Critic Method:
 ```
 cd ./examples/rl-wifi-rt/agents/
 python3 agentAC.py
@@ -157,10 +170,11 @@ Contact
 ============
 * Anatolij Zubow, TU-Berlin, zubow@tkn
 * Sascha Roesler, TU-Berlin, s.roesler@campus
+* Piotr Gawlowicz, TU-Berlin, gawlowicz@tkn
 * tkn = tkn.tu-berlin.de
 * campus = campus.tu-berlin.de
 
-How to reference gr-gym?
+How to reference **GrGym**?
 ============
 
 Please use the following bibtex :
