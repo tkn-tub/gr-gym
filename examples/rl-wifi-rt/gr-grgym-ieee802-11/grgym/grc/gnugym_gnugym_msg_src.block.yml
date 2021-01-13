@@ -1,0 +1,36 @@
+# (C) A. Zubow, TU Berlin. <zubow@tkn.tu-berlin.de>
+
+id: gnugym_gnugym_msg_src
+label: GnuGym Message Source
+category: '[gnugym]'
+
+parameters:
+-   id: msg
+    label: Message PMT
+    dtype: raw
+    default: pmt.intern("TEST")
+-   id: trigger
+    label: Trigger message creation
+    dtype: int
+    default: '1'
+
+inputs:
+-   domain: message
+    id: set_msg
+    optional: true
+
+outputs:
+-   domain: message
+    id: strobe
+    optional: true
+
+templates:
+    imports: |-
+        import gnugym
+        import pmt
+    make: gnugym.gnugym_msg_src(${msg}, ${trigger})
+    callbacks:
+    - set_msg(${msg})
+    - set_trigger(${trigger})
+
+file_format: 1
