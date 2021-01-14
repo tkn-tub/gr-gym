@@ -198,6 +198,41 @@ Data streams can be forwarded into the related sink blocks in GNU-Radio. This ma
 See the example scenario for rate control in IEEE 802.11p implemented 
 in ./grgym/grgym/scenarios/ieee80211p_scenario.py
 
+
+### Configuration file
+To wire your scenario, you have to write the corresponding configuration file. The configuration file includes a **GrGym** generic part. You can also add parameters for your scenario. For the generic part, the config file includes theese lines:
+```
+grgym_environment:
+  run_local: True # whether gnuradio is running locally or remotely
+  timebased: # a step results in progress of time for step_time seconds
+    step_time: 0.5 # the duration of a single step [in s]
+  eventbased: False # if false time based is used otherwise event based
+  help: GrGym configuration
+
+grgym_local: # used if grgym_environment.run_local = True
+  compile_and_start_gr: True # disable it, if GNU-Radio runs on a remote machine.
+  host: localhost # local GnuRadio process
+  rpc_port: 8080 # RPC port of local/remote GnuRadio process
+  gr_ipc: ZMQ # the IPC mechanism for communication between grgym and gnuradio; options: FILE|ZMQ
+  gr_grc: ieee80211_wifi_loopback_w_fr_channel
+  simulation:
+    simulate_channel: True # enable if channel is simulated in GR
+    sim_time: 0.25 # the duration [in s] over which the observation is obtained; must be smaller than step_time
+grgym_scenario:
+  scenario_class: ieee80211p_scenario.IEEE80211pRateControlScenario # class is a string pointing to a function that is inside one or multiple modules. The function will be imported and executed without any arguments.
+```
+
+* `run_local`: `True` if the GNU-Radio program runs locally.
+* `step_time`: Waiting time in seconds after execute action and before reading reward and done. This is only necessary if `eventbased` is `False`.
+* `eventbased`: If `True` there is no waiting for a step time and the scenario is responsable for the waiting for the reward.
+* `compile_and_start_gr`: If `True` **GrGym** will compile and execute the GnuRadio program.
+* `host`: Name of the host, the GNU-Radio program (the transmitter) is running on.
+* `rpc_port`: Port of the XML-RPC Server to access variables in the GNU-Radio program.
+* `gr_grc`: Name of the GNU-Radio flowgraph file. **GrGym** can compile this file.
+* `simulate_channel`: If `True` the simulation method of the scenario is executed
+* `sim_time`: Time in seconds to wait after simulation is executed. This ensures that there is data for the new simulation configuration. If `simulate_channel` is `False`, this parameter is not used.
+* `scenario_class`: Phyton module name and class name of the scenario.
+
 Contact
 ============
 * Anatolij Zubow, TU-Berlin, zubow@tkn
