@@ -22,7 +22,7 @@
 #ifndef INCLUDED_GNUGYM_GNUGYM_MOVING_AVERAGE_VECT_FF_IMPL_H
 #define INCLUDED_GNUGYM_GNUGYM_MOVING_AVERAGE_VECT_FF_IMPL_H
 
-#include <gnugym/gnugym_moving_average_vect_ff.h>
+#include <gnuradio/gnugym/gnugym_moving_average_vect_ff.h>
 #include "equalizer/base.h"
 
 

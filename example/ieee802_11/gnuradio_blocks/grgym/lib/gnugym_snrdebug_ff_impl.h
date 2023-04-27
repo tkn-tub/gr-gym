@@ -21,7 +21,7 @@
 #ifndef INCLUDED_GNUGYM_gnugym_snrdebug_ff_impl_H
 #define INCLUDED_GNUGYM_gnugym_snrdebug_ff_impl_H
 
-#include <gnugym/gnugym_snrdebug_cb.h>
+#include <gnuradio/gnugym/gnugym_snrdebug_ff.h>
 #include "equalizer/base.h"
 
 

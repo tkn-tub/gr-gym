@@ -20,7 +20,7 @@
 
 using namespace gr::gnugym::equalizer;
 
-void comb::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, boost::shared_ptr<gr::digital::constellation> mod, float* snrVect, bool onlyRssi) {
+void comb::equalize(gr_complex *in, int n, gr_complex *symbols, uint8_t *bits, std::shared_ptr<gr::digital::constellation> mod, float* snrVect, bool onlyRssi) {
 
     for(int i = 0; i < 64; i ++){
         snrVect[i] = 0;

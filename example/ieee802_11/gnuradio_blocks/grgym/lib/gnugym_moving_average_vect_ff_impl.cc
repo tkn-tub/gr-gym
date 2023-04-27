@@ -23,6 +23,7 @@
 #include "config.h"
 #endif
 
+#include <gnuradio/io_signature.h>
 #include <gnugym/constellations.h>
 #include "gnugym_moving_average_vect_ff_impl.h"
 #define dout d_debug && std::cout
@@ -33,9 +34,10 @@ namespace gr {
     gnugym_moving_average_vect_ff_impl::sptr
     gnugym_moving_average_vect_ff::make(int vlen, int buffer)
     {
-      return gnuradio::get_initial_sptr
-        (new gnugym_moving_average_vect_ff_impl(vlen));
+      return gnuradio::make_block_sptr<gnugym_moving_average_vect_ff_impl>(
+        vlen);
     }
+
 
     /*
      * The private constructor

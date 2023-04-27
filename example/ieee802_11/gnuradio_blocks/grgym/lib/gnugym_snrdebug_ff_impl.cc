@@ -24,17 +24,18 @@
 #endif
 
 #include <gnugym/constellations.h>
+#include <gnuradio/io_signature.h>
 #include "gnugym_snrdebug_ff_impl.h"
 #define dout d_debug && std::cout
 
 namespace gr {
   namespace gnugym {
 
-    gnugym_snrdebug_ff_impl::sptr
+    gnugym_snrdebug_ff::sptr
     gnugym_snrdebug_ff::make()
     {
-      return gnuradio::get_initial_sptr
-        (new gnugym_snrdebug_ff_impl());
+      return gnuradio::make_block_sptr<gnugym_snrdebug_ff_impl>(
+        );
     }
 
     /*

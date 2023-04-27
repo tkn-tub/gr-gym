@@ -39,9 +39,9 @@ namespace gr {
     gnugym_snr_cb::sptr
     gnugym_snr_cb::make(EqualizerSNR algo, double freq, double bw, bool log, bool debug)
     {
-      return gnuradio::get_initial_sptr
-        (new gnugym_snr_cb_impl(algo,  freq, bw, log, debug));
+      return gnuradio::make_block_sptr<gnugym_snr_cb_impl>(new gnugym_snr_cb_impl(algo,  freq, bw, log, debug);
     }
+
 
     /*
      * The private constructor

@@ -22,7 +22,7 @@
 #ifndef INCLUDED_GNUGYM_GNUGYM_SNR_CB_IMPL_H
 #define INCLUDED_GNUGYM_GNUGYM_SNR_CB_IMPL_H
 
-#include <gnugym/gnugym_snr_cb.h>
+#include <gnuradio/gnugym/gnugym_snr_cb.h>
 #include "equalizer/base.h"
 
 
@@ -80,7 +80,7 @@ private:
 	uint8_t d_deinterleaved[48];
 	gr_complex symbols[48];
 
-	boost::shared_ptr<gr::digital::constellation> d_frame_mod;
+	std::shared_ptr<gr::digital::constellation> d_frame_mod;
 	constellation_bpsk::sptr d_bpsk;
 	constellation_qpsk::sptr d_qpsk;
 	constellation_16qam::sptr d_16qam;

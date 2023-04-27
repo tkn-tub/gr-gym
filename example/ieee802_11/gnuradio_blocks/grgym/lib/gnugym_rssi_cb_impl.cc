@@ -38,6 +38,7 @@ namespace gr {
         (new gnugym_rssi_cb_impl(freq, bw, log, debug));
     }
 
+
     /*
      * The private constructor
      */

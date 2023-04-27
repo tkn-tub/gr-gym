@@ -92,3 +92,16 @@ include(GrTest)
 # List all files that contain Boost.UTF unit tests here
 list(APPEND test_gnugym_sources
 )
+# Anything we need to link to for the unit tests go here
+list(APPEND GR_TEST_TARGET_DEPS gnuradio-gnugym)
+
+if(NOT test_gnugym_sources)
+    MESSAGE(STATUS "No C++ unit tests... skipping")
+    return()
+endif(NOT test_gnugym_sources)
+
+foreach(qa_file ${test_gnugym_sources})
+    GR_ADD_CPP_TEST("gnugym_${qa_file}"
+        ${CMAKE_CURRENT_SOURCE_DIR}/${qa_file}
+    )
+endforeach(qa_file)
