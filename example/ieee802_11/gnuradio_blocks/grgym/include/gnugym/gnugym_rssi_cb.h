@@ -37,7 +37,7 @@ namespace gr {
     class GNUGYM_API gnugym_rssi_cb : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<gnugym_rssi_cb> sptr;
+      typedef std::shared_ptr<gnugym_rssi_cb> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of gnugym::gnugym_rssi_cb.

@@ -36,7 +36,7 @@ namespace gr {
     class GNUGYM_API gnugym_moving_average_vect_ff : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<gnugym_moving_average_vect_ff> sptr;
+      typedef std::shared_ptr<gnugym_moving_average_vect_ff> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of gnugym::gnugym_moving_average_vect.

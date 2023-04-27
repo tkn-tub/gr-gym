@@ -28,7 +28,7 @@ class GNUGYM_API gnugym_parse_seqnr : virtual public block
 {
 public:
 
-	typedef boost::shared_ptr<gnugym_parse_seqnr> sptr;
+	typedef std::shared_ptr<gnugym_parse_seqnr> sptr;
 	static sptr make(bool log = false, bool debug = false);
 
 };

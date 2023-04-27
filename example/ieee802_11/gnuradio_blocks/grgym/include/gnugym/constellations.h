@@ -27,7 +27,7 @@ namespace gnugym {
 class GNUGYM_API constellation_bpsk : virtual public digital::constellation
 {
 public:
-	typedef boost::shared_ptr<gr::gnugym::constellation_bpsk> sptr;
+	typedef std::shared_ptr<gr::gnugym::constellation_bpsk> sptr;
 	static sptr make();
 
 protected:
@@ -37,7 +37,7 @@ protected:
 class GNUGYM_API constellation_qpsk : virtual public digital::constellation
 {
 public:
-	typedef boost::shared_ptr<gr::gnugym::constellation_qpsk> sptr;
+	typedef std::shared_ptr<gr::gnugym::constellation_qpsk> sptr;
 	static sptr make();
 
 protected:
@@ -47,7 +47,7 @@ protected:
 class GNUGYM_API constellation_16qam : virtual public digital::constellation
 {
 public:
-	typedef boost::shared_ptr<gr::gnugym::constellation_16qam> sptr;
+	typedef std::shared_ptr<gr::gnugym::constellation_16qam> sptr;
 	static sptr make();
 
 protected:
@@ -57,7 +57,7 @@ protected:
 class GNUGYM_API constellation_64qam : virtual public digital::constellation
 {
 public:
-	typedef boost::shared_ptr<gr::gnugym::constellation_64qam> sptr;
+	typedef std::shared_ptr<gr::gnugym::constellation_64qam> sptr;
 	static sptr make();
 
 protected:

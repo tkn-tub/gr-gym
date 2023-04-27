@@ -37,7 +37,7 @@ namespace gr {
     class GNUGYM_API gnugym_snrdebug_ff : virtual public gr::block
     {
      public:
-      typedef boost::shared_ptr<gnugym_snrdebug_ff> sptr;
+      typedef std::shared_ptr<gnugym_snrdebug_ff> sptr;
 
       /*!
        * \brief Return a shared_ptr to a new instance of gnugym::gnugym_snrdebug.
