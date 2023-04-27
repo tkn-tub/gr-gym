@@ -23,7 +23,7 @@
 #ifndef INCLUDED_GNUGYM_GNUGYM_RSSI_CB_H
 #define INCLUDED_GNUGYM_GNUGYM_RSSI_CB_H
 
-#include <gnugym/api.h>
+#include <gnuradio/gnugym/api.h>
 #include <gnuradio/block.h>
 
 namespace gr {

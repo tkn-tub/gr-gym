@@ -24,7 +24,7 @@
 #endif
 
 #include <gnuradio/io_signature.h>
-#include <gnugym/constellations.h>
+#include <gnuradio/gnugym/constellations.h>
 #include "gnugym_snr_cb_impl.h"
 #include "equalizer/base.h"
 #include "equalizer/comb.h"
@@ -39,7 +39,7 @@ namespace gr {
     gnugym_snr_cb::sptr
     gnugym_snr_cb::make(EqualizerSNR algo, double freq, double bw, bool log, bool debug)
     {
-      return gnuradio::make_block_sptr<gnugym_snr_cb_impl>(new gnugym_snr_cb_impl(algo,  freq, bw, log, debug);
+      return gnuradio::make_block_sptr<gnugym_snr_cb_impl>(algo,  freq, bw, log, debug);
     }
 
 

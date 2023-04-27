@@ -15,7 +15,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-#include <gnugym/gnugym_parse_seqnr.h>
+#include <gnuradio/gnugym/gnugym_parse_seqnr.h>
 
 #include <gnuradio/io_signature.h>
 #include <gnuradio/block_detail.h>
@@ -53,7 +53,7 @@ gnugym_parse_seqnr_impl(bool log, bool debug) :
 
 }
 
-void gnugym_parse_seqnr_impl::forecast (int noutput_items, gr_vector_int &ninput_items_required)
+void forecast (int noutput_items, gr_vector_int &ninput_items_required)
 {
 	ninput_items_required[0] = noutput_items;
 }

@@ -23,7 +23,7 @@
 #include "config.h"
 #endif
 
-#include <gnugym/constellations.h>
+#include <gnuradio/gnugym/constellations.h>
 #include <gnuradio/io_signature.h>
 #include "gnugym_snrdebug_ff_impl.h"
 #define dout d_debug && std::cout

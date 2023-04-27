@@ -17,7 +17,7 @@
 #ifndef INCLUDED_GNUGYM_CONSTELLATIONS_IMPL_H
 #define INCLUDED_GNUGYM_CONSTELLATIONS_IMPL_H
 
-#include <gnugym/constellations.h>
+#include <gnuradio/gnugym/constellations.h>
 
 namespace gr {
 namespace gnugym {

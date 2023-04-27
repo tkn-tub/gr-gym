@@ -25,9 +25,9 @@
 #include <gnuradio/attributes.h>
 
 #ifdef gnuradio_gnugym_EXPORTS
-#  define GNUGYM_API __GR_ATTR_EXPORT
+# define GNUGYM_API __GR_ATTR_EXPORT
 #else
-#  define GNUGYM_API __GR_ATTR_IMPORT
+# define GNUGYM_API __GR_ATTR_IMPORT
 #endif
 
 #endif /* INCLUDED_GNUGYM_API_H */

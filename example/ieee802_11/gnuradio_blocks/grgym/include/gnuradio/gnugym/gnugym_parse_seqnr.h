@@ -18,13 +18,13 @@
 #ifndef INCLUDED_GNUGYM_PARSE_SEQNR_H
 #define INCLUDED_GNUGYM_PARSE_SEQNR_H
 
-#include <gnugym/api.h>
+#include <gnuradio/gnugym/api.h>
 #include <gnuradio/block.h>
 
 namespace gr {
 namespace gnugym {
 
-class GNUGYM_API gnugym_parse_seqnr : virtual public block
+class GNUGYM_API gnugym_parse_seqnr : virtual public gr::block
 {
 public:
 
@@ -33,7 +33,7 @@ public:
 
 };
 
-} // namespace ieee802_11
+} // namespace gnugym
 } // namespace gr
 
 #endif /* INCLUDED_GNUGYM_PARSE_SEQNR_H */
