@@ -42,4 +42,4 @@ include(GrTest)
 set(GR_TEST_TARGET_DEPS gnuradio-gnugym)
 set(GR_TEST_PYTHON_DIRS ${CMAKE_BINARY_DIR}/swig)
 
-add_subdirectory(bindings)
+add_subdirectory(gnugym/bindings)
