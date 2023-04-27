@@ -5,19 +5,15 @@ radio_programs_compile_execute:
 
 radio_programs_path:
   default: example/grc
-  help: Path to the collection of radio programms (grc files)
+  help: Path to the collection of radio programms (GNU Radio Companion (GRC) files)
 
 gnu_radio_program_filename:
   default: ieee80211_wifi_loopback_w_fr_channel
-  help: A string pointing to a function that is inside one or multiple modules. The
-    function will be imported and executed without any arguments. It must return a
-    tuple of inputs and targets.
+  help: The name of the GNU Radio Companion (GRC) file to be used.
 
 gnu_radio_program:
   default: wifi_loopback
-  help: A string pointing to a function that is inside one or multiple modules. The
-    function will be imported and executed without any arguments. It must return a
-    tuple of inputs and targets.
+  help: The ID of the grc radio program, see Id under Options block in grc.
 
 scenario:
   default: ieee80211codemodscenario.ieee80211_scenario
@@ -25,80 +21,55 @@ scenario:
     function will be imported and executed without any arguments. It must return a
     tuple of inputs and targets.
 
-rpcport:
-  default: 8080
-  help:
-rpchost:
+scenario_args:
+  default: [3, 5, 7]
+  help: Additional arguments for scenario, i.e. array of MCS (0-7) to be tested
+
+rpc_host:
   default: "localhost"
-  help:
+  help: Configuration needed to connect to GnuRadio process, host name / IP address
+
+rpc_port:
+  default: 8080
+  help: Configuration needed to connect to GnuRadio process, RPC port of Gnuradio flow.
 
 eventbased:
-  default: False
-  help:
+  default: True
+  help: Under development; untested
 
-stepTime:
-  default: 1.5
-  help:
+step_time:
+  default: 0.5
+  help: The duration of a single step [in ms]
 
 simulate:
   default: False
   help: Enable or disable the simulation methode
 
-simTime:
-  default: 0.3
-  help:
+sim_time:
+  default: 0.25
+  help: The duration [in ms] over which the observation is obtained; must be smaller than step_time
 
-simSteps:
-  default: 4
-  help: Number of steps with the same Observation. The simulation changes after
-    simCount steps
+longterm_channel_coherence_time:
+  default: 1
+  help: Number of steps with same average observation, i.e. distance is constant between nodes. The average channel
+    quality changes after longterm_channel_coherence_time steps
 
-simDistMin:
-  default: 0
-  help: Minimum simulated distance in dB 
+sim_channel_min_dist:
+  default: 2
+  help: Minimum simulated distance [in dB] between nodes
 
-simDistMax:
-  default: 20
-  help: Maximum simulated distance in dB
+sim_channel_max_dist:
+  default: 23 
+  help: Maximum simulated distance [in dB] between nodes
 
-maxRewardLoss:
+max_steps_zero_reward:
   default: 30
   help: Maximum numper of steps with reward == 0 in a row
 
-modelSNR:
-  default: 17
-  help: SNR variable in the GNU-Radio flowchart
+channel_SNR:
+  default: 25
+  help: value of SNR variable used by channel block in the GNU-Radio flowchart
 
-packetInterval:
-  default: 100
-  help: interval between two packets in ms
-
-sync_length:
-  default:
-  help:
-frequency:
-  default:
-  help:
-bandwidth:
-  default:
-  help:
-windows_size:
-  default:
-  help:
-model: "fading_model"
-N:
-  default: 8
-  help: the number of sinusoids to use in simulating the channel
-fDTs:
-  default: 50
-  help: normalized maximum Doppler frequency
-LOS:
-  default: LOS
-  help: include Line-of-Site path? selects between Rayleigh (NLOS) and Rician (LOS) models
-K:
-  default:
-  help: Rician factor
-seed:
-  default: 23
-  help: noise generators
-
+packet_interval:
+  default: 10
+  help: interval between two transmitted packets in ms

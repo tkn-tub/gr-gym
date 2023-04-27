@@ -15,6 +15,7 @@ import sys
 import time
 from enum import Enum
 import zmq
+from _thread import start_new_thread
 
 class BridgeConnectionType(Enum):
     PIPE = 0
@@ -95,6 +96,120 @@ class CommunicationTCP(AbstractCommunicationElement):
     def close(self):
         return self.sock.close()
 
+datalock = threading.Lock()
+dataPipe = []
+dataZMQ = []
+dataPipe2 = []
+dataZMQ2 = []
+stop = False
+loggerfile  = open("comlog.csv",  "a")
+loggerfile2 = open("comlog2.csv", "a")
+
+def listenPipe():
+    structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
+    while not stop:
+        connection = CommunicationPipe('/tmp/grpipe')
+        #connection = CommunicationZMQ(self.address)
+
+        while not stop:
+            buf = connection.read(structlen)
+            if len(buf) == 0:
+                break
+            
+            tmp = np.frombuffer(buf, dtype=np.int32)
+            
+            datalock.acquire()
+            
+            dataPipe.append(tmp)
+            while len(dataZMQ) > 0 and len(dataPipe) > 0:
+                pipe = dataPipe.pop(0)
+                zmq = dataZMQ.pop(0)
+                loggerfile.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
+            datalock.release()
+
+        connection.close()
+
+def listenPipe2():
+    structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
+    while not stop:
+        connection = CommunicationPipe('/tmp/grpipe2')
+        #connection = CommunicationZMQ(self.address)
+
+        while not stop:
+            buf = connection.read(structlen)
+            if len(buf) == 0:
+                break
+            
+            tmp = np.frombuffer(buf, dtype=np.int32)
+            
+            datalock.acquire()
+            
+            dataPipe2.append(tmp)
+            while len(dataZMQ2) > 0 and len(dataPipe2) > 0:
+                pipe = dataPipe2.pop(0)
+                zmq = dataZMQ2.pop(0)
+                loggerfile2.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
+            datalock.release()
+
+        connection.close()
+        
+def listenZMQ():
+    structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
+    while not stop:
+        #connection = CommunicationPipe(self.address)
+        connection = CommunicationZMQ('tcp://127.0.0.1:8021')
+
+        while not stop:
+            buf = connection.read(structlen)
+            if len(buf) == 0:
+                break
+            
+            tmp = np.frombuffer(buf, dtype=np.int32)
+            
+            datalock.acquire()
+            
+            dataZMQ.append(tmp)
+            while len(dataZMQ) > 0 and len(dataPipe) > 0:
+                pipe = dataPipe.pop(0)
+                zmq = dataZMQ.pop(0)
+                loggerfile.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
+            datalock.release()
+
+        connection.close()
+
+def listenZMQ2():
+    structlen = np.dtype(np.int32).itemsize * 1 #* self.elements
+    while not stop:
+        #connection = CommunicationPipe(self.address)
+        connection = CommunicationZMQ('tcp://127.0.0.1:8022')
+
+        while not stop:
+            buf = connection.read(structlen)
+            if len(buf) == 0:
+                break
+            
+            tmp = np.frombuffer(buf, dtype=np.int32)
+            
+            datalock.acquire()
+            
+            dataZMQ2.append(tmp)
+            while len(dataZMQ2) > 0 and len(dataPipe2) > 0:
+                pipe = dataPipe2.pop(0)
+                zmq = dataZMQ2.pop(0)
+                loggerfile2.write(str(pipe[0]) + ", " +  str(zmq[0]) + "\n")
+            datalock.release()
+
+        connection.close()
+
+
+start_new_thread(listenPipe,())
+start_new_thread(listenPipe2,())
+start_new_thread(listenZMQ2,())
+listenZMQ()
+
+print("stop")
+
+'''
 class PipeListener(threading.Thread):
     def __init__(self, address, mydtype, elements, comTyp=BridgeConnectionType.PIPE):
         threading.Thread.__init__(self) 
@@ -103,16 +218,13 @@ class PipeListener(threading.Thread):
         self.elements = elements
         self.interval = 300
         self.stop = False
-        self.data = np.zeros(shape=(self.elements,1))
-        self.data = (self.data.astype(self.dtype), timer())
+        self.data = []
         self.mutex = threading.Lock()
         self.log = logging.getLogger('PipeListener[' + self.address+ ']')
         self.waitevent = threading.Event()
         self.waitcounter_mutex = threading.Lock()
         self.waitcounter = 0
         self.comTyp = comTyp
-        
-        self.intervallog = open("timing_" + address.split(':')[-1] + ".csv", "a")
         
     
     # listen on pipe with address
@@ -141,17 +253,14 @@ class PipeListener(threading.Thread):
                 
                 tmp = np.frombuffer(buf, dtype=self.dtype)
                 
-                self.intervallog.write(str(self.interval) + ", " + str(timer() - self.data[1]) + "\n")
-                
                 self.mutex.acquire()
                 
-                self.data = (tmp, timer())
+                self.data.append(tmp)
                 self.mutex.release()
                 self.waitevent.set()
 
             connection.close()
             self.waitevent.set()
-        
     
     # return data from buffer
     def get_data(self):
@@ -163,8 +272,8 @@ class PipeListener(threading.Thread):
     def set_stop(self):
         self.stop = True
     
-    def set_interval(self, interval):
-        self.interval = interval
+    #def set_interval(self, interval):
+    #    self.interval = interval
     
     def wait_for_value(self):
         if not self.stop:
@@ -225,7 +334,4 @@ class GR_Bridge:
     def wait_for_value(self, name):
         if name in self.pipes:
             self.pipes[name].wait_for_value()
-    
-    def set_interval(self, interval):
-        for key, elem in self.pipes.items():
-            elem.set_interval(interval)
+'''

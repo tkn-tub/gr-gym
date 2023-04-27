@@ -42,7 +42,7 @@ gnugym_parse_seqnr_impl(bool log, bool debug) :
 				gr::io_signature::make(0, 0, 0),
 				gr::io_signature::make(2, 2, sizeof(int))),
 		d_log(log), d_last_seq_no(-1),
-		d_missing_seq_no(0),
+		d_missing_seq_no(0), d_cnt(0),
 		d_debug(debug) {
 
 	message_port_register_in(pmt::mp("in"));
@@ -86,8 +86,10 @@ int general_work(int noutput, gr_vector_int& ninput_items,
 	int seqnr = int(h->seq_nr >> 4);
 	d_missing_seq_no += seqnr - d_last_seq_no -1;
 	d_last_seq_no = seqnr;
+	// simple counter
+	++d_cnt;
 	
-	out1[0] = seqnr;
+	out1[0] = d_cnt; //seqnr;
 	out2[0] = d_missing_seq_no;
 	
 	return 1;
@@ -98,6 +100,7 @@ private:
 	bool d_debug;
 	int d_last_seq_no;
 	int d_missing_seq_no;
+	int d_cnt;
 };
 
 gnugym_parse_seqnr::sptr

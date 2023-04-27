@@ -2,168 +2,181 @@
 gnugym project, TU-Berlin 2020
 Sascha Rösler <s.roesler@campus.tu-berlin.de>
 Tien Dat Phan <t.phan@campus.tu-berlin.de>
+Anatolij Zubow <zubow@tkn.tu-berlin.de>
 '''
 from gym import spaces
 import numpy as np
 from grgym.envs.gnu_case import gnu_case
-from timeit import default_timer as timer
-
+from grgym.envs.gr_bridge import BridgeConnectionType
+from datetime import datetime
 
 class ieee80211_scenario(gnu_case):
     def __init__(self, gnuradio, args):
-        self.gnuradio = gnuradio
-        self.args = args
-        self.lastSendSeqnr = 0
-        self.lastRecvSeqnr = 0
-        self.lastMissingCounter = 0
-        self.action = 0
-        self.nopacketCounter = 0
-        self.lastDoneRecvSeqnr = 0
-        self.lastObsTime = 0
-        self.simcount = 0
-        self.simrrcount = 0
+        super().__init__(gnuradio, args)
+        self.debug = False
+
+        # variables
+        self.last_send_pkt_cnt = 0
+        self.last_recv_pkt_cnt = 0
+        self.no_packet_rx_within_step_cnt = 0 # count the number of steps without a single packet received
+        self.last_done_pkt_recv_cnt = 0
+        self.last_obs_time = 0
+        self.step_count = 0
+
+        # TODO: refactor
         self.low = 10.0
+        self.high = 35.0
+
+        # bitrates available in 802.11p GnuRadio stack
         self.bitrates = [
-            3,  # Mbps BPSK 1/2
+            3.0,  # Mbps BPSK 1/2
             4.5,  # Mbps BPSK 3/4
-            6,  # Mbps QPSK 1/2
-            9,  # Mbps QPSK 3/4
-            12,  # Mbps 16QAM 1/2
-            18,  # Mbps 16QAM 3/4
-            24,  # Mbps 64QAM 2/3
-            17  # Mbps 64QAM 3/4
+            6.0,  # Mbps QPSK 1/2
+            9.0,  # Mbps QPSK 3/4
+            12.0,  # Mbps 16QAM 1/2
+            18.0,  # Mbps 16QAM 3/4
+            24.0,  # Mbps 64QAM 2/3
+            27.0  # Mbps 64QAM 3/4
         ]
-        self.gnuradio.subscribe_parameter('seqnr_missing_recv', '/tmp/gr_seq_missing_recv', np.int32, 1)
-        self.gnuradio.subscribe_parameter('seqnr_recv', '/tmp/gr_seq_recv', np.int32, 1)
-        self.gnuradio.subscribe_parameter('seqnr_send', '/tmp/gr_seq_send', np.int32, 1)
-        self.gnuradio.subscribe_parameter('snr_vect', '/tmp/gr_snr_vect', np.float32, 64)
-        #self.reset()
+
+        if self.debug:
+            print('Available MCS: %s' % (str(self.args.scenario_args)))
+
+        # mapping table from action ID to MCS index; only bitrates from this table are available
+        # see config.yaml file for configuration
+        self.act_to_idx = dict()
+        for id, mcs in enumerate(self.args.scenario_args):
+            self.act_to_idx[id] = mcs
+
+        self.NSC = 64 # no. OFDM subcarriers
+
+        # IPC with GnuRadio process to collect observations and data needed to calculate the reward
+        self.gnuradio.subscribe_parameter('pkt_snd_cnt', 'tcp://127.0.0.1:8001', np.int32, 1, BridgeConnectionType.ZMQ)
+        self.gnuradio.subscribe_parameter('pkt_recv_cnt', 'tcp://127.0.0.1:8002', np.int32, 1, BridgeConnectionType.ZMQ)
+        self.gnuradio.subscribe_parameter('rssi_obs', 'tcp://127.0.0.1:8003', np.float32, self.NSC, BridgeConnectionType.ZMQ)
 
     def get_observation_space(self):
-        return spaces.Box(low=self.low, high=30.0, shape=(64, 1), dtype=np.float32)
+        return spaces.Box(low=self.low, high=self.high, shape=(self.NSC, 1), dtype=np.float32)
 
     def get_action_space(self):
-        return spaces.Discrete(8)
+        return spaces.Discrete(len(self.act_to_idx))
 
-    def execute_actions(self, action):
-        self.gnuradio.set_parameter('encoding', action)
-        self.action = action
-    
+    def execute_action(self, action):
+        # map action ID to MCS index
+        mcs_idx = self.act_to_idx[action]
+        if self.debug:
+            print('%s. execute_action: MCS idx: %d' % (datetime.now().time(), mcs_idx))
+
+        # set MCS/bitrate on GnuRadio process
+        self.gnuradio.set_parameter('encoding', int(mcs_idx))
+
     def _get_reward_state(self, eventbased):
         # get Data of gnuradio
-        #missingcounterprev = self.gnuradio.get_parameter_prev('seqnr_missing_recv')[0]
-        #senderSeqNrprev = self.gnuradio.get_parameter_prev('seqnr_send')[0]
-        #reveicerSeqNrprev = self.gnuradio.get_parameter_prev('seqnr_recv')[0]
-        
         if eventbased:
-            self.gnuradio.wait_for_value('seqnr_recv')
-        
-        missingcountertmp = self.gnuradio.get_parameter('seqnr_missing_recv')
-        senderSeqNrtmp = self.gnuradio.get_parameter('seqnr_send')
-        reveicerSeqNrtmp = self.gnuradio.get_parameter('seqnr_recv')
-        
-        missingcounter = missingcountertmp[0]
-        senderSeqNr = senderSeqNrtmp[0]
-        reveicerSeqNr = reveicerSeqNrtmp[0]
-        
-        missingcounter = missingcounter[-1]
-        senderSeqNr = senderSeqNr[-1]
-        reveicerSeqNr = reveicerSeqNr[-1]
-       
-        # calculate number of send packets in last step and
-        # calculate number of received packets in last step and
-        # calculate number of lost packets in last step
-        totalSend = senderSeqNr - self.lastSendSeqnr
-        totalRecv = reveicerSeqNr - self.lastRecvSeqnr
-        # detected missing frames at receiver, and difference between sender and receiver
-        missingPackets = (missingcounter - self.lastMissingCounter)
-        
-        #print("send: " + str(senderSeqNr) + "- last send: " + str(self.lastSendSeqnr))
-        #print("receive: " + str(reveicerSeqNr) + "- last receive: " + str(self.lastRecvSeqnr))
-        #print("missing: " + str(missingcounter) + "- last missing: " + str(self.lastMissingCounter))
-        
-        if(totalSend < -4000):
-            totalSend += 4096
-        if(totalRecv < -4000):
-            totalRecv += 4096
-        if(missingPackets < -4000):
-            missingPackets += 4096
-        
-        #print("totalSend=" +  str(totalSend) + ", totalRecv=" + str(totalRecv) + ", missingPackets=" + str(missingPackets))
+            self.gnuradio.wait_for_value('pkt_recv_cnt')
 
-        self.lastSendSeqnr = senderSeqNr
-        self.lastRecvSeqnr = reveicerSeqNr
-        self.lastMissingCounter = missingcounter
-        
-        return (totalSend, totalRecv, missingPackets)
-    
+        # get packet counters to TX and RX side so that we can compute PER later
+        pkt_snd_cnt = self.gnuradio.get_parameter('pkt_snd_cnt')
+        pkt_snd_cnt = pkt_snd_cnt[0][0]
+        pkt_recv_cnt = self.gnuradio.get_parameter('pkt_recv_cnt')
+        pkt_recv_cnt = pkt_recv_cnt[0][0]
+
+        total_send = pkt_snd_cnt - self.last_send_pkt_cnt
+        total_recv = pkt_recv_cnt - self.last_recv_pkt_cnt
+
+        if self.debug:
+            print("d_snd/recv/miss: %d/%d" % (total_send, total_recv))
+
+        self.last_send_pkt_cnt = pkt_snd_cnt
+        self.last_recv_pkt_cnt = pkt_recv_cnt
+
+        return (total_send, total_recv)
+
     def get_obs(self):
         if self.args.eventbased:
-            self.gnuradio.wait_for_value('snr_vect')
-        (obs, time) = self.gnuradio.get_parameter('snr_vect')
-        if(time - self.lastObsTime == 0):
-            print("Old DATA!!!!")
-            return np.full((1, 64), self.low)[0]
-        #reset after simulation
-        self.lastObsTime = time
-        
-        self.gnuradio.wait_for_value('snr_vect')
-        (obs2, time) = self.gnuradio.get_parameter('snr_vect')
-        
-        avg = np.full((1, 64), self.low)[0]
-        for i in range(64):
+            self.gnuradio.wait_for_value('rssi_obs')
+
+        if self.debug:
+            print('%s. get_obs' % (datetime.now().time()))
+
+        (obs, time) = self.gnuradio.get_parameter('rssi_obs')
+
+        if time - self.last_obs_time == 0:
+            print("Warning: processing old observation caused by too slow CPU")
+            return np.full((1, self.NSC), self.low)[0]
+
+        self.last_obs_time = time
+
+        self.gnuradio.wait_for_value('rssi_obs')
+        (obs2, time) = self.gnuradio.get_parameter('rssi_obs')
+
+        # compute average over two observations
+        avg = np.full((1, self.NSC), self.low)[0]
+        for i in range(self.NSC):
             avg[i] = np.average([obs[i], obs2[i]])
-        (totalSend, totalRecv, missingPackets) = self._get_reward_state(False)
-        return avg[-64:]
+
+        (totalSend, totalRecv) = self._get_reward_state(False)
+        return avg[-self.NSC:]
 
     def get_reward(self):
-        encoding = self.gnuradio.get_parameter('encoding')[0]
-        (totalSend, totalRecv, missingPackets) = self._get_reward_state(self.args.eventbased)
-        # calculate effective packet rate -> +1 to avoid division by zero
-        reward = (totalRecv - missingPackets) / (totalSend + 1) * self.bitrates[encoding]
+        if self.debug:
+            print('%s. get_reward' % (datetime.now().time()))
 
-        return float(reward)
+        encoding = self.gnuradio.get_parameter('encoding')[0]
+        assert encoding >= 0 and encoding < len(self.bitrates)
+
+        (totalSend, totalRecv) = self._get_reward_state(self.args.eventbased)
+        # calculate effective throughput, i.e. packet success rate x bitrate
+        return float(totalRecv) / (totalSend + 1) * self.bitrates[encoding]
 
     def get_done(self):
-        recSeqnr = self.gnuradio.get_parameter('seqnr_recv')[0]
-        if recSeqnr == self.lastDoneRecvSeqnr:
-            self.nopacketCounter += 1
+        pkt_recv_cnt = self.gnuradio.get_parameter('pkt_recv_cnt')
+        pkt_recv_cnt = pkt_recv_cnt[0][0]
+
+        if pkt_recv_cnt == self.last_done_pkt_recv_cnt:
+            self.no_packet_rx_within_step_cnt += 1
         else:
-            self.nopacketCounter = 0
-        self.lastDoneRecvSeqnr = recSeqnr
-        if self.nopacketCounter >= self.args.maxRewardLoss:
+            self.no_packet_rx_within_step_cnt = 0 # reset to 0
+
+        self.last_done_pkt_recv_cnt = pkt_recv_cnt
+
+        if self.no_packet_rx_within_step_cnt >= self.args.max_steps_zero_reward:
+            # give up episode due to no reception during last max_steps_zero_reward steps
             return True
+
         return False
 
     def render(self):
+        # no GUI so far
         return
 
     def reset(self):
-        # set inital action
-        self.execute_actions(0)
-        self.gnuradio.set_parameter('snr',self.args.modelSNR)
-        self.gnuradio.set_parameter('interval',self.args.packetInterval)
+        # set initial action
+        self.execute_action(0) # reset to lowest action/MCS
+        self.gnuradio.set_parameter('snr', self.args.channel_SNR)
+        self.gnuradio.set_parameter('interval', self.args.packet_interval)
+
         # reset local counter
         self._get_reward_state(False)
-        
-        self.nopacketCounter = 0
-        self.lastDoneRecvSeqnr = 0
+        self.no_packet_rx_within_step_cnt = 0
+        self.last_done_pkt_recv_cnt = 0
+        self.step_count = 0
+        self.last_obs_time = 0
+
 
     def get_info(self):
-        return ""
+        return "gr-gnugym-80211-mcs-selection"
 
-    def simulate(self):
-        if self.simcount % self.args.simSteps == 0:
-            #f_d = np.random.uniform(0,1363)
-            noise_level = (self.args.simDistMax - self.args.simDistMin)/ 100 * 10 
-            dist_noise = np.random.uniform(0, noise_level)
-            dist = dist_noise + self.simrrcount
-            print("The distance is " + str(dist) + "dB")
-            #self.gnuradio.set_parameter("f_d",f_d)
-            self.gnuradio.set_parameter("dist",dist)
-            self.simcount = 0
-            self.simrrcount += 1.5
-            if self.args.simDistMax < self.simrrcount:
-                self.simrrcount = self.args.simDistMin
-        self.simcount += 1
+    def sim_channel(self):
+        if self.debug:
+            print('%s. simulate_channel' % (datetime.now().time()))
+
+        if self.step_count % self.args.longterm_channel_coherence_time == 0:
+            # simple block model, i.e. channel stays the same for sim_steps & afterwards a random value for the
+            # attenuation is selected
+            dist = np.random.uniform(self.args.sim_channel_min_dist, self.args.sim_channel_max_dist)
+            # set on Gnuradio process
+            self.gnuradio.set_parameter("dist", dist)
+
+        self.step_count += 1
         return
