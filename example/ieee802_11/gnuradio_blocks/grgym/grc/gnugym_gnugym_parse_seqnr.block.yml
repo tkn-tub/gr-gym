@@ -36,7 +36,7 @@ outputs:
     vlen: 1
 
 templates:
-    imports: import gnugym
+    imports: from gnuradio import gnugym
     make: gnugym.gnugym_parse_seqnr(${log}, ${debug})
 
 file_format: 1

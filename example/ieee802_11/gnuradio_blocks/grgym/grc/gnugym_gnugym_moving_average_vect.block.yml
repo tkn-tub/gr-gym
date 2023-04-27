@@ -31,7 +31,7 @@ outputs:
     multiplicity: '1'
 
 templates:
-    imports: import gnugym
+    imports: from gnuradio import gnugym
     make: gnugym.gnugym_moving_average_vect_ff(${vlen}, ${buffer})
 
 file_format: 1

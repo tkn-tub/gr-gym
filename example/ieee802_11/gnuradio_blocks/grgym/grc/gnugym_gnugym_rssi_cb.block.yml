@@ -44,7 +44,7 @@ outputs:
 
 
 templates:
-    imports: import gnugym
+    imports: from gnuradio import gnugym
     make: gnugym.gnugym_rssi_cb( ${freq}, ${bw}, ${log}, ${debug})
     callbacks:
     - set_frequency(${freq})
