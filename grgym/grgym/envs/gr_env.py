@@ -78,7 +78,7 @@ class GrEnv(gym.Env):
         obs = 0
         reward = 0
         done = False
-        info = ''
+        info = {}
 
         if self.check_is_alive():
             self._logger.info("perform step: send action to gnuradio")

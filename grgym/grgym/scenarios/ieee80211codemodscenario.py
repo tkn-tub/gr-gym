@@ -165,7 +165,7 @@ class ieee80211_scenario(gnu_case):
 
 
     def get_info(self):
-        return "gr-gnugym-80211-mcs-selection"
+        return {'msg': "gr-gnugym-80211-mcs-selection"}
 
     def sim_channel(self):
         if self.debug:
