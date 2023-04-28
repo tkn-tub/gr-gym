@@ -1,4 +1,3 @@
-tmp
-checkpoint
-*.bin.*
+results/*
 agentdata*
+*.csv
