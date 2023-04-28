@@ -35,7 +35,7 @@ list(APPEND gnugym_python_files
     gnugym_snr_cb_python.cc python_bindings.cc)
 
 GR_PYBIND_MAKE_OOT(gnugym
-   ../../..
+   ../..
    gr::gnugym
    "${gnugym_python_files}")
 
