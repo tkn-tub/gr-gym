@@ -1,6 +1,7 @@
 options:
   parameters:
     author: ''
+    catch_exceptions: 'True'
     category: Custom
     cmake_opt: ''
     comment: ''
@@ -453,8 +454,8 @@ blocks:
     coordinate: [1092.0, 504]
     rotation: 90
     state: enabled
-- name: wifi_phy_hier_0
-  id: wifi_phy_hier
+- name: wifi_phy_hier_fft_0
+  id: wifi_phy_hier_fft
   parameters:
     affinity: ''
     alias: ''
@@ -495,6 +496,7 @@ blocks:
     alias: ''
     comment: ''
     hwm: '-1'
+    key: ''
     pass_tags: 'False'
     timeout: '100'
     type: int
@@ -514,6 +516,7 @@ blocks:
     alias: ''
     comment: ''
     hwm: '-1'
+    key: ''
     pass_tags: 'False'
     timeout: '100'
     type: float
@@ -533,6 +536,7 @@ blocks:
     alias: ''
     comment: ''
     hwm: '-1'
+    key: ''
     pass_tags: 'False'
     timeout: '100'
     type: int
@@ -552,6 +556,7 @@ blocks:
     alias: ''
     comment: ''
     hwm: '-1'
+    key: ''
     pass_tags: 'False'
     timeout: '100'
     type: int
@@ -571,6 +576,7 @@ blocks:
     alias: ''
     comment: ''
     hwm: '-1'
+    key: ''
     pass_tags: 'False'
     timeout: '100'
     type: int
@@ -600,14 +606,11 @@ connections:
 - [gnugym_parse_seqnr_1, '0', zeromq_pub_sink_0_1, '0']
 - [gnugym_parse_seqnr_1, '1', blocks_null_sink_1_0, '0']
 - [ieee802_11_mac_0, phy out, gnugym_parse_seqnr_1, in]
-- [ieee802_11_mac_0, phy out, wifi_phy_hier_0, mac_in]
-- [ieee802_11_parse_mac_0, fer, blocks_pdu_to_tagged_stream_0, pdus]
-- [pfb_arb_resampler_xxx_0, '0', wifi_phy_hier_0, '0']
-- [wifi_phy_hier_0, '0', foo_packet_pad2_0, '0']
-- [wifi_phy_hier_0, '1', gnugym_gnugym_rssi_cb_0, '0']
-- [wifi_phy_hier_0, mac_out, foo_wireshark_connector_0, in]
-- [wifi_phy_hier_0, mac_out, gnugym_parse_seqnr_0, in]
-- [wifi_phy_hier_0, mac_out, ieee802_11_parse_mac_0, in]
+- [ieee802_11_mac_0, phy out, wifi_phy_hier_fft_0, mac_in]
+- [pfb_arb_resampler_xxx_0, '0', wifi_phy_hier_fft_0, '0']
+- [wifi_phy_hier_fft_0, '0', foo_packet_pad2_0, '0']
+- [wifi_phy_hier_fft_0, mac_out, gnugym_parse_seqnr_0, in]
+- [wifi_phy_hier_fft_0, mac_out, ieee802_11_parse_mac_0, in]
 
 metadata:
   file_format: 1
