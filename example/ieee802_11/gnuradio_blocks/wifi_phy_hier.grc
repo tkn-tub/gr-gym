@@ -1,6 +1,7 @@
 options:
   parameters:
     author: ''
+    catch_exceptions: 'True'
     category: '[IEEE802.11]'
     cmake_opt: ''
     comment: ''
@@ -94,7 +95,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [1008, 12]
+    coordinate: [1024, 12.0]
     rotation: 0
     state: enabled
 - name: blocks_complex_to_mag_0
@@ -447,7 +448,7 @@ blocks:
     hide: none
     label: ''
     short_id: ''
-    type: intx
+    type: ''
     value: ieee802_11.BPSK_1_2
   states:
     bus_sink: false
@@ -512,7 +513,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [920, 12]
+    coordinate: [936, 12.0]
     rotation: 0
     state: enabled
 - name: ieee802_11_chunks_to_symbols_xx_0
@@ -710,7 +711,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [824, 12]
+    coordinate: [864, 12.0]
     rotation: 0
     state: enabled
 - name: sync_long
