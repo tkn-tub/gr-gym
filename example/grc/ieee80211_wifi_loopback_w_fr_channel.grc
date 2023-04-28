@@ -609,6 +609,7 @@ connections:
 - [ieee802_11_mac_0, phy out, wifi_phy_hier_fft_0, mac_in]
 - [pfb_arb_resampler_xxx_0, '0', wifi_phy_hier_fft_0, '0']
 - [wifi_phy_hier_fft_0, '0', foo_packet_pad2_0, '0']
+- [wifi_phy_hier_fft_0, '1', gnugym_gnugym_rssi_cb_0, '0']
 - [wifi_phy_hier_fft_0, mac_out, gnugym_parse_seqnr_0, in]
 - [wifi_phy_hier_fft_0, mac_out, ieee802_11_parse_mac_0, in]
 
