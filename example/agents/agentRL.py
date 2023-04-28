@@ -1,5 +1,5 @@
 import random
-import gym
+import gymnasium as gym
 import math
 import pickle
 import numpy as np

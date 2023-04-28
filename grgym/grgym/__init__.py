@@ -1,5 +1,5 @@
 import logging
-from gym.envs.registration import registry, register, make, spec
+from gymnasium.envs.registration import registry, register, make, spec
 
 logger = logging.getLogger(__name__)
 

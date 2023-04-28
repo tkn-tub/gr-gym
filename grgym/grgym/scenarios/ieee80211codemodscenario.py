@@ -4,7 +4,7 @@ Sascha Rösler <s.roesler@campus.tu-berlin.de>
 Tien Dat Phan <t.phan@campus.tu-berlin.de>
 Anatolij Zubow <zubow@tkn.tu-berlin.de>
 '''
-from gym import spaces
+from gymnasium import spaces
 import numpy as np
 from grgym.envs.gnu_case import gnu_case
 from grgym.envs.gr_bridge import BridgeConnectionType

@@ -68,7 +68,7 @@ See https://github.com/bastibl/gr-ieee802-11
 ##### 4. Install OpenAI Gym
 ```
 # minimal install of the packaged version directly from PyPI:
-pip3 install gym
+pip3 install gymnasium
 
 see https://github.com/openai/gym
 ```
@@ -101,7 +101,7 @@ All examples can be found [here](./example/agents/).
 
 ##### 1. Example Python script. Note, that `gym.make('grgym:grenv-v0')` starts Gnu Radio program configured in the ./params/config.yaml file.
 ```
-import gym
+import gymnasium as gym
 import MyAgent
 
 env = gym.make('grgym:grenv-v0')

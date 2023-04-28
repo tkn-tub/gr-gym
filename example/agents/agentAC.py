@@ -11,7 +11,7 @@ To plot the results:
     python3 plot_reward.py -d results/agent_ac/
 """
 
-import gym
+import gymnasium as gym
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras

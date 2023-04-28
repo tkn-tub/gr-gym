@@ -11,7 +11,7 @@ import signal
 import sh
 from enum import Enum
 
-import gym
+import gymnasium as gym
 from gym.utils import seeding
 from grgym.envs.gr_bridge import GR_Bridge
 from grgym.envs.gr_utils import *

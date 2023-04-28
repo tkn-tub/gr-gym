@@ -38,7 +38,7 @@ remains upright. The agent, therefore, must learn to keep the pole from falling 
 ## Setup
 """
 
-import gym
+import gymnasium as gym
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
