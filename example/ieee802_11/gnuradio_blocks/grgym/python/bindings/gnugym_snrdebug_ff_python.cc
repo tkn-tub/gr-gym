@@ -13,7 +13,7 @@
 /* If manual edits are made, the following tags should be modified accordingly.    */
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
-/* BINDTOOL_HEADER_FILE(gnugym_snrdebug_cb.h)                                        */
+/* BINDTOOL_HEADER_FILE(gnugym_snrdebug_ff.h)                                        */
 /* BINDTOOL_HEADER_FILE_HASH(add18a402394cb154832b5b943f0f4cd)                     */
 /***********************************************************************************/
 
@@ -23,11 +23,11 @@
 
 namespace py = pybind11;
 
-#include <gnugym/gnugym_snrdebug_cb.h>
+#include <gnugym/gnugym_snrdebug_ff.h>
 // pydoc.h is automatically generated in the build directory
-#include <gnugym_snrdebug_cb_pydoc.h>
+#include <gnugym_snrdebug_ff_pydoc.h>
 
-void bind_gnugym_snrdebug_cb(py::module& m)
+void bind_gnugym_snrdebug_ff(py::module& m)
 {
 
     using gnugym_snrdebug_ff    = ::gr::gnugym::gnugym_snrdebug_ff;

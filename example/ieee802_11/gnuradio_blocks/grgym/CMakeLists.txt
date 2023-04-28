@@ -39,7 +39,7 @@ list(INSERT CMAKE_MODULE_PATH 0 ${CMAKE_SOURCE_DIR}/cmake/Modules)
 
 # Set the version information here
 set(VERSION_MAJOR 1)
-set(VERSION_API    1)
+set(VERSION_API    2)
 set(VERSION_ABI 0)
 set(VERSION_PATCH git)
 
@@ -59,11 +59,11 @@ if((CMAKE_CXX_COMPILER_ID MATCHES "Clang" OR
 endif()
 
 IF(CMAKE_CXX_COMPILER_ID STREQUAL "GNU")
-    SET(CMAKE_CXX_STANDARD 11)
+    SET(CMAKE_CXX_STANDARD 14)
 ELSEIF(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    SET(CMAKE_CXX_STANDARD 11)
+    SET(CMAKE_CXX_STANDARD 14)
 ELSEIF(CMAKE_CXX_COMPILER_ID STREQUAL "MSVC")
-    SET(CMAKE_CXX_STANDARD 11)
+    SET(CMAKE_CXX_STANDARD 14)
 ELSE()
     message(WARNING "C++ standard could not be set because compiler is not GNU, Clang or MSVC.")
 ENDIF()
@@ -81,7 +81,9 @@ ENDIF()
 ########################################################################
 # Install directories
 ########################################################################
-find_package(Gnuradio "3.8" REQUIRED COMPONENTS filter fft digital analog blocks)
+include(FindPkgConfig)
+find_package(Volk)
+find_package(Gnuradio "3.9" REQUIRED COMPONENTS filter fft digital analog blocks)
 include(GrVersion)
 
 include(GrPlatform) #define LIB_SUFFIX
@@ -118,6 +120,20 @@ if(APPLE)
 endif(APPLE)
 
 ########################################################################
+# Find gnuradio build dependencies
+########################################################################
+find_package(Doxygen)
+
+########################################################################
+# Setup doxygen option
+########################################################################
+if(DOXYGEN_FOUND)
+    option(ENABLE_DOXYGEN "Build docs using Doxygen" ON)
+else(DOXYGEN_FOUND)
+    option(ENABLE_DOXYGEN "Build docs using Doxygen" OFF)
+endif(DOXYGEN_FOUND)
+
+########################################################################
 # Create uninstall target
 ########################################################################
 configure_file(
@@ -129,11 +145,33 @@ add_custom_target(uninstall
     ${CMAKE_COMMAND} -P ${CMAKE_CURRENT_BINARY_DIR}/cmake_uninstall.cmake
     )
 
-
 ########################################################################
 # Add subdirectories
 ########################################################################
 add_subdirectory(include/gnuradio/gnugym)
 add_subdirectory(lib)
-add_subdirectory(python)
-add_subdirectory(grc)
+add_subdirectory(apps)
+add_subdirectory(docs)
+# NOTE: manually update below to use GRC to generate C++ flowgraphs w/o python
+if(ENABLE_PYTHON)
+  message(STATUS "PYTHON and GRC components are enabled")
+  add_subdirectory(python)
+  add_subdirectory(grc)
+else(ENABLE_PYTHON)
+  message(STATUS "PYTHON and GRC components are disabled")
+endif(ENABLE_PYTHON)
+
+########################################################################
+# Install cmake search helper for this library
+########################################################################
+
+install(FILES cmake/Modules/gnugymConfig.cmake
+    DESTINATION ${GR_CMAKE_DIR}
+)
+
+include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    ${PROJECT_SOURCE_DIR}/cmake/Modules/targetConfig.cmake.in
+    ${CMAKE_CURRENT_BINARY_DIR}/cmake/Modules/${target}Config.cmake
+    INSTALL_DESTINATION ${GR_CMAKE_DIR}
+)

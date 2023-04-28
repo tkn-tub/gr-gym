@@ -57,7 +57,7 @@ list(APPEND include_sources
     constellations.h
     gnugym_rssi_cb.h
     gnugym_snr_cb.h
-    gnugym_snrdebug_cb.h
+    gnugym_snrdebug_ff.h
     gnugym_moving_average_vect_ff.h
     gnugym_parse_seqnr.h
 )
