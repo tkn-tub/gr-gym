@@ -1,19 +1,19 @@
 '''
-gnugym project, TU-Berlin 2020
-Ali Alouane <ali.alouane@campus.tu-berlin.de>
+The base class for all custom GrGym scenarios.
 
-Base class for all scenarios.
+Anatolij Zubow <zubow@tkn.tu-berlin.de>
+Ali Alouane <ali.alouane@campus.tu-berlin.de>
 '''
 
 import abc
 
-class gnu_case(abc.ABC):
+class GrScenario(abc.ABC):
     @abc.abstractmethod
-    def __init__(self, gnuradio, args):
+    def __init__(self, gnuradio, conf):
         """ Init your scenario
         """
         self.gnuradio = gnuradio
-        self.args = args
+        self.conf = conf
 
     @abc.abstractmethod
     def get_observation_space(self):

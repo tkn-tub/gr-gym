@@ -1,6 +1,8 @@
 '''
-gnugym project, TU-Berlin 2020
+GrGym
+
 Ali Alouane <ali.alouane@campus.tu-berlin.de>
+Anatolij Zubow <zubow@tkn.tu-berlin.de>
 '''
 
 import os
@@ -8,7 +10,7 @@ from ruamel import yaml as yaml
 from pathlib import Path
 import argparse
 import sys
-
+from box import Box
 
 def make_path_absolute(base_path, path):
     base_path = Path(base_path)
@@ -87,6 +89,11 @@ def args_from_dict(d):
             setattr(args, k, args_from_dict(v))
     return args
 
+
+def parse_yaml(yaml_path):
+    conf_dict = load_yaml(yaml_path)
+    # make it easy accessible using dot
+    return Box(conf_dict)
 
 def yaml_argparse(yaml_path, raw_args=None):
     """

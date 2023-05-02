@@ -1,41 +1,8 @@
 """
-Title: Actor Critic Method
-Author: [Apoorv Nandan](https://twitter.com/NandanApoorv)
-Date created: 2020/05/13
-Last modified: 2020/05/13
-Description: Implement Actor Critic Method in CartPole environment.
-"""
-"""
-## Introduction
-
-This script shows an implementation of Actor Critic method on CartPole-V0 environment.
-
-### Actor Critic Method
-
-As an agent takes actions and moves through an environment, it learns to map
-the observed state of the environment to two possible outputs:
-
-1. Recommended action: A probabiltiy value for each action in the action space.
-   The part of the agent responsible for this output is called the **actor**.
-2. Estimated rewards in the future: Sum of all rewards it expects to receive in the
-   future. The part of the agent responsible for this output is the **critic**.
-
-Agent and Critic learn to perform their tasks, such that the recommended actions
-from the actor maximize the rewards.
-
-### CartPole-V0
-
-A pole is attached to a cart placed on a frictionless track. The agent has to apply
-force to move the cart. It is rewarded for every time step the pole
-remains upright. The agent, therefore, must learn to keep the pole from falling over.
-
-### References
-
-- [CartPole](http://www.derongliu.org/adp/adp-cdrom/Barto1983.pdf)
-- [Actor Critic Method](https://hal.inria.fr/hal-00840470/document)
-"""
-"""
-## Setup
+Title: Actor Critic Method for MCS Selection in IEEE 802.11p
+Author: Anatolij Zubow
+Date created: 2020/09/24
+Description: Implement Actor Critic Method with fake (mockup) environment.
 """
 
 import gymnasium as gym
@@ -47,10 +14,13 @@ from tensorflow.keras import layers
 obs_low = 14
 obs_high = 35
 
-
+'''
+    Some simple fack environment used for testing only
+'''
 class EnvMockup:
 
-   def __init__(self):
+   def __init__(self, debug=False):
+       self.debug = debug
        self.NSC = 64
        self.rssi = [np.random.uniform(obs_low, obs_high)] * self.NSC
        
@@ -72,12 +42,15 @@ class EnvMockup:
        
        self.rssi = [np.random.uniform(obs_low, obs_high)] * self.NSC
        done = False
-       #print("Mockup: next state: %.2f, action: %d, reward: %.2f" % (np.mean(self.rssi), action, reward))
+
+       if self.debug:
+           print("Mockup: next state: %.2f, action: %d, reward: %.2f" % (np.mean(self.rssi), action, reward))
        
        return (self.rssi, reward, done, '')
 
    def close(self):
-       print('Buy')
+       if self.debug:
+           print('Bey!')
 
 # Configuration parameters for the whole setup
 seed = 42
@@ -88,11 +61,11 @@ env = EnvMockup() #gym.make('grgym:grenv-v0')  # Create the environment
 env.seed(seed)
 eps = np.finfo(np.float32).eps.item()  # Smallest number such that 1.0 + eps != 1.0
 
-logfile = './agent_test/running_reward.csv'
+logfile = './results/agent_fake/running_reward.csv'
 with open(logfile, 'w') as fd:
     fd.write("\n")
 
-logfile_raw = './agent_test/raw.csv'
+logfile_raw = './results/agent_fake/raw.csv'
 with open(logfile_raw, 'w') as fd:
     fd.write("\n")
 
@@ -188,12 +161,6 @@ while True:  # Run until solved
             p_a = np.squeeze(action_probs)
             action = np.random.choice(num_actions, p = p_a)
 
-            # test
-            #if last_state >= 0.5:
-            #    action = 1
-            #else:
-            #    action = 0
-
             action_probs_history.append(tf.math.log(action_probs[0, action]))
             # debug
             actions_in_epoch[action] += 1
@@ -202,6 +169,7 @@ while True:  # Run until solved
             #print("%d: observation: %.2f" % (timestep, state))
             state, reward, done, _ = env.step(action)
             state = preprocess_state(state)
+
             #print("%d: next state: %.2f, action: %d, reward: %.2f" % (timestep, state, action, reward))
             with open(logfile_raw, 'a') as fd:
                 fd.write(str(last_state) + "," + str(action) + "," + str(reward) + "\n")

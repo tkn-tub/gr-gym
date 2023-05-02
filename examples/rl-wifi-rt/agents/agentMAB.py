@@ -1,3 +1,10 @@
+"""
+Title: Simple multi-armed bandit agent
+Author: Anatolij Zubow
+Date created: 2020/09/24
+"""
+
+import os
 import gymnasium as gym
 import numpy as np
 
@@ -19,6 +26,13 @@ for i in range(a_size):
 
 mean = np.zeros(8)
 maxreward = 1
+
+dir = './results/agent_mab/'
+if not os.path.exists(dir):
+    os.makedirs(dir)
+logfile = dir + 'raw.csv'
+with open(logfile, 'w') as fd:
+    fd.write("\n")
 
 while True:
     print("--------------------------------------------------------")
@@ -43,7 +57,7 @@ while True:
     avg[action] = (avg[action] * num[action] + reward) / (num[action] +1)
     num[action] += 1
     
-    with open('result.csv','a') as fd:
+    with open(logfile,'a') as fd:
         fd.write(str(action) + "," + str(reward) + "\n")
     
     print("Mean:", str(avg))
@@ -51,4 +65,5 @@ while True:
     
     if done:
         break
+
 env.close()

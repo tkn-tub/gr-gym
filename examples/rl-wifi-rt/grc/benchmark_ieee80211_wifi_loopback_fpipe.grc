@@ -10,7 +10,7 @@ options:
     gen_linking: dynamic
     generate_options: no_gui
     hier_block_src_path: '.:'
-    id: ieee80211_wifi_loopback_w_fr_channel
+    id: benchmark_ieee80211_wifi_loopback_fpipe
     max_nouts: '0'
     output_language: python
     placement: (0,0)
@@ -128,6 +128,60 @@ blocks:
     coordinate: [533, 64]
     rotation: 0
     state: true
+- name: blocks_file_sink_0
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: /tmp/rssi_obs
+    type: float
+    unbuffered: 'True'
+    vlen: '64'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [742, 211]
+    rotation: 0
+    state: true
+- name: blocks_file_sink_1
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: /tmp/pkt_snd_cnt
+    type: int
+    unbuffered: 'True'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [988, 47]
+    rotation: 0
+    state: true
+- name: blocks_file_sink_1_0
+  id: blocks_file_sink
+  parameters:
+    affinity: ''
+    alias: ''
+    append: 'False'
+    comment: ''
+    file: /tmp/pkt_recv_cnt
+    type: int
+    unbuffered: 'True'
+    vlen: '1'
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [152, 281]
+    rotation: 0
+    state: true
 - name: blocks_message_strobe_0
   id: blocks_message_strobe
   parameters:
@@ -142,9 +196,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [248, 164.0]
+    coordinate: [249, 137]
     rotation: 0
-    state: enabled
+    state: disabled
 - name: blocks_multiply_const_xx_0
   id: blocks_multiply_const_xx
   parameters:
@@ -238,6 +292,23 @@ blocks:
     coordinate: [290, 476]
     rotation: 0
     state: enabled
+- name: gnugym_gnugym_msg_src_0
+  id: gnugym_gnugym_msg_src
+  parameters:
+    affinity: ''
+    alias: ''
+    comment: ''
+    maxoutbuf: '0'
+    minoutbuf: '0'
+    msg: pmt.intern("".join("x" for i in range(pdu_length)))
+    trigger: encoding
+  states:
+    bus_sink: false
+    bus_source: false
+    bus_structure: null
+    coordinate: [239, 211]
+    rotation: 0
+    state: true
 - name: gnugym_gnugym_rssi_cb_0
   id: gnugym_gnugym_rssi_cb
   parameters:
@@ -312,7 +383,6 @@ blocks:
 - name: note_0
   id: note
   parameters:
-    affinity: ''
     alias: ''
     comment: ''
     note: 'GrGym actions:'
@@ -417,73 +487,17 @@ blocks:
     coordinate: [17, 117]
     rotation: 0
     state: true
-- name: zeromq_pub_sink_0
-  id: zeromq_pub_sink
-  parameters:
-    address: tcp://127.0.0.1:8001
-    affinity: ''
-    alias: ''
-    comment: ''
-    hwm: '-1'
-    pass_tags: 'False'
-    timeout: '100'
-    type: int
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [986, 49]
-    rotation: 0
-    state: true
-- name: zeromq_pub_sink_0_0
-  id: zeromq_pub_sink
-  parameters:
-    address: tcp://127.0.0.1:8003
-    affinity: ''
-    alias: ''
-    comment: ''
-    hwm: '-1'
-    pass_tags: 'False'
-    timeout: '100'
-    type: float
-    vlen: '64'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [749, 234]
-    rotation: 0
-    state: true
-- name: zeromq_pub_sink_1
-  id: zeromq_pub_sink
-  parameters:
-    address: tcp://127.0.0.1:8002
-    affinity: ''
-    alias: ''
-    comment: ''
-    hwm: '-1'
-    pass_tags: 'False'
-    timeout: '100'
-    type: int
-    vlen: '1'
-  states:
-    bus_sink: false
-    bus_source: false
-    bus_structure: null
-    coordinate: [144, 284.0]
-    rotation: 0
-    state: true
 
 connections:
 - [blocks_message_strobe_0, strobe, ieee802_11_mac_0, app in]
 - [blocks_multiply_const_xx_0, '0', channels_channel_model_0, '0']
 - [channels_channel_model_0, '0', pfb_arb_resampler_xxx_0, '0']
 - [foo_packet_pad2_0, '0', blocks_multiply_const_xx_0, '0']
-- [gnugym_gnugym_rssi_cb_0, '0', zeromq_pub_sink_0_0, '0']
-- [gnugym_parse_seqnr_0, '0', zeromq_pub_sink_1, '0']
+- [gnugym_gnugym_msg_src_0, strobe, ieee802_11_mac_0, app in]
+- [gnugym_gnugym_rssi_cb_0, '0', blocks_file_sink_0, '0']
+- [gnugym_parse_seqnr_0, '0', blocks_file_sink_1_0, '0']
 - [gnugym_parse_seqnr_0, '1', blocks_null_sink_1_0_0, '0']
-- [gnugym_parse_seqnr_1, '0', zeromq_pub_sink_0, '0']
+- [gnugym_parse_seqnr_1, '0', blocks_file_sink_1, '0']
 - [gnugym_parse_seqnr_1, '1', blocks_null_sink_1_0, '0']
 - [ieee802_11_mac_0, phy out, gnugym_parse_seqnr_1, in]
 - [ieee802_11_mac_0, phy out, wifi_phy_hier_0, mac_in]
