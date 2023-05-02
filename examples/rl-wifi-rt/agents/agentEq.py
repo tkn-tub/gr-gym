@@ -1,12 +1,29 @@
+"""
+Title: Non-learning agent. Just select the MCSs available in round-robin.
+Author: Anatolij Zubow
+Date created: 2020/10/1
+"""
+
+import os
 import gymnasium as gym
 import numpy as np
 from datetime import datetime
+import optparse
+
+parser = optparse.OptionParser()
+
+parser.add_option('-c', '--config',
+    action="store", dest="config_file",
+    help="name of config file", default="config.yaml")
+
+options, args = parser.parse_args()
+print('Using config file: %s' % (options.config_file))
 
 #
 # Probe the MCSs in RR
 #
 
-env = gym.make('grgym:grenv-v0')
+env = gym.make('grgym:grenv-v0', config_file=options.config_file)
 obs = env.reset()
 
 ac_space = env.action_space
@@ -36,7 +53,11 @@ action = 0
 
 step = 1
 
-with open('agentEQ_res.csv', 'w') as fd:
+dir = './results/agent_eq/'
+if not os.path.exists(dir):
+    os.makedirs(dir)
+logfile = dir + 'raw.csv'
+with open(logfile, 'w') as fd:
     fd.write("\n")
 
 while True:
@@ -50,17 +71,14 @@ while True:
     obs = []
     obs.extend(obsl)
     obs.extend(obsr)
-    #print(obs)
 
     avg_obs = np.mean(obs)
-    #obs = (obs - s_min) / s_range
-    #obs = np.reshape(obs, [1, 1])
     obs_db = 10.0 * np.log10(avg_obs)
 
     print("# %s: %d observation %.2f %.2f dB" % (datetime.now().time(), step, avg_obs, obs_db))
 
     # move to next MCS
-    action = (action + 1) % 8
+    action = (action + 1) % a_size
 
     print("# %s: %d action: %d" % (datetime.now().time(), step, action))
     obs, reward, done, info = env.step(int(action))
@@ -70,14 +88,12 @@ while True:
     num[action] += 1
 
     # save old observation
-    with open('agentEQ_res.csv', 'a') as fd:
+    with open(logfile, 'a') as fd:
         fd.write(str(avg_obs) + "," + str(action) + "," + str(reward) + "," + str(obs_db) + "\n")
 
     print("avg reward:", str(avg))
     print("num probes:", str(num))
 
-    #if done:
-    #    break
     step = step + 1
 
 env.close()
