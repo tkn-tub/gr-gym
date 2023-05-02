@@ -149,12 +149,12 @@ import gymnasium as gym
 import MyAgent
 
 env = gym.make('grgym:grenv-v0', config_file=pathToConfig)
-obs = env.reset()
+obs, info = env.reset()
 agent = MyAgent.Agent()
 
 while True:
   action = agent.get_action(obs)
-  obs, reward, done, info = env.step(action)
+  obs, reward, done, truncated, info = env.step(action)
 
   if done:
     break
@@ -169,7 +169,8 @@ def execute_action(action)
 def get_obs()
 def get_reward()
 def get_done()
-def reset()
+def reset(seed, options)
+def get_truncated()
 def get_info()
 def sim_channel()   #optional
 ```
