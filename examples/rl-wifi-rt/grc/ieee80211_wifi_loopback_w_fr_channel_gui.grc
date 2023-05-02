@@ -51,7 +51,7 @@ blocks:
     option2: '2'
     option3: '3'
     option4: '4'
-    options: '[ieee802_11.LS, ieee802_11.LMS, ieee802_11.STA, ieee802_11.COMB]'
+    options: '[ieee802_11.LS, ieee802_11.LMS, ieee802_11.COMB, ieee802_11.STA]'
     orient: Qt.QHBoxLayout
     type: int
     value: '0'
@@ -739,6 +739,7 @@ connections:
 - [ieee802_11_mac_0, phy out, wifi_phy_hier_fft_0, mac_in]
 - [pfb_arb_resampler_xxx_0, '0', wifi_phy_hier_fft_0, '0']
 - [wifi_phy_hier_fft_0, '0', foo_packet_pad2_0, '0']
+- [wifi_phy_hier_fft_0, '1', gnugym_gnugym_rssi_cb_0, '0']
 - [wifi_phy_hier_fft_0, mac_out, gnugym_parse_seqnr_0, in]
 - [wifi_phy_hier_fft_0, mac_out, ieee802_11_parse_mac_0, in]
 

@@ -454,7 +454,7 @@ blocks:
     rotation: 90
     state: enabled
 - name: wifi_phy_hier_0
-  id: wifi_phy_hier
+  id: wifi_phy_hier_fft
   parameters:
     affinity: ''
     alias: ''

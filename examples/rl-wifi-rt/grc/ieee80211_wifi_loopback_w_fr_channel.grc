@@ -1,6 +1,7 @@
 options:
   parameters:
     author: ''
+    catch_exceptions: 'True'
     category: Custom
     cmake_opt: ''
     comment: ''
@@ -271,7 +272,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [144, 368.0]
+    coordinate: [192, 376.0]
     rotation: 180
     state: true
 - name: gnugym_parse_seqnr_1
@@ -312,7 +313,6 @@ blocks:
 - name: note_0
   id: note
   parameters:
-    affinity: ''
     alias: ''
     comment: ''
     note: 'GrGym actions:'
@@ -384,7 +384,7 @@ blocks:
     rotation: 90
     state: enabled
 - name: wifi_phy_hier_0
-  id: wifi_phy_hier
+  id: wifi_phy_hier_fft
   parameters:
     affinity: ''
     alias: ''
@@ -425,6 +425,7 @@ blocks:
     alias: ''
     comment: ''
     hwm: '-1'
+    key: ''
     pass_tags: 'False'
     timeout: '100'
     type: int
@@ -444,6 +445,7 @@ blocks:
     alias: ''
     comment: ''
     hwm: '-1'
+    key: ''
     pass_tags: 'False'
     timeout: '100'
     type: float
@@ -463,6 +465,7 @@ blocks:
     alias: ''
     comment: ''
     hwm: '-1'
+    key: ''
     pass_tags: 'False'
     timeout: '100'
     type: int
