@@ -175,6 +175,8 @@ class GrEnv(gym.Env):
             for br in self.bridge:
                 br.close()
 
+    def close(self):
+        self.bridge.close()
         if self.check_is_alive():
             self._logger.info("Stop grc execution")
             if self.conf.grgym_environment.run_local:
