@@ -5,17 +5,23 @@ Date created: 2020/09/24
 Description: Implement Actor Critic Method in GnuGym environment with IEEE 802.11p MCS selection scenario.
 """
 
-"""
-To plot the results:
-    python3 plot_raw.py -d results/agent_ac/
-    python3 plot_reward.py -d results/agent_ac/
-"""
 
+import os
 import gym
 import numpy as np
 import tensorflow as tf
 from tensorflow import keras
 from tensorflow.keras import layers
+import optparse
+
+parser = optparse.OptionParser()
+
+parser.add_option('-c', '--config',
+    action="store", dest="config_file",
+    help="name of config file", default="config.yaml")
+
+options, args = parser.parse_args()
+print('Using config file: %s' % (options.config_file))
 
 debug = False
 
@@ -25,14 +31,16 @@ obs_high = 35
 
 # Configuration parameters for the whole setup
 seed = 42
-gamma = 0 #0.99  # Discount factor for past rewards; must be zero for MCS selection
+gamma = 0  # Discount factor for past rewards; must be zero for MCS selection
 max_steps_per_episode = 100
-env = gym.make('grgym:grenv-v0')  # Create the environment
+env = gym.make('grgym:grenv-v0', config_file=options.config_file)  # Create the environment
 env.seed(seed)
 eps = np.finfo(np.float32).eps.item()  # Smallest number such that 1.0 + eps != 1.0
 
 # logging for later processing
 dir = './results/agent_ac/'
+if not os.path.exists(dir):
+    os.makedirs(dir)
 logfile = dir + 'running_reward.csv'
 with open(logfile, 'w') as fd:
     fd.write("\n")

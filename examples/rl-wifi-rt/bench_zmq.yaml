@@ -2,7 +2,7 @@ grgym_environment:
   run_local: True # whether gnuradio is running locally or remotely
   timebased: # a step results in progress of time for step_time seconds
     step_time: 0.5 # the duration of a single step [in s]
-  eventbased: False # if false time based is used otherwise event based
+  eventbased: True # if false time based is used otherwise event based
   max_steps_zero_reward: 30 # maximum number of steps with reward == 0 in a row
   help: GrGym configuration
 
@@ -11,9 +11,9 @@ grgym_local: # used if grgym_environment.run_local = True
   host: localhost # local GnuRadio process
   rpc_port: 8080 # RPC port of local/remote GnuRadio process
   gr_ipc: ZMQ # the IPC mechanism for communication between grgym and gnuradio; options: FILE|ZMQ
-  gr_grc: ieee80211_wifi_loopback_w_fr_channel
+  gr_grc: benchmark_ieee80211_wifi_loopback_zmq
   simulation:
-    simulate_channel: True # enable if channel is simulated in GR
+    simulate_channel: False # enable if channel is simulated in GR
     sim_time: 0.25 # the duration [in s] over which the observation is obtained; must be smaller than step_time
     longterm_channel_coherence_time: 1 # number of steps with same average observation, i.e. distance is constant between nodes. The average channel quality changes after longterm_channel_coherence_time steps
     sim_channel_min_dist: 2 # minimum simulated distance [in dB] between nodes
@@ -23,18 +23,15 @@ grgym_local: # used if grgym_environment.run_local = True
 grgym_remote: # used if grgym_environment.run_local = False
   num_nodes: 1
   node0:
-    name: TX
-    host: localhost # local/remote GnuRadio process
+    name: TX_RX_channel
+    host: 130.149.49.31 # local/remote GnuRadio process
     rpc_port: 8080 # RPC port of local/remote GnuRadio process
-#  node1:
-#    name: RX
-#    host: localhost2 # local/remote GnuRadio process
-#    rpc_port: 8080 # RPC port of local/remote GnuRadio process
   help: configuration used when gnuradio is running on remote machine, i.e. host name, Gnu Radio ID, Gnu Radio GRC filename, rpc port.
 
 grgym_scenario:
-  scenario_class: ieee80211p_scenario.IEEE80211pRateControlScenario # class is a string pointing to a function that is inside one or multiple modules. The function will be imported and executed without any arguments.
+  scenario_class: benchmark.BenchmarkScenario # class is a string pointing to a function that is inside one or multiple modules. The function will be imported and executed without any arguments.
   mcs: [3, 5, 7] # scenario specific: only those MCS will be used
   channel_SNR: 25 # scenario specific: value of SNR variable used by channel block in the GNU-Radio flowchart
-  packet_interval: 10 # interval between two transmitted packets in ms
+  packet_interval: 1 # interval between two transmitted packets in ms
+  obs_len: 64
   help: configuration of a specific grgym scenario
