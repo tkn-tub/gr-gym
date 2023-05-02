@@ -6,7 +6,7 @@ Sascha Rösler <s.roesler@campus.tu-berlin.de>
 Tien Dat Phan <t.phan@campus.tu-berlin.de>
 Anatolij Zubow <zubow@tkn.tu-berlin.de>
 '''
-from gym import spaces
+from gymnasium import spaces
 import numpy as np
 from grgym.envs.gr_scenario import GrScenario
 from grgym.envs.gr_bridge import BridgeConnectionType
@@ -166,11 +166,15 @@ class IEEE80211pRateControlScenario(GrScenario):
 
         return False
 
+    def get_truncated(self):
+        #no time limit
+        return False
+
     def render(self):
         # no GUI so far
         return
 
-    def reset(self):
+    def reset(self, seed, options):
         # set initial action
         self.execute_action(0) # reset to lowest action/MCS
         self.gnuradio.set_parameter('snr', self.conf.grgym_scenario.channel_SNR)
@@ -185,7 +189,7 @@ class IEEE80211pRateControlScenario(GrScenario):
 
 
     def get_info(self):
-        return self.name
+        return {'mesg': self.name}
 
     def sim_channel(self):
         '''
