@@ -44,11 +44,15 @@ class GrScenario(abc.ABC):
         pass
 
     @abc.abstractmethod
+    def get_truncated(self):
+        pass
+
+    @abc.abstractmethod
     def render(self):
         pass
 
     @abc.abstractmethod
-    def reset(self):
+    def reset(self, seed, options):
         pass
 
     @abc.abstractmethod

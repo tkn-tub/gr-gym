@@ -4,7 +4,7 @@ step duration in different configurations.
 
 Anatolij Zubow <zubow@tkn.tu-berlin.de>
 '''
-from gym import spaces
+from gymnasium import spaces
 import numpy as np
 from grgym.envs.gr_scenario import GrScenario
 from grgym.envs.gr_bridge import BridgeConnectionType
@@ -53,11 +53,14 @@ class BenchmarkScenario(GrScenario):
     def get_done(self):
         return False
 
+    def get_truncated(self):
+        return False
+
     def render(self):
         # no GUI so far
         return
 
-    def reset(self):
+    def reset(self, seed, options):
         if self.debug:
             print('obs_len: %d' % self.conf.grgym_scenario.obs_len)
             print('interval: %d' % self.conf.grgym_scenario.packet_interval)
@@ -66,7 +69,7 @@ class BenchmarkScenario(GrScenario):
         self.gnuradio.set_parameter('obs_len', self.conf.grgym_scenario.obs_len)
 
     def get_info(self):
-        return self.name
+        return {'mesg': self.name}
 
     def sim_channel(self):
         pass
