@@ -1,0 +1,11 @@
+from setuptools import setup
+
+setup(name='grgym',
+<<<<<<< HEAD
+      version='0.0.3',
+      install_requires=['gymnasium>=0.2.3', 'ruamel.yaml', 'sh>=1.10.0', 'packaging>=20.0.0']
+=======
+      version='0.0.2',
+      install_requires=['gym>=0.2.3', 'ruamel.yaml', 'sh>=1.10.0', 'packaging>=20.0.0', 'python-box[all]']
+>>>>>>> d9b07df76414a34b2503d21d001abc92a28d8d37
+)
