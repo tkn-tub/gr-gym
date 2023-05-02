@@ -14,8 +14,8 @@ import signal
 import sh
 from enum import Enum
 
-import gym
-from gym.utils import seeding
+import gymnasium as gym
+from gymnasium.utils import seeding
 from grgym.envs.gr_bridge import GR_Bridge
 from grgym.envs.gr_utils import *
 
@@ -105,6 +105,7 @@ class GrEnv(gym.Env):
         self._logger.info("collect results (reward, done, info) from scenario")
         reward = self.scenario.get_reward()
         done = self.scenario.get_done()
+        truncated = self.scenario.get_truncated()
         info = self.scenario.get_info()
 
         if self.conf.grgym_environment.run_local and self.conf.grgym_local.simulation.simulate_channel:
@@ -119,12 +120,12 @@ class GrEnv(gym.Env):
         self._logger.info("grgym::collect observations")
         obs = self.scenario.get_obs()
 
-        return (obs, reward, done, info)
+        return (obs, reward, done, truncated, info)
 
     '''
         Gym framework function
     '''
-    def reset(self):
+    def reset(self, seed = None, options = None):
         self._logger.info("grgym::reset()")
 
         # start gnuradio using the bridge if grnuradio not yet running
@@ -152,7 +153,7 @@ class GrEnv(gym.Env):
 
         time.sleep(2) # wait to gnuradio to settle down
         self.gr_state = RadioProgramState.RUNNING
-        self.scenario.reset()
+        self.scenario.reset(seed, options)
         self.action_space = self.scenario.get_action_space()
         self.observation_space = self.scenario.get_observation_space()
 
@@ -160,8 +161,9 @@ class GrEnv(gym.Env):
             if self.conf.grgym_local.simulation.simulate_channel:
                 time.sleep(self.conf.grgym_local.simulation.sim_time)
         obs = self.scenario.get_obs()
+        info = self.scenario.get_info()
 
-        return obs
+        return (obs, info)
 
     '''
         Gym framework function
