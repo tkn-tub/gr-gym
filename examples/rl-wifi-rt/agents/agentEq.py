@@ -24,7 +24,7 @@ print('Using config file: %s' % (options.config_file))
 #
 
 env = gym.make('grgym:grenv-v0', config_file=options.config_file)
-obs = env.reset()
+obs, info = env.reset()
 
 ac_space = env.action_space
 ob_space = env.observation_space
@@ -81,9 +81,9 @@ while True:
     action = (action + 1) % a_size
 
     print("# %s: %d action: %d" % (datetime.now().time(), step, action))
-    obs, reward, done, info = env.step(int(action))
+    obs, reward, done, truncated, info = env.step(int(action))
 
-    print("# %s: %d reward: %.2f done: %s" % (datetime.now().time(), step, reward, str(done)))
+    print("# %s: %d reward: %.2f done: %s truncated %s" % (datetime.now().time(), step, reward, str(done), str(truncated)))
     avg[action] = (avg[action] * num[action] + reward) / (num[action] +1)
     num[action] += 1
 

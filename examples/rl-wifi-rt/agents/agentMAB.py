@@ -9,7 +9,7 @@ import gymnasium as gym
 import numpy as np
 
 env = gym.make('grgym:grenv-v0')
-obs = env.reset()
+obs, info = env.reset()
 
 ac_space = env.action_space
 ob_space = env.observation_space
@@ -46,7 +46,7 @@ while True:
     action = np.argmax(randval)
     
     print("action:", str(action))
-    obs, reward, done, info = env.step(int(action))
+    obs, reward, done, truncated, info = env.step(int(action))
     
     #if reward < 0:
     #    for i in range(2):

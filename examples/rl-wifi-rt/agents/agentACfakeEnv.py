@@ -27,9 +27,9 @@ class EnvMockup:
    def seed(self, v):
        self.v = v
        
-   def reset(self):
+   def reset(self, seed=None, options=None):
        obs = [obs_low] * self.NSC
-       return obs
+       return (obs, {})
 
    def step(self, action):
        if action == 0:
@@ -42,11 +42,12 @@ class EnvMockup:
        
        self.rssi = [np.random.uniform(obs_low, obs_high)] * self.NSC
        done = False
+       truncated = False
 
        if self.debug:
            print("Mockup: next state: %.2f, action: %d, reward: %.2f" % (np.mean(self.rssi), action, reward))
        
-       return (self.rssi, reward, done, '')
+       return (self.rssi, reward, done,  truncated, '')
 
    def close(self):
        if self.debug:
@@ -139,7 +140,8 @@ running_reward = 0
 episode_count = 0
 
 while True:  # Run until solved
-    state = preprocess_state(env.reset())
+    obs, info = env.reset()
+    state = preprocess_state(obs)
     episode_reward = 0
     with tf.GradientTape() as tape:
 
@@ -167,7 +169,7 @@ while True:  # Run until solved
 
             # Apply the sampled action in our environment
             #print("%d: observation: %.2f" % (timestep, state))
-            state, reward, done, _ = env.step(action)
+            state, reward, done, truncated, _ = env.step(action)
             state = preprocess_state(state)
 
             #print("%d: next state: %.2f, action: %d, reward: %.2f" % (timestep, state, action, reward))
@@ -179,6 +181,9 @@ while True:  # Run until solved
             reward_in_epoch += reward
 
             if done:
+                break
+            
+            if truncated:
                 break
 
         print('log:avg reward_in_epoch=%.2f' % (reward_in_epoch / max_steps_per_episode))

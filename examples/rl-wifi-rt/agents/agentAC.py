@@ -120,7 +120,8 @@ running_reward = 0
 episode_count = 0
 
 while True:  # Run until solved
-    state = preprocess_state(env.reset())
+    obs, info = env.reset()
+    state = preprocess_state(obs)
     episode_reward = 0
     with tf.GradientTape() as tape:
 
@@ -146,7 +147,7 @@ while True:  # Run until solved
             actions_in_epoch[action] += 1
 
             # Apply the sampled action in our environment
-            state, reward, done, _ = env.step(action)
+            state, reward, done, truncated, _ = env.step(action)
             state = preprocess_state(state)
 
             if debug:
@@ -160,6 +161,8 @@ while True:  # Run until solved
             reward_in_epoch += reward
 
             if done:
+                break
+            if truncated:
                 break
 
         print('log:avg reward_in_epoch=%.2f' % (reward_in_epoch / max_steps_per_episode))
