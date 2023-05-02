@@ -211,4 +211,17 @@ How to reference **GrGym**?
 
 Please use the following bibtex :
 
-TBD.
+```
+@inproceedings{zubow2021grgym,
+    abstract = {Trends like softwarization through the usage of flexible Software- defined Radio (SDR) platforms together with the usage of Machine Learning (ML) techniques are key enablers for building and running future high-performance communication networks in a cost- efficient way. In particular, Reinforcement Learning (RL) becomes very popular as an agent can explore the environment and adapt its behavior based on collected observations and reward values. However, for early deployments there is a pressing need for well-defined environments so that ML/RL-based algorithms can learn the best policies. In this paper, we present GrGym, a framework enabling the design of RL-driven solutions for communication networks based on the OpenAI Gym toolkit and the GNU Radio SDR platform. The GrGym framework allows integrating any GNU Radio program as an environment in the Gym framework by exposing its state and control knobs for the agent’s learning purposes. Our framework is generic and can be easily extended to cover various communication problems. We present an illustrative example, where an IEEE 802.11 transmitter learns to adapt its modulation and coding rate based on the observed channel conditions.},
+    author = {Zubow, Anatolij and R{\"{o}}sler, Sascha and Gawłowicz, Piotr and Dressler, Falko},
+    doi = {10.1145/3446382.3448358},
+    title = {{GrGym: When GNU Radio goes to (AI) Gym}},
+    pages = {8--14},
+    publisher = {Association for Computing Machinery (ACM)},
+    address = {Virtual Conference},
+    booktitle = {22nd ACM International Workshop on Mobile Computing Systems and Applications (HotMobile 2021)},
+    month = {2},
+    year = {2021}
+```
+}
