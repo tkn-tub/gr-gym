@@ -60,6 +60,7 @@ list(APPEND include_sources
     gnugym_snrdebug_cb.h
     gnugym_moving_average_vect_ff.h
     gnugym_parse_seqnr.h
+    gnugym_msg_src.h
 )
 
 install(

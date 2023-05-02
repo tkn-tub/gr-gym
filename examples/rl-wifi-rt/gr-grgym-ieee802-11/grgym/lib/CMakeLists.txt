@@ -34,6 +34,7 @@ list(APPEND gnugym_sources
     constellations_impl.cc
     gnugym_rssi_cb_impl.cc
     gnugym_snr_cb_impl.cc
+    gnugym_msg_src_impl.cc
     equalizer/base.cc
     equalizer/comb.cc
     equalizer/ls.cc
