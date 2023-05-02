@@ -1,0 +1,6 @@
+PASS: /home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/python/bindings/docstrings/gnugym_snr_cb_pydoc_template.h
+PASS: /home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/python/bindings/docstrings/gnugym_snr_cb_pydoc_template.h
+PASS: /home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/python/bindings/docstrings/gnugym_rssi_cb_pydoc_template.h
+PASS: /home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/python/bindings/docstrings/gnugym_rssi_cb_pydoc_template.h
+PASS: /home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/python/bindings/docstrings/gnugym_moving_average_vect_ff_pydoc_template.h
+PASS: /home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/python/bindings/docstrings/gnugym_moving_average_vect_ff_pydoc_template.h

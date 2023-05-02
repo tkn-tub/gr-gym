@@ -1,0 +1,535 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl" kind="class" language="C++" prot="public">
+    <compoundname>gr::gnugym::gnugym_rssi_cb_impl</compoundname>
+    <basecompoundref refid="classgr_1_1gnugym_1_1gnugym__rssi__cb" prot="public" virt="non-virtual">gr::gnugym::gnugym_rssi_cb</basecompoundref>
+    <includes refid="gnugym__rssi__cb__impl_8h" local="no">gnugym_rssi_cb_impl.h</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a5361326f65df9030736a64366157d074" prot="private" static="no" mutable="no">
+        <type><ref refid="classgr_1_1gnugym_1_1equalizer_1_1base" kindref="compound">equalizer::base</ref> *</type>
+        <definition>equalizer::base* gr::gnugym::gnugym_rssi_cb_impl::d_equalizer</definition>
+        <argsstring></argsstring>
+        <name>d_equalizer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="59" column="17" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="59" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1aa9fc9ebd8e9f6c9b26f247e54b0783ff" prot="private" static="no" mutable="no">
+        <type>gr::thread::mutex</type>
+        <definition>gr::thread::mutex gr::gnugym::gnugym_rssi_cb_impl::d_mutex</definition>
+        <argsstring></argsstring>
+        <name>d_mutex</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="60" column="19" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="60" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a87f1877e000f361e4e640b32fbc4c908" prot="private" static="no" mutable="no">
+        <type>std::vector&lt; gr::tag_t &gt;</type>
+        <definition>std::vector&lt;gr::tag_t&gt; gr::gnugym::gnugym_rssi_cb_impl::tags</definition>
+        <argsstring></argsstring>
+        <name>tags</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="61" column="13" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="61" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a73302ccd4b80efbabe2430fb1fd74b7a" prot="private" static="no" mutable="no">
+        <type>bool</type>
+        <definition>bool gr::gnugym::gnugym_rssi_cb_impl::d_log</definition>
+        <argsstring></argsstring>
+        <name>d_log</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="63" column="6" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="63" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1aa2c91e7a328a8e57696c2db414f85c44" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int gr::gnugym::gnugym_rssi_cb_impl::d_current_symbol</definition>
+        <argsstring></argsstring>
+        <name>d_current_symbol</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="64" column="6" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="64" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1abea9630433adb7132d24dce181dce227" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double gr::gnugym::gnugym_rssi_cb_impl::d_freq</definition>
+        <argsstring></argsstring>
+        <name>d_freq</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="68" column="8" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="68" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a30768e08df90755b8371b9cda056371c" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double gr::gnugym::gnugym_rssi_cb_impl::d_freq_offset_from_synclong</definition>
+        <argsstring></argsstring>
+        <name>d_freq_offset_from_synclong</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="69" column="8" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="69" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a1ef6db6ec0b2bec859ea8bd44dc5fee2" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double gr::gnugym::gnugym_rssi_cb_impl::d_bw</definition>
+        <argsstring></argsstring>
+        <name>d_bw</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="70" column="8" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="70" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a3c450d168b68ed353d729500870b58a6" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double gr::gnugym::gnugym_rssi_cb_impl::d_er</definition>
+        <argsstring></argsstring>
+        <name>d_er</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="71" column="8" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="71" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1aa1b958b7f5789316a020c8d33a6d7ede" prot="private" static="no" mutable="no">
+        <type>double</type>
+        <definition>double gr::gnugym::gnugym_rssi_cb_impl::d_epsilon0</definition>
+        <argsstring></argsstring>
+        <name>d_epsilon0</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="72" column="8" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="72" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a55196e6471b4da66c0ec0357ad33864c" prot="private" static="no" mutable="no">
+        <type>gr_complex</type>
+        <definition>gr_complex gr::gnugym::gnugym_rssi_cb_impl::d_prev_pilots[4]</definition>
+        <argsstring>[4]</argsstring>
+        <name>d_prev_pilots</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="73" column="12" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="73" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a9a0ca170ef589fc5dbe16452d3c48d1d" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int gr::gnugym::gnugym_rssi_cb_impl::d_frame_bytes</definition>
+        <argsstring></argsstring>
+        <name>d_frame_bytes</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="75" column="6" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="75" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a5eaaa2476f7944f17254c13ffc9c236e" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int gr::gnugym::gnugym_rssi_cb_impl::d_frame_symbols</definition>
+        <argsstring></argsstring>
+        <name>d_frame_symbols</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="76" column="6" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="76" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ad025377d3f10448c8c65a987da5b0fcb" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int gr::gnugym::gnugym_rssi_cb_impl::d_frame_encoding</definition>
+        <argsstring></argsstring>
+        <name>d_frame_encoding</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="77" column="6" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="77" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1abc5c7b3fd2670d795296950cdc836fab" prot="private" static="no" mutable="no">
+        <type>uint8_t</type>
+        <definition>uint8_t gr::gnugym::gnugym_rssi_cb_impl::d_deinterleaved[48]</definition>
+        <argsstring>[48]</argsstring>
+        <name>d_deinterleaved</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="79" column="9" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="79" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ae2f1ae3a70aeca611e6317763479354c" prot="private" static="no" mutable="no">
+        <type>gr_complex</type>
+        <definition>gr_complex gr::gnugym::gnugym_rssi_cb_impl::symbols[48]</definition>
+        <argsstring>[48]</argsstring>
+        <name>symbols</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="80" column="12" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="80" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a2c6a6394d56f9b11ca0016fb5359ff5f" prot="private" static="no" mutable="no">
+        <type>std::shared_ptr&lt; gr::digital::constellation &gt;</type>
+        <definition>std::shared_ptr&lt;gr::digital::constellation&gt; gr::gnugym::gnugym_rssi_cb_impl::d_frame_mod</definition>
+        <argsstring></argsstring>
+        <name>d_frame_mod</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="82" column="17" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="82" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ae73acef0989f0dd0060ff708c155253d" prot="private" static="no" mutable="no">
+        <type><ref refid="classgr_1_1gnugym_1_1constellation__bpsk_1afd11d21a8aa4405b8b5569544ea0cb09" kindref="member">constellation_bpsk::sptr</ref></type>
+        <definition>constellation_bpsk::sptr gr::gnugym::gnugym_rssi_cb_impl::d_bpsk</definition>
+        <argsstring></argsstring>
+        <name>d_bpsk</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="83" column="26" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="83" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ab6e9ef0d58cce856dd3ef5df98c3428d" prot="private" static="no" mutable="no">
+        <type><ref refid="classgr_1_1gnugym_1_1constellation__qpsk_1adba51213dcd763bf770e7d23eb6c1b1b" kindref="member">constellation_qpsk::sptr</ref></type>
+        <definition>constellation_qpsk::sptr gr::gnugym::gnugym_rssi_cb_impl::d_qpsk</definition>
+        <argsstring></argsstring>
+        <name>d_qpsk</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="84" column="26" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="84" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a7c9625f81d6b509cd4e993197835bba0" prot="private" static="no" mutable="no">
+        <type><ref refid="classgr_1_1gnugym_1_1constellation__16qam_1a66544b09a17718e15305e3a9c2b38320" kindref="member">constellation_16qam::sptr</ref></type>
+        <definition>constellation_16qam::sptr gr::gnugym::gnugym_rssi_cb_impl::d_16qam</definition>
+        <argsstring></argsstring>
+        <name>d_16qam</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="85" column="27" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="85" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1aba14411d5de2933221bd757cebe37e4c" prot="private" static="no" mutable="no">
+        <type><ref refid="classgr_1_1gnugym_1_1constellation__64qam_1a5d053b9eec0e445dac154891b8188553" kindref="member">constellation_64qam::sptr</ref></type>
+        <definition>constellation_64qam::sptr gr::gnugym::gnugym_rssi_cb_impl::d_64qam</definition>
+        <argsstring></argsstring>
+        <name>d_64qam</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="86" column="27" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="86" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-static-attrib">
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a5b5e8d1cfb42341334cab1d9db6a8d79" prot="private" static="yes" mutable="no">
+        <type>const int</type>
+        <definition>const int gr::gnugym::gnugym_rssi_cb_impl::interleaver_pattern[48]</definition>
+        <argsstring>[48]</argsstring>
+        <name>interleaver_pattern</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="88" column="18" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="88" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ace0e95db2b1dddb7218b3b780a124c9a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::gnugym::gnugym_rssi_cb_impl::gnugym_rssi_cb_impl</definition>
+        <argsstring>(double freq, double bw, bool log, bool debug)</argsstring>
+        <name>gnugym_rssi_cb_impl</name>
+        <param>
+          <type>double</type>
+          <declname>freq</declname>
+        </param>
+        <param>
+          <type>double</type>
+          <declname>bw</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>log</declname>
+        </param>
+        <param>
+          <type>bool</type>
+          <declname>debug</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="38" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ab1e419d72d3e5d2769c86bf9f373cae6" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::gnugym::gnugym_rssi_cb_impl::~gnugym_rssi_cb_impl</definition>
+        <argsstring>()</argsstring>
+        <name>~gnugym_rssi_cb_impl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="39" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a24c59b656cce8126ac31da7d12f42e33" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::gnugym::gnugym_rssi_cb_impl::set_bandwidth</definition>
+        <argsstring>(double bw)</argsstring>
+        <name>set_bandwidth</name>
+        <param>
+          <type>double</type>
+          <declname>bw</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="41" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a5deec7a6b58924531a23b1999f3bcd47" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::gnugym::gnugym_rssi_cb_impl::set_frequency</definition>
+        <argsstring>(double freq)</argsstring>
+        <name>set_frequency</name>
+        <param>
+          <type>double</type>
+          <declname>freq</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="42" column="8"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1afbd0c8c6cafc028b23ca24667b39494a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::gnugym::gnugym_rssi_cb_impl::forecast</definition>
+        <argsstring>(int noutput_items, gr_vector_int &amp;ninput_items_required)</argsstring>
+        <name>forecast</name>
+        <param>
+          <type>int</type>
+          <declname>noutput_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_int &amp;</type>
+          <declname>ninput_items_required</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="45" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a6ced1050cffb4bfb2cee834e89b73a85" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int gr::gnugym::gnugym_rssi_cb_impl::general_work</definition>
+        <argsstring>(int noutput_items, gr_vector_int &amp;ninput_items, gr_vector_const_void_star &amp;input_items, gr_vector_void_star &amp;output_items)</argsstring>
+        <name>general_work</name>
+        <param>
+          <type>int</type>
+          <declname>noutput_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_int &amp;</type>
+          <declname>ninput_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_const_void_star &amp;</type>
+          <declname>input_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_void_star &amp;</type>
+          <declname>output_items</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="47" column="11"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="private-func">
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a3cea447713c6a80e833bc8138474506f" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>bool</type>
+        <definition>bool gr::gnugym::gnugym_rssi_cb_impl::decode_signal_field</definition>
+        <argsstring>(uint8_t *rx_bits)</argsstring>
+        <name>decode_signal_field</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>rx_bits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="56" column="6"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a53dd4b086b557bb82226352b0d074ed2" prot="private" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::gnugym::gnugym_rssi_cb_impl::deinterleave</definition>
+        <argsstring>(uint8_t *rx_bits)</argsstring>
+        <name>deinterleave</name>
+        <param>
+          <type>uint8_t *</type>
+          <declname>rx_bits</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="57" column="6"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>gr::gnugym::gnugym_rssi_cb</label>
+        <link refid="classgr_1_1gnugym_1_1gnugym__rssi__cb"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>gr::gnugym::gnugym_rssi_cb_impl</label>
+        <link refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gr::block</label>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>gr::gnugym::gnugym_rssi_cb</label>
+        <link refid="classgr_1_1gnugym_1_1gnugym__rssi__cb"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="1">
+        <label>gr::gnugym::gnugym_rssi_cb_impl</label>
+        <link refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gr::block</label>
+      </node>
+    </collaborationgraph>
+    <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" line="32" column="5" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_rssi_cb_impl.h" bodystart="33" bodyend="89"/>
+    <listofallmembers>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a7c9625f81d6b509cd4e993197835bba0" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_16qam</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1aba14411d5de2933221bd757cebe37e4c" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_64qam</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ae73acef0989f0dd0060ff708c155253d" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_bpsk</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a1ef6db6ec0b2bec859ea8bd44dc5fee2" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_bw</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1aa2c91e7a328a8e57696c2db414f85c44" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_current_symbol</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1abc5c7b3fd2670d795296950cdc836fab" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_deinterleaved</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1aa1b958b7f5789316a020c8d33a6d7ede" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_epsilon0</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a5361326f65df9030736a64366157d074" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_equalizer</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a3c450d168b68ed353d729500870b58a6" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_er</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a9a0ca170ef589fc5dbe16452d3c48d1d" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_frame_bytes</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ad025377d3f10448c8c65a987da5b0fcb" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_frame_encoding</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a2c6a6394d56f9b11ca0016fb5359ff5f" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_frame_mod</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a5eaaa2476f7944f17254c13ffc9c236e" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_frame_symbols</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1abea9630433adb7132d24dce181dce227" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_freq</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a30768e08df90755b8371b9cda056371c" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_freq_offset_from_synclong</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a73302ccd4b80efbabe2430fb1fd74b7a" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_log</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1aa9fc9ebd8e9f6c9b26f247e54b0783ff" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_mutex</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a55196e6471b4da66c0ec0357ad33864c" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_prev_pilots</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ab6e9ef0d58cce856dd3ef5df98c3428d" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>d_qpsk</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a3cea447713c6a80e833bc8138474506f" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>decode_signal_field</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a53dd4b086b557bb82226352b0d074ed2" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>deinterleave</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1afbd0c8c6cafc028b23ca24667b39494a" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>forecast</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a6ced1050cffb4bfb2cee834e89b73a85" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>general_work</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ace0e95db2b1dddb7218b3b780a124c9a" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>gnugym_rssi_cb_impl</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a5b5e8d1cfb42341334cab1d9db6a8d79" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>interleaver_pattern</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb_1a3af180dc1c4a433ba128445b72aa34ca" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>make</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a24c59b656cce8126ac31da7d12f42e33" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>set_bandwidth</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a5deec7a6b58924531a23b1999f3bcd47" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>set_frequency</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb_1a26f252b4a928abde0d6ce9399ef29705" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>sptr</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ae2f1ae3a70aeca611e6317763479354c" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>symbols</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1a87f1877e000f361e4e640b32fbc4c908" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>tags</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__rssi__cb__impl_1ab1e419d72d3e5d2769c86bf9f373cae6" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_rssi_cb_impl</scope><name>~gnugym_rssi_cb_impl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

@@ -1,0 +1,182 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl" kind="class" language="C++" prot="public">
+    <compoundname>gr::gnugym::gnugym_moving_average_vect_ff_impl</compoundname>
+    <basecompoundref refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff" prot="public" virt="non-virtual">gr::gnugym::gnugym_moving_average_vect_ff</basecompoundref>
+    <includes refid="gnugym__moving__average__vect__ff__impl_8h" local="no">gnugym_moving_average_vect_ff_impl.h</includes>
+      <sectiondef kind="private-attrib">
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a307210dcf2b03fa652f645873296304b" prot="private" static="no" mutable="no">
+        <type>float *</type>
+        <definition>float* gr::gnugym::gnugym_moving_average_vect_ff_impl::d_buffer</definition>
+        <argsstring></argsstring>
+        <name>d_buffer</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" line="35" column="13" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" bodystart="35" bodyend="-1"/>
+      </memberdef>
+      <memberdef kind="variable" id="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a5c1fdc43ea73cd2d2f04e7320bc16e52" prot="private" static="no" mutable="no">
+        <type>int</type>
+        <definition>int gr::gnugym::gnugym_moving_average_vect_ff_impl::d_vlen</definition>
+        <argsstring></argsstring>
+        <name>d_vlen</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" line="36" column="11" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" bodystart="36" bodyend="-1"/>
+      </memberdef>
+      </sectiondef>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a1226b21859024ee8305a8cb75fb4c043" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::gnugym::gnugym_moving_average_vect_ff_impl::gnugym_moving_average_vect_ff_impl</definition>
+        <argsstring>(int vlen)</argsstring>
+        <name>gnugym_moving_average_vect_ff_impl</name>
+        <param>
+          <type>int</type>
+          <declname>vlen</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" line="39" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1adfae1a37297457656af5d36fa87a792e" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::gnugym::gnugym_moving_average_vect_ff_impl::~gnugym_moving_average_vect_ff_impl</definition>
+        <argsstring>()</argsstring>
+        <name>~gnugym_moving_average_vect_ff_impl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" line="40" column="7"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a3910ec919e24b780f9ef6efe2b26227a" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>void</type>
+        <definition>void gr::gnugym::gnugym_moving_average_vect_ff_impl::forecast</definition>
+        <argsstring>(int noutput_items, gr_vector_int &amp;ninput_items_required)</argsstring>
+        <name>forecast</name>
+        <param>
+          <type>int</type>
+          <declname>noutput_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_int &amp;</type>
+          <declname>ninput_items_required</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" line="43" column="12"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a434d84406dca85cbce77245687841199" prot="public" static="no" const="no" explicit="no" inline="no" virt="virtual">
+        <type>std::vector&lt; double &gt;</type>
+        <definition>std::vector&lt;double&gt; gr::gnugym::gnugym_moving_average_vect_ff_impl::getLastOutput</definition>
+        <argsstring>()</argsstring>
+        <name>getLastOutput</name>
+        <reimplements refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff_1a494e736610d50d46886a5c01df4af444">getLastOutput</reimplements>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" line="44" column="19"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a8c793274992017891cdbc7a296cae09b" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>int</type>
+        <definition>int gr::gnugym::gnugym_moving_average_vect_ff_impl::general_work</definition>
+        <argsstring>(int noutput_items, gr_vector_int &amp;ninput_items, gr_vector_const_void_star &amp;input_items, gr_vector_void_star &amp;output_items)</argsstring>
+        <name>general_work</name>
+        <param>
+          <type>int</type>
+          <declname>noutput_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_int &amp;</type>
+          <declname>ninput_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_const_void_star &amp;</type>
+          <declname>input_items</declname>
+        </param>
+        <param>
+          <type>gr_vector_void_star &amp;</type>
+          <declname>output_items</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" line="46" column="11"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="2">
+        <label>gr::gnugym::gnugym_moving_average_vect_ff</label>
+        <link refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gr::block</label>
+      </node>
+      <node id="1">
+        <label>gr::gnugym::gnugym_moving_average_vect_ff_impl</label>
+        <link refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="2">
+        <label>gr::gnugym::gnugym_moving_average_vect_ff</label>
+        <link refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>gr::block</label>
+      </node>
+      <node id="1">
+        <label>gr::gnugym::gnugym_moving_average_vect_ff_impl</label>
+        <link refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" line="32" column="5" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/gnugym_moving_average_vect_ff_impl.h" bodystart="33" bodyend="50"/>
+    <listofallmembers>
+      <member refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a307210dcf2b03fa652f645873296304b" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_moving_average_vect_ff_impl</scope><name>d_buffer</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a5c1fdc43ea73cd2d2f04e7320bc16e52" prot="private" virt="non-virtual"><scope>gr::gnugym::gnugym_moving_average_vect_ff_impl</scope><name>d_vlen</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a3910ec919e24b780f9ef6efe2b26227a" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_moving_average_vect_ff_impl</scope><name>forecast</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a8c793274992017891cdbc7a296cae09b" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_moving_average_vect_ff_impl</scope><name>general_work</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a434d84406dca85cbce77245687841199" prot="public" virt="virtual"><scope>gr::gnugym::gnugym_moving_average_vect_ff_impl</scope><name>getLastOutput</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1a1226b21859024ee8305a8cb75fb4c043" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_moving_average_vect_ff_impl</scope><name>gnugym_moving_average_vect_ff_impl</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff_1a888cef52404641ab17833471dc9cdaee" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_moving_average_vect_ff_impl</scope><name>make</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff_1a1833f1603b0c1b54eecdb2962d6b385a" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_moving_average_vect_ff_impl</scope><name>sptr</name></member>
+      <member refid="classgr_1_1gnugym_1_1gnugym__moving__average__vect__ff__impl_1adfae1a37297457656af5d36fa87a792e" prot="public" virt="non-virtual"><scope>gr::gnugym::gnugym_moving_average_vect_ff_impl</scope><name>~gnugym_moving_average_vect_ff_impl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

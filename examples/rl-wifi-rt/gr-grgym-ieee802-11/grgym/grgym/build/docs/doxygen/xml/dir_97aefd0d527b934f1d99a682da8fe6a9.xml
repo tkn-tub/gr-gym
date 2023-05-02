@@ -1,0 +1,17 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="dir_97aefd0d527b934f1d99a682da8fe6a9" kind="dir">
+    <compoundname>lib</compoundname>
+    <innerdir refid="dir_631a5d9f333fdf0681e4f92fd497f630">equalizer</innerdir>
+    <innerfile refid="constellations__impl_8h">constellations_impl.h</innerfile>
+    <innerfile refid="gnugym__moving__average__vect__ff__impl_8h">gnugym_moving_average_vect_ff_impl.h</innerfile>
+    <innerfile refid="gnugym__rssi__cb__impl_8h">gnugym_rssi_cb_impl.h</innerfile>
+    <innerfile refid="gnugym__snr__cb__impl_8h">gnugym_snr_cb_impl.h</innerfile>
+    <innerfile refid="gnugym__snrdebug__ff__impl_8h">gnugym_snrdebug_ff_impl.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/"/>
+  </compounddef>
+</doxygen>

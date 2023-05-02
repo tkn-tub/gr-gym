@@ -1,0 +1,18 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="dir_ae00968b77bddf46b96e26e5b01150ab" kind="dir">
+    <compoundname>gnugym</compoundname>
+    <innerfile refid="api_8h">api.h</innerfile>
+    <innerfile refid="constellations_8h">constellations.h</innerfile>
+    <innerfile refid="gnugym__moving__average__vect__ff_8h">gnugym_moving_average_vect_ff.h</innerfile>
+    <innerfile refid="gnugym__parse__seqnr_8h">gnugym_parse_seqnr.h</innerfile>
+    <innerfile refid="gnugym__rssi__cb_8h">gnugym_rssi_cb.h</innerfile>
+    <innerfile refid="gnugym__snr__cb_8h">gnugym_snr_cb.h</innerfile>
+    <innerfile refid="gnugym__snrdebug__ff_8h">gnugym_snrdebug_ff.h</innerfile>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/include/gnuradio/gnugym/"/>
+  </compounddef>
+</doxygen>

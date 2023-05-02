@@ -1,0 +1,54 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="constellations_8h" kind="file" language="C++">
+    <compoundname>constellations.h</compoundname>
+    <includes refid="api_8h" local="no">gnuradio/gnugym/api.h</includes>
+    <includes local="no">gnuradio/digital/constellation.h</includes>
+    <includedby refid="constellations__impl_8h" local="no">constellations_impl.h</includedby>
+    <incdepgraph>
+      <node id="4">
+        <label>gnuradio/digital/constellation.h</label>
+      </node>
+      <node id="3">
+        <label>gnuradio/attributes.h</label>
+      </node>
+      <node id="1">
+        <label>constellations.h</label>
+        <link refid="constellations_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+        <childnode refid="4" relation="include">
+        </childnode>
+      </node>
+      <node id="2">
+        <label>gnuradio/gnugym/api.h</label>
+        <link refid="api_8h"/>
+        <childnode refid="3" relation="include">
+        </childnode>
+      </node>
+    </incdepgraph>
+    <invincdepgraph>
+      <node id="2">
+        <label>constellations_impl.h</label>
+        <link refid="constellations__impl_8h"/>
+      </node>
+      <node id="1">
+        <label>constellations.h</label>
+        <link refid="constellations_8h"/>
+        <childnode refid="2" relation="include">
+        </childnode>
+      </node>
+    </invincdepgraph>
+    <innerclass refid="classgr_1_1gnugym_1_1constellation__bpsk" prot="public">gr::gnugym::constellation_bpsk</innerclass>
+    <innerclass refid="classgr_1_1gnugym_1_1constellation__qpsk" prot="public">gr::gnugym::constellation_qpsk</innerclass>
+    <innerclass refid="classgr_1_1gnugym_1_1constellation__16qam" prot="public">gr::gnugym::constellation_16qam</innerclass>
+    <innerclass refid="classgr_1_1gnugym_1_1constellation__64qam" prot="public">gr::gnugym::constellation_64qam</innerclass>
+    <innernamespace refid="namespacegr">gr</innernamespace>
+    <innernamespace refid="namespacegr_1_1gnugym">gr::gnugym</innernamespace>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/include/gnuradio/gnugym/constellations.h"/>
+  </compounddef>
+</doxygen>

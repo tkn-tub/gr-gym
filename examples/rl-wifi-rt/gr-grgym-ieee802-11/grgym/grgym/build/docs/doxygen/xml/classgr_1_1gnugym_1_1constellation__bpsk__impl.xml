@@ -1,0 +1,100 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="classgr_1_1gnugym_1_1constellation__bpsk__impl" kind="class" language="C++" prot="public">
+    <compoundname>gr::gnugym::constellation_bpsk_impl</compoundname>
+    <basecompoundref refid="classgr_1_1gnugym_1_1constellation__bpsk" prot="public" virt="non-virtual">gr::gnugym::constellation_bpsk</basecompoundref>
+    <includes refid="constellations__impl_8h" local="no">constellations_impl.h</includes>
+      <sectiondef kind="public-func">
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1constellation__bpsk__impl_1af04403080a26a5c64919cca9c13d2d16" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::gnugym::constellation_bpsk_impl::constellation_bpsk_impl</definition>
+        <argsstring>()</argsstring>
+        <name>constellation_bpsk_impl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/constellations_impl.h" line="28" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1constellation__bpsk__impl_1a5b200ee02072d825c1598c4ef2d9cfa9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type></type>
+        <definition>gr::gnugym::constellation_bpsk_impl::~constellation_bpsk_impl</definition>
+        <argsstring>()</argsstring>
+        <name>~constellation_bpsk_impl</name>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/constellations_impl.h" line="29" column="1"/>
+      </memberdef>
+      <memberdef kind="function" id="classgr_1_1gnugym_1_1constellation__bpsk__impl_1ab334c1d9a47618db30f00c668f6e31c9" prot="public" static="no" const="no" explicit="no" inline="no" virt="non-virtual">
+        <type>unsigned int</type>
+        <definition>unsigned int gr::gnugym::constellation_bpsk_impl::decision_maker</definition>
+        <argsstring>(const gr_complex *sample)</argsstring>
+        <name>decision_maker</name>
+        <param>
+          <type>const gr_complex *</type>
+          <declname>sample</declname>
+        </param>
+        <briefdescription>
+        </briefdescription>
+        <detaileddescription>
+        </detaileddescription>
+        <inbodydescription>
+        </inbodydescription>
+        <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/constellations_impl.h" line="31" column="14"/>
+      </memberdef>
+      </sectiondef>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <inheritancegraph>
+      <node id="1">
+        <label>gr::gnugym::constellation_bpsk_impl</label>
+        <link refid="classgr_1_1gnugym_1_1constellation__bpsk__impl"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>digital::constellation</label>
+      </node>
+      <node id="2">
+        <label>gr::gnugym::constellation_bpsk</label>
+        <link refid="classgr_1_1gnugym_1_1constellation__bpsk"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </inheritancegraph>
+    <collaborationgraph>
+      <node id="1">
+        <label>gr::gnugym::constellation_bpsk_impl</label>
+        <link refid="classgr_1_1gnugym_1_1constellation__bpsk__impl"/>
+        <childnode refid="2" relation="public-inheritance">
+        </childnode>
+      </node>
+      <node id="3">
+        <label>digital::constellation</label>
+      </node>
+      <node id="2">
+        <label>gr::gnugym::constellation_bpsk</label>
+        <link refid="classgr_1_1gnugym_1_1constellation__bpsk"/>
+        <childnode refid="3" relation="public-inheritance">
+        </childnode>
+      </node>
+    </collaborationgraph>
+    <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/constellations_impl.h" line="25" column="1" bodyfile="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/lib/constellations_impl.h" bodystart="26" bodyend="32"/>
+    <listofallmembers>
+      <member refid="classgr_1_1gnugym_1_1constellation__bpsk_1ac632261aa0518f81fde021e16c9bb9cb" prot="protected" virt="non-virtual"><scope>gr::gnugym::constellation_bpsk_impl</scope><name>constellation_bpsk</name></member>
+      <member refid="classgr_1_1gnugym_1_1constellation__bpsk__impl_1af04403080a26a5c64919cca9c13d2d16" prot="public" virt="non-virtual"><scope>gr::gnugym::constellation_bpsk_impl</scope><name>constellation_bpsk_impl</name></member>
+      <member refid="classgr_1_1gnugym_1_1constellation__bpsk__impl_1ab334c1d9a47618db30f00c668f6e31c9" prot="public" virt="non-virtual"><scope>gr::gnugym::constellation_bpsk_impl</scope><name>decision_maker</name></member>
+      <member refid="classgr_1_1gnugym_1_1constellation__bpsk_1aa193fd9953e65e45e69abfeab905bf1b" prot="public" virt="non-virtual"><scope>gr::gnugym::constellation_bpsk_impl</scope><name>make</name></member>
+      <member refid="classgr_1_1gnugym_1_1constellation__bpsk_1afd11d21a8aa4405b8b5569544ea0cb09" prot="public" virt="non-virtual"><scope>gr::gnugym::constellation_bpsk_impl</scope><name>sptr</name></member>
+      <member refid="classgr_1_1gnugym_1_1constellation__bpsk__impl_1a5b200ee02072d825c1598c4ef2d9cfa9" prot="public" virt="non-virtual"><scope>gr::gnugym::constellation_bpsk_impl</scope><name>~constellation_bpsk_impl</name></member>
+    </listofallmembers>
+  </compounddef>
+</doxygen>

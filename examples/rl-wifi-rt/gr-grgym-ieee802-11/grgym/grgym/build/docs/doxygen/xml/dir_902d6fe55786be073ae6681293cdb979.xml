@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<doxygen xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="compound.xsd" version="1.9.1" xml:lang="en-US">
+  <compounddef id="dir_902d6fe55786be073ae6681293cdb979" kind="dir">
+    <compoundname>gnuradio</compoundname>
+    <innerdir refid="dir_ae00968b77bddf46b96e26e5b01150ab">gnugym</innerdir>
+    <briefdescription>
+    </briefdescription>
+    <detaileddescription>
+    </detaileddescription>
+    <location file="/home/roesler/project_openai_gnuradio/GnuRadio_Gym/example/ieee802_11/gnuradio_blocks/grgym/include/gnuradio/"/>
+  </compounddef>
+</doxygen>
