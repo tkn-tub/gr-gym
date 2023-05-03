@@ -201,7 +201,7 @@ in ./grgym/grgym/scenarios/ieee80211p_scenario.py
 Contact
 ============
 * Anatolij Zubow, TU-Berlin, zubow@tkn
-* Sascha Roesler, TU-Berlin, s.roesler@campus
+* Sascha Roesler, TU-Berlin, roesler@tkn
 * Piotr Gawlowicz, TU-Berlin, gawlowicz@tkn
 * tkn = tkn.tu-berlin.de
 * campus = campus.tu-berlin.de
@@ -223,5 +223,5 @@ Please use the following bibtex :
     booktitle = {22nd ACM International Workshop on Mobile Computing Systems and Applications (HotMobile 2021)},
     month = {2},
     year = {2021}
+    }
 ```
-}
