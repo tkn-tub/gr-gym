@@ -25,7 +25,8 @@
 #    constellations.h
 #    gnugym_rssi_cb.h
 #
-#    zwei_test.h DESTINATION include/gnugym
+#    zwei_test.h
+#    calculateTxDuration.h DESTINATION include/gnugym
 #)
 
 #
@@ -60,6 +61,7 @@ list(APPEND include_sources
     gnugym_snrdebug_ff.h
     gnugym_moving_average_vect_ff.h
     gnugym_parse_seqnr.h
+    calculateTxDuration.h
 )
 
 install(

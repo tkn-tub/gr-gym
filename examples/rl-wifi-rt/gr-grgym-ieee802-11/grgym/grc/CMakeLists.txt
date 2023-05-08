@@ -23,5 +23,5 @@ install(FILES
     gnugym_gnugym_snrdebug_ff.block.yml
     gnugym_gnugym_moving_average_vect.block.yml
     gnugym_gnugym_parse_seqnr.block.yml
-    DESTINATION share/gnuradio/grc/blocks
+    gnugym_calculateTxDuration.block.yml DESTINATION share/gnuradio/grc/blocks
 )
