@@ -26,6 +26,7 @@ namespace py = pybind11;
     void bind_gnugym_rssi_cb(py::module& m);
     void bind_gnugym_snr_cb(py::module& m);
     void bind_gnugym_snrdebug_ff(py::module& m);
+    void bind_calculateTxDuration(py::module& m);
 // ) END BINDING_FUNCTION_PROTOTYPES
 
 
@@ -59,5 +60,6 @@ PYBIND11_MODULE(gnugym_python, m)
     bind_gnugym_rssi_cb(m);
     bind_gnugym_snr_cb(m);
     bind_gnugym_snrdebug_ff(m);
+    bind_calculateTxDuration(m);
     // ) END BINDING_FUNCTION_CALLS
 }

@@ -44,3 +44,4 @@ GR_ADD_TEST(qa_gnugym_parse_seqnr ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DI
 GR_ADD_TEST(qa_gnugym_rssi_cb ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gnugym_rssi_cb.py)
 GR_ADD_TEST(qa_gnugym_snr_cb ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gnugym_snr_cb.py)
 GR_ADD_TEST(qa_gnugym_snrdebug_ff ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_gnugym_snrdebug_ff.py)
+GR_ADD_TEST(qa_calculateTxDuration ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/qa_calculateTxDuration.py)

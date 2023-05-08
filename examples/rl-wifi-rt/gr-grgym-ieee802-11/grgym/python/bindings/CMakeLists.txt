@@ -33,7 +33,8 @@ list(APPEND gnugym_python_files
     gnugym_parse_seqnr_python.cc
     gnugym_rssi_cb_python.cc
     gnugym_snr_cb_python.cc
-    gnugym_snrdebug_ff_python.cc python_bindings.cc)
+    gnugym_snrdebug_ff_python.cc
+    calculateTxDuration_python.cc python_bindings.cc)
 
 GR_PYBIND_MAKE_OOT(gnugym
    ../..
