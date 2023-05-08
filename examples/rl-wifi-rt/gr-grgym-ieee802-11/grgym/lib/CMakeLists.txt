@@ -42,6 +42,7 @@ list(APPEND gnugym_sources
     gnugym_snrdebug_ff_impl.cc
     gnugym_moving_average_vect_ff_impl.cc
     gnugym_parse_seqnr_impl.cc
+    calculateTxDuration_impl.cc
 )
 
 set(gnugym_sources "${gnugym_sources}" PARENT_SCOPE)
