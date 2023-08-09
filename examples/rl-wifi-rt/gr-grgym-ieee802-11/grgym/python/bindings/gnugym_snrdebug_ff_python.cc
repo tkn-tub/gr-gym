@@ -23,7 +23,7 @@
 
 namespace py = pybind11;
 
-#include <gnugym/gnugym_snrdebug_ff.h>
+#include <gnuradio/gnugym/gnugym_snrdebug_ff.h>
 // pydoc.h is automatically generated in the build directory
 #include <gnugym_snrdebug_ff_pydoc.h>
 
