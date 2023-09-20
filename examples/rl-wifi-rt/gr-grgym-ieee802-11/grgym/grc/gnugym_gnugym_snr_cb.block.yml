@@ -7,8 +7,8 @@ category: '[gnugym]'
 parameters:
 -   id: algo
     label: Algorithm
-    dtype: int
-    default: gnugym.LS
+    dtype: raw
+    default: gnugym.LS_SNR
     options: [gnugym.LS_SNR, gnugym.LMS_SNR, gnugym.COMB_SNR, gnugym.STA_SNR]
     option_labels: [LS, LMS, COMB, STA]
     category: standard
@@ -52,7 +52,7 @@ outputs:
 
 templates:
     imports: from gnuradio import gnugym
-    make: gnugym.gnugym_snr_cb(${algo}, ${freq}, ${bw}, ${log}, ${debug})
+    make: gnuradio.gnugym.gnugym_snr_cb(${algo}, ${freq}, ${bw}, ${log}, ${debug})
     callbacks:
     - set_algorithm(${algo})
     - set_frequency(${freq})

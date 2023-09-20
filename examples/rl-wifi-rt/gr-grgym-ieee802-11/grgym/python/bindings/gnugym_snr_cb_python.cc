@@ -14,7 +14,7 @@
 /* BINDTOOL_GEN_AUTOMATIC(0)                                                       */
 /* BINDTOOL_USE_PYGCCXML(0)                                                        */
 /* BINDTOOL_HEADER_FILE(gnugym_snr_cb.h)                                        */
-/* BINDTOOL_HEADER_FILE_HASH(986d5b15d6f5f548f32a988f90bb9392)                     */
+/* BINDTOOL_HEADER_FILE_HASH(d930e70495011579c07d3e490e77d4d3)                     */
 /***********************************************************************************/
 
 #include <pybind11/complex.h>
@@ -44,6 +44,17 @@ void bind_gnugym_snr_cb(py::module& m)
 
 
         ;
+        
+        
+        py::enum_<::gr::gnugym::EqualizerSNR>(m,"EqualizerSNR")
+        .value("LS_SNR", ::gr::gnugym::LS_SNR) // 0
+        .value("LMS_SNR", ::gr::gnugym::LMS_SNR) // 1
+        .value("COMB_SNR", ::gr::gnugym::COMB_SNR) // 2
+        .value("STA_SNR", ::gr::gnugym::STA_SNR) // 3
+        .export_values()
+    ;
+
+    py::implicitly_convertible<int, ::gr::gnugym::EqualizerSNR>();
 
 
 
