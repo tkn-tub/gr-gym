@@ -40,7 +40,6 @@ echo 'export LD_LIBRARY_PATH=/user/local/lib:$LD_LIBRARY_PATH' >> ~/.profile
 cd ~/
 git clone --recursive https://github.com/gnuradio/gnuradio
 cd gnuradio
-git checkout maint-3.9
 mkdir build
 cd build
 git pull --recurse-submodules=on
