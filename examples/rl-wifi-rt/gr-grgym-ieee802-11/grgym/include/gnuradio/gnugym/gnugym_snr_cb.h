@@ -26,15 +26,16 @@
 #include <gnuradio/gnugym/api.h>
 #include <gnuradio/block.h>
 
-enum EqualizerSNR {
-	LS_SNR   = 0,
-	LMS_SNR  = 1,
-	COMB_SNR = 2,
-	STA_SNR  = 3,
-};
 
 namespace gr {
   namespace gnugym {
+
+    enum EqualizerSNR {
+        LS_SNR   = 0,
+        LMS_SNR  = 1,
+        COMB_SNR = 2,
+        STA_SNR  = 3,
+    };
 
     /*!
      * \brief <+description of block+>
